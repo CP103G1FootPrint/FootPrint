@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorTitle">#4198d0</color>
+    <color name="colorbtnCreateAccount">#fde15d</color>
+    <color name="colortextWhite">#FFFFFF</color>
+    <color name="colorbtnFB">#2C408D</color>
+    <color name="colorbackground">#FFECE3</color>
+</resources>

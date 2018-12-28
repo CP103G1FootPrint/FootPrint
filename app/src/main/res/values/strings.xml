@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FootPrint</string>
+    <string name="textTitle">FootPrint</string>
+    <string name="btnCreateAccount">FootPrint Login In</string>
+    <string name="btnFBAccount">FaceBook</string>
+    <string name="btnTerms">I Agree to Terms of Service and Privacy Policy</string>
+</resources>
