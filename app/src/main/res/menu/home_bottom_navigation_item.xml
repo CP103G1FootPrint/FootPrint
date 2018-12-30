@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeBtnNavigation"
+        android:icon="@drawable/ic_home_pet_24dp"
+        android:title="@string/homeBtnNavigation" />
+    <item
+        android:id="@+id/homeStrokeBtnNavigation"
+        android:icon="@drawable/ic_home_pet_24dp"
+        android:title="@string/homeStrokeBtnNavigation" />
+    <item
+        android:id="@+id/homeTakePictureBtnNavigation"
+        android:icon="@drawable/ic_home_pet_24dp"
+        android:title="@string/homeTakePictureBtnNavigation"/>
+    <item
+        android:id="@+id/homeFriendsBtnNavigation"
+        android:icon="@drawable/ic_home_pet_24dp"
+        android:title="@string/homeFriendsBtnNavigation" />
+    <item
+        android:id="@+id/homePersonalBtnNavigation"
+        android:icon="@drawable/ic_home_pet_24dp"
+        android:title="@string/homePersonalBtnNavigation" />
+</menu>

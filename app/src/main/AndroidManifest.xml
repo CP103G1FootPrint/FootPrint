@@ -9,13 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".loginIn">
+        <activity android:name=".MainLoginIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Home" />
+        <activity android:name=".Stroke" />
+        <activity android:name=".Friends" />
+        <activity android:name=".Personal"></activity>
     </application>
 
 </manifest>
