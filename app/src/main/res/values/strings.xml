@@ -3,8 +3,26 @@
     <string name="textTitle">FootPrint</string>
     <string name="btnCreateAccount">FootPrint Login In</string>
     <string name="btnFBAccount">FaceBook</string>
-    <string name="btnTerms">I Agree to Terms of Service and Privacy Policy</string>
+    <string name="textTerms">I Agree to Terms of Service and Privacy Policy</string>
+    <string name="EmailAccount">Email</string>
+    <string name="Password">Password</string>
+    <string name="confirm">Confirm</string>
+    <string-array name="textConstellation">
+        <item>Aquarius 1/21 - 2/19</item>
+        <item>Pisces 2/20 - 3/20</item>
+        <item>Aries 3/21 - 4/19</item>
+        <item>Taurus 4/20 - 5/20</item>
+        <item>Gemini 5/21 - 6/21</item>
+        <item>Cancer 6/22 - 7/22</item>
+        <item>Leo 7/23 - 8/22</item>
+        <item>Virgo 8/23 - 9/22</item>
+        <item>Libra 9/23 - 10/23</item>
+        <item>Scorpio 10/24 - 11/21</item>
+        <item>Sagittarius 11/22 - 12/20</item>
+        <item>Capricorn 12/21 - 1/20</item>
+    </string-array>
 
+    <string name="facebook_app_id">1637855299849357</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="homeBtnNavigation">Home</string>
@@ -12,4 +30,18 @@
     <string name="homeTakePictureBtnNavigation">Share</string>
     <string name="homeFriendsBtnNavigation">Friends</string>
     <string name="homePersonalBtnNavigation">Personal</string>
+    <string name="createNewAccount">Create New FootPrint Account</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="Account">Account</string>
+    <string name="Constellation">Constellation</string>
+    <string name="Birthday">Birthday</string>
+    <string name="nickName">Nick Name</string>
+    <string name="BirthdayDate">MM/DD</string>
+    <string name="textForgotPasswordMessage">Please enter your email to search for your account.</string>
+    <string name="textConfirm">Confirm</string>
+    <string name="textCancel">Cancel</string>
+    <string name="textForgotPassword">Find Your Account</string>
+    <string name="textSendForgotPasswordMessage">Success send the new password to your email</string>
+    <string name="textLoginIn">Login In</string>
+    <string name="textLoginInMessage">Please enter your Account and Password</string>
 </resources>

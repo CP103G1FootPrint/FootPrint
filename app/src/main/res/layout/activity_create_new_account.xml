@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Account"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/createAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/EmailAccount"
+            android:inputType="textEmailAddress" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Password"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/createPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true"
+        app:errorEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/Password"
+            android:inputType="textPassword" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nickName"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/createNickName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Birthday"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+    <EditText
+        android:id="@+id/createBirthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="@string/BirthdayDate"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Constellation"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"/>
+    <Spinner
+        android:id="@+id/createSpConstellation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/textConstellation" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="@string/confirm"
+        android:layout_margin="5dp"
+        android:onClick="createAccountConfirm"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="@string/textCancel"
+        android:layout_margin="5dp"
+        android:onClick="createAccountCancel" />
+</LinearLayout>
