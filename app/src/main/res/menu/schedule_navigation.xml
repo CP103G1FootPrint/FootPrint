@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/shnavigation_all"
+        android:title="@string/textAll"/>
+    <item
+        android:id="@+id/shnavigation_group"
+        android:title="@string/textGroup"/>
+    <item
+        android:id="@+id/shnavigation_personal"
+        android:title="@string/textPersonal"/>
+
+
+
+
+</menu>

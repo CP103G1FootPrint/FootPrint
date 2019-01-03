@@ -44,4 +44,13 @@
     <string name="textSendForgotPasswordMessage">Success send the new password to your email</string>
     <string name="textLoginIn">Login In</string>
     <string name="textLoginInMessage">Please enter your Account and Password</string>
+    <string name="btnTerms">I Agree to Terms of Service and Privacy Policy</string>
+    <string name="textTripName">TripName</string>
+    <string name="textAll">All</string>
+    <string name="textGroup">Group</string>
+    <string name="textPersonal">Personal</string>
+    <string name="textDate">Date</string>
+    <string name="textDay">Day</string>
+    <string name="textUserID">UserID</string>
+    <string name="textFriendList">FriendList</string>
 </resources>
