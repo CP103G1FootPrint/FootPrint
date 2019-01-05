@@ -6,74 +6,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/homeToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/colorbtnCreateAccount">
-
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </SearchView>
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/homeTabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorbtnCreateAccount"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@android:color/black">
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/homeTabNews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="News" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/homeTabStroke"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stroke" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/homeTabMap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Map" />
-
-    </android.support.design.widget.TabLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/homeViewPager"
+    <FrameLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-    </android.support.v4.view.ViewPager>
-
-<android.support.design.widget.BottomNavigationView
-    android:id="@+id/homeBottomNavigation"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:layout_gravity="bottom"
-    app:itemIconTint="@color/bottom_navigation_item_color"
-    android:background="@color/colorbtnCreateAccount"
-    app:menu="@menu/home_bottom_navigation_item">
-
-</android.support.design.widget.BottomNavigationView>
-</LinearLayout>
-
-<!--
-
+        android:layout_weight="1" />
 
     <android.support.design.widget.BottomNavigationView
+        android:id="@+id/homeBottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="bottom"
-        app:labelVisibilityMode="unlabeled"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/home_bottom_navigation_item"/>
--->
+        app:itemIconTint="@color/bottom_navigation_item_color"
+        android:background="@color/colorbtnCreateAccount"
+        app:menu="@menu/home_bottom_navigation_item">
+
+    </android.support.design.widget.BottomNavigationView>
+</LinearLayout>
+
+    <!--
+
+
+        <android.support.design.widget.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            app:labelVisibilityMode="unlabeled"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/home_bottom_navigation_item"/>
+    -->

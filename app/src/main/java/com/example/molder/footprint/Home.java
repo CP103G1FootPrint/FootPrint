@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -15,100 +18,62 @@ import android.view.MenuItem;
 
 public class Home extends AppCompatActivity {
 
-    private Toolbar homeToolbar;
-    private TabLayout hometabLayout;
-    private ViewPager homeViewPager;
-    private PagerAdapter homePagerAdapter;
-    private TabItem homeTabNews, homeTabStroke, homeTabMap;
+
     private BottomNavigationView homeBottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        handleViews();
-        homeTabSelectedListener();
-        homeNavigationItemSelectedListener();
-    }
-
-    //initial 初始化
-    private void handleViews() {
-
-        homeToolbar = findViewById(R.id.homeToolbar);
-        //toolbar title設定
-        homeToolbar.setTitle("");
-        setSupportActionBar(homeToolbar);
-
-        hometabLayout = findViewById(R.id.homeTabLayout);
-        homeViewPager = findViewById(R.id.homeViewPager);
-        homeTabNews = findViewById(R.id.homeTabNews);
-        homeTabStroke = findViewById(R.id.homeTabStroke);
-        homeTabMap = findViewById(R.id.homeTabMap);
-
-        //取得FragmentManager權限 並取得目前分頁所在的頁數
-        homePagerAdapter = new HomePageAdapter(getSupportFragmentManager(), hometabLayout.getTabCount());
-        //將剛剛取到的分頁所在的頁數 顯示在Fragment上
-        homeViewPager.setAdapter(homePagerAdapter);
-
         homeBottomNavigation = findViewById(R.id.homeBottomNavigation);
-
-
+        homeNavigationItemSelectedListener();
+        initContent();
     }
 
-    //分頁選項監聽器 (分頁換頁)
-    private void homeTabSelectedListener() {
-        hometabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                //取得使用者點擊的分頁頁數
-                homeViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
-        //刷新 Fragment 頁面
-        homeViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(hometabLayout));
-    }
 
     //主功能表換頁
-    private void homeNavigationItemSelectedListener(){
+    private void homeNavigationItemSelectedListener() {
         homeBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent;
+                Fragment fragment;
                 switch (item.getItemId()) {
-                    case R.id.homeBottomNavigation:
-                        intent = new Intent(Home.this, Home.class);
-                        startActivity(intent);
-                        return true;
-
                     case R.id.homeStrokeBtnNavigation:
-                        intent = new Intent(Home.this, Stroke.class);
-                        startActivity(intent);
-                        return true;
-
+                        fragment = new Schedule();
+                        break;
                     case R.id.homeTakePictureBtnNavigation:
-
-                        return true;
-
+                        fragment = new HomeFragment();
+                        Intent intent = new Intent(Home.this,TakePicture.class);
+                        startActivity(intent);
+                        break;
                     case R.id.homeFriendsBtnNavigation:
-                        intent = new Intent(Home.this, Friends.class);
-                        startActivity(intent);
-                        return true;
-
+                        fragment = new Friends();
+                        break;
                     case R.id.homePersonalBtnNavigation:
-                        intent = new Intent(Home.this, Personal.class);
-                        startActivity(intent);
-                        return true;
+                        fragment = new Personal();
+                        break;
+                    default:
+                        fragment = new HomeFragment();
+                        break;
                 }
+                item.setChecked(true);
+                changeFragment(fragment);
                 return false;
             }
         });
     }
+
+    private void initContent() {
+        //設定預選的選項
+        homeBottomNavigation.setSelectedItemId(R.id.homeBtnNavigation);
+    }
+
+    private void changeFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction =
+                fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content, fragment);
+        fragmentTransaction.commit();
+    }
 }
+
