@@ -53,4 +53,6 @@
     <string name="textDay">Day</string>
     <string name="textUserID">UserID</string>
     <string name="textFriendList">FriendList</string>
+    <string name="textTakePictureLarge">Take Picture</string>
+    <string name="textPickPicture">Pick Picture</string>
 </resources>
