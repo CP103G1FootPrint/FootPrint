@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+
 //繼承FragmentPagerAdapter
 public class HomePageAdapter extends FragmentPagerAdapter {
 
@@ -37,4 +38,8 @@ public class HomePageAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return numOfTabs;
     }
+
+
 }
+
+

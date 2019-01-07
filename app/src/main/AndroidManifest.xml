@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.molder.footprint">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,11 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
-        <provider android:authorities="com.facebook.app.FacebookContentProvider1637855299849357"
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <provider
             android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider1637855299849357"
             android:exported="true" />
+
         <activity android:name=".MainLoginIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,11 +28,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Home" />
-        <activity android:name=".Schedule" />
-        <activity android:name=".Friends" />
-        <activity android:name=".Personal" />
         <activity android:name=".LoginTerms" />
-        <activity android:name=".CreateNewAccount"></activity>
+        <activity android:name=".CreateNewAccount" />
+        <activity android:name=".TakePicture"></activity>
     </application>
 
 </manifest>

@@ -171,4 +171,8 @@ public class MainLoginIn extends AppCompatActivity {
         Intent intent = new Intent(MainLoginIn.this, LoginTerms.class);
         startActivity(intent);
     }
+
+    public void onImageViewClick(View view){
+        //do nothing. 遮蔽用
+    }
 }
