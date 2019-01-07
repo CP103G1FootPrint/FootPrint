@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Home" />
-        <activity android:name=".Stroke" />
+        <activity android:name=".Schedule" />
         <activity android:name=".Friends" />
         <activity android:name=".Personal" />
         <activity android:name=".LoginTerms" />

@@ -89,7 +89,7 @@ public class Home extends AppCompatActivity {
                         return true;
 
                     case R.id.homeStrokeBtnNavigation:
-                        intent = new Intent(Home.this, Stroke.class);
+                        intent = new Intent(Home.this, Schedule.class);
                         startActivity(intent);
                         return true;
 
