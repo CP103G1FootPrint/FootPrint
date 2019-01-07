@@ -1,5 +1,6 @@
 package com.example.molder.footprint;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -16,17 +17,21 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Schedule extends Fragment {
+public class ScheduleFragment extends Fragment {
+    Activity activity ;
 
     private RecyclerView recyclerView ;
+    private View schedule_fragment ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.schedule_main, container, false);
-        handleview();
-        recyclerView.setAdapter(new TripAdapter(this,getTrip()));
+        inflater.inflate(R.layout.schedule_main, container, false);
+        handleViews();
+        return schedule_fragment;
+
+//        recyclerView.setAdapter(new TripAdapter(this,getTrip()));
 
     }
     private class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder>{
@@ -83,9 +88,10 @@ public class Schedule extends Fragment {
 
 
 
-    private void handleview(){
-        recyclerView = findViewById(R.id.shRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void handleViews(){
+        RecyclerView recyclerView= schedule_fragment.findViewById(R.id.shRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setAdapter(new TripAdapter(activity,getTrip()));
     }
 
     private List<Trip>getTrip(){
