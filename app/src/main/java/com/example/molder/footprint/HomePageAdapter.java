@@ -3,10 +3,11 @@ package com.example.molder.footprint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 
 //繼承FragmentPagerAdapter
-public class HomePageAdapter extends FragmentPagerAdapter {
+public class HomePageAdapter extends FragmentStatePagerAdapter {
 
     //建立屬性 分頁頁數計數器
     private int numOfTabs;
@@ -39,7 +40,10 @@ public class HomePageAdapter extends FragmentPagerAdapter {
         return numOfTabs;
     }
 
-
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 
 
 }
