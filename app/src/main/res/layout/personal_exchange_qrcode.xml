@@ -33,6 +33,6 @@
         android:layout_height="211dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/QRCODE"
+        app:srcCompat="@drawable/qrcode"
         tools:layout_editor_absoluteY="249dp" />
 </android.support.constraint.ConstraintLayout>

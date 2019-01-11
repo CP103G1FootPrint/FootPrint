@@ -39,7 +39,7 @@ public class Home extends AppCompatActivity {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.homeStrokeBtnNavigation:
-                        fragment = new Schedule();
+                        fragment = new ScheduleFragment();
                         break;
                     case R.id.homeTakePictureBtnNavigation:
                         fragment = new HomeFragment();
@@ -50,7 +50,7 @@ public class Home extends AppCompatActivity {
                         fragment = new Friends();
                         break;
                     case R.id.homePersonalBtnNavigation:
-                        fragment = new Personal();
+                        fragment = new HomeFragment();
                         break;
                     default:
                         fragment = new HomeFragment();
