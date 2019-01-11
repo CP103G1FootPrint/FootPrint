@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleFragment extends Fragment {
-    Activity activity ;
+    FragmentActivity activity ;
 
     private RecyclerView recyclerView ;
     private View schedule_fragment ;
@@ -26,8 +27,9 @@ public class ScheduleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        activity = getActivity();
         // Inflate the layout for this fragment
-        inflater.inflate(R.layout.schedule_main, container, false);
+        schedule_fragment = inflater.inflate(R.layout.schedule_main, container, false);
         handleViews();
         return schedule_fragment;
 
@@ -89,7 +91,7 @@ public class ScheduleFragment extends Fragment {
 
 
     private void handleViews(){
-        RecyclerView recyclerView= schedule_fragment.findViewById(R.id.shRecyclerView);
+        recyclerView= schedule_fragment.findViewById(R.id.shRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(new TripAdapter(activity,getTrip()));
     }
