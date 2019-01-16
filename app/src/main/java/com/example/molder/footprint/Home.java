@@ -27,7 +27,7 @@ public class Home extends AppCompatActivity {
         initContent();
     }
 
-
+// TEST
     //主功能表換頁
     private void homeNavigationItemSelectedListener() {
         homeBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -36,7 +36,7 @@ public class Home extends AppCompatActivity {
                 Fragment fragment;
                 switch (item.getItemId()) {
                     case R.id.homeStrokeBtnNavigation:
-                        fragment = new ScheduleFragment();
+                        fragment = new ScheduleMainFragment();
                         break;
                     case R.id.homeTakePictureBtnNavigation:
                         fragment = new CheckInShareFragment();

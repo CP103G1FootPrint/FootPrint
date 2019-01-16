@@ -2,7 +2,9 @@ package com.example.molder.footprint;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleFragment extends Fragment {
+public class ScheduleMainFragment extends Fragment {
     FragmentActivity activity ;
 
     private RecyclerView recyclerView ;
@@ -94,6 +96,18 @@ public class ScheduleFragment extends Fragment {
         recyclerView= schedule_fragment.findViewById(R.id.shRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(new TripAdapter(activity,getTrip()));
+        FloatingActionButton shBtAdd = schedule_fragment.findViewById(R.id.shBtAdd);
+        shBtAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(),ScheduleCreateActivity.class);
+                startActivity(intent);
+//                Fragment fragment = new ScheduleCreateFragment();
+//                changeFragment(fragment);
+            }
+        });
+
+
     }
 
     private List<Trip>getTrip(){

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shBody"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -11,14 +12,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/schedule_navigation" />
-
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/shRecyclerView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/shSwipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/shRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/shCoordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/shBtAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="24dp"
+                android:src="@drawable/ic_add"
+                app:elevation="6dp"
+                app:rippleColor="#FFFFFF" /> //elevation高度陰影
+        </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

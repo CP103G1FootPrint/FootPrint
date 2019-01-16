@@ -73,4 +73,5 @@
     <string name="CheckInShareState">Image State</string>
     <string name="CheckInShareLandMark">Choose LandMark</string>
     <string name="checkInShareNoCameraApp">No Camera App</string>
+    <string name="textSave">Save</string>
 </resources>

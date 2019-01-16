@@ -66,6 +66,8 @@
         <activity android:name=".Login.LoginTerms" />
         <activity android:name=".Login.CreateNewAccount" />
 
+        <activity android:name=".ScheduleCreateActivity"></activity>
+
     </application>
 
 </manifest>
