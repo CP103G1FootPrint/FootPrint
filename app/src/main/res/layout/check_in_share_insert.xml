@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp" >
+
+            <ImageView
+                android:id="@+id/ivCheckInShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_launcher" />
+
+            <Button
+                android:id="@+id/btCheckInSharePickPicture"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/btCheckInShareTakePicture"
+                android:layout_toRightOf="@+id/btCheckInShareTakePicture"
+                android:onClick="onPickPictureClick"
+                android:text="@string/CheckInShareFormAlbum" />
+
+            <Button
+                android:id="@+id/btCheckInShareTakePicture"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/ivCheckInShare"
+                android:layout_below="@+id/ivCheckInShare"
+                android:onClick="onTakePictureClick"
+                android:text="@string/CheckInShareFormCamera" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CheckInShareState"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+        <Spinner
+            android:id="@+id/btnCheckInShareState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:entries="@array/textCheckInShareState" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint="@string/CheckInShareLandMark"
+            android:textColor="#0000FF"
+            android:onClick="onCheckInShareLandMark"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvShowLandMark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CheckInShareLandMark"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/etCheckInShareDescription"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etCheckInShareDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint="@string/etCheckInShareDescription"
+            android:inputType="text"
+            android:textColor="#0000FF" />
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp">
+
+            <Button
+                android:id="@+id/btCheckInShareFinishInsert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/btCheckInShareCancel"
+                android:onClick="onFinishInsertClick"
+                android:text="@string/CheckInShareInsert" />
+
+            <Button
+                android:id="@+id/btCheckInShareCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btCheckInShareFinishInsert"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:onClick="onCancelClick"
+                android:text="@string/textCancel" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

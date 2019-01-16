@@ -22,6 +22,12 @@
         <item>Capricorn 12/21 - 1/20</item>
     </string-array>
 
+    <string-array name="textCheckInShareState">
+        <item>Public</item>
+        <item>Private</item>
+        <item>Only Friends</item>
+    </string-array>
+
     <string name="facebook_app_id">1637855299849357</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -55,4 +61,16 @@
     <string name="textFriendList">FriendList</string>
     <string name="textTakePictureLarge">Take Picture</string>
     <string name="textPickPicture">Pick Picture</string>
+    <string name="col_Name">Name</string>
+    <string name="col_Type">Type</string>
+    <string name="col_Address">Address</string>
+    <string name="CheckInSharePopUpOption">Options</string>
+    <string name="CheckInShareFormCamera">Form Camera</string>
+    <string name="CheckInShareFormAlbum">Form Album</string>
+    <string name="msg_NoCameraApp">No Camera App</string>
+    <string name="CheckInShareInsert">Insert</string>
+    <string name="etCheckInShareDescription">Image Description</string>
+    <string name="CheckInShareState">Image State</string>
+    <string name="CheckInShareLandMark">Choose LandMark</string>
+    <string name="checkInShareNoCameraApp">No Camera App</string>
 </resources>

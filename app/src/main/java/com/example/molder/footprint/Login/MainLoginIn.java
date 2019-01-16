@@ -1,8 +1,12 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Login;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.molder.footprint.Home;
+import com.example.molder.footprint.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -22,11 +28,15 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainLoginIn extends AppCompatActivity {
 
     CallbackManager callbackManager;
     private AccessToken accessToken;
     LoginButton loginButton;
+    private static final int REQ_PERMISSIONS = 0;
 
 
     @Override
@@ -174,5 +184,35 @@ public class MainLoginIn extends AppCompatActivity {
 
     public void onImageViewClick(View view){
         //do nothing. 遮蔽用
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        askPermissions();
+    }
+
+
+
+    // New Permission see Appendix A
+    private void askPermissions() {
+        //因為是群組授權，所以請求ACCESS_COARSE_LOCATION就等同於請求ACCESS_FINE_LOCATION，因為同屬於LOCATION群組
+        String[] permissions = {
+                Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        Set<String> permissionsRequest = new HashSet<>();
+        for (String permission : permissions) {
+            int result = ContextCompat.checkSelfPermission(this, permission);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                permissionsRequest.add(permission);
+            }
+        }
+
+        if (!permissionsRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    permissionsRequest.toArray(new String[permissionsRequest.size()]),
+                    REQ_PERMISSIONS);
+        }
     }
 }

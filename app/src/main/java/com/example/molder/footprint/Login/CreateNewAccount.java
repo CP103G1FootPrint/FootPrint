@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Login;
 
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.example.molder.footprint.R;
 
 public class CreateNewAccount extends AppCompatActivity {
 
