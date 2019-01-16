@@ -25,7 +25,7 @@ public class Home extends AppCompatActivity {
         initContent();
     }
 
-
+// TEST
     //主功能表換頁
     private void homeNavigationItemSelectedListener() {
         homeBottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
