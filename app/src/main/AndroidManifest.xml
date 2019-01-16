@@ -30,7 +30,8 @@
         <activity android:name=".Home" />
         <activity android:name=".LoginTerms" />
         <activity android:name=".CreateNewAccount" />
-        <activity android:name=".TakePicture"></activity>
+        <activity android:name=".TakePicture" />
+        <activity android:name=".ScheduleCreateActivity"></activity>
     </application>
 
 </manifest>

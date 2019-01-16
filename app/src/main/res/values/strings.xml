@@ -55,4 +55,5 @@
     <string name="textFriendList">FriendList</string>
     <string name="textTakePictureLarge">Take Picture</string>
     <string name="textPickPicture">Pick Picture</string>
+    <string name="textSave">Save</string>
 </resources>
