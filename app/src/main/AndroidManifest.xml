@@ -30,7 +30,9 @@
         <activity android:name=".Home" />
         <activity android:name=".LoginTerms" />
         <activity android:name=".CreateNewAccount" />
-        <activity android:name=".TakePicture"></activity>
+        <activity android:name=".TakePicture" />
+        <activity android:name=".HomeNewsActivityPersonal" />
+        <activity android:name=".HomeNewsActivity_Personal"></activity>
     </application>
 
 </manifest>

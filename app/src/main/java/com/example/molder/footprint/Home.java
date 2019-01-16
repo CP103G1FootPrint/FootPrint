@@ -15,11 +15,14 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
+
 
 public class Home extends AppCompatActivity {
 
 
     private BottomNavigationView homeBottomNavigation;
+    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +30,19 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         homeBottomNavigation = findViewById(R.id.homeBottomNavigation);
         homeNavigationItemSelectedListener();
+        fragment = new HomeFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content,fragment);
+        ft.commit();
         initContent();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!BackHandlerHelper.handleBackPress(this)) {
+            super.onBackPressed();
+            this.finish();
+        }
     }
 
 
@@ -73,7 +88,9 @@ public class Home extends AppCompatActivity {
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content, fragment);
+//        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
 }
 
