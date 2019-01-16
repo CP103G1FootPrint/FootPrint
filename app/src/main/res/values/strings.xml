@@ -74,4 +74,5 @@
     <string name="CheckInShareLandMark">Choose LandMark</string>
     <string name="checkInShareNoCameraApp">No Camera App</string>
     <string name="textSave">Save</string>
+    <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
 </resources>

@@ -6,11 +6,18 @@
     tools:context=".HomeNewsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_news"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/home_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>
