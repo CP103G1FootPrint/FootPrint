@@ -88,9 +88,9 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
 
     private void getHomeNewsFragment_News() {
         List<HomeNewsFragment_News> homeNewsFragment_news = new ArrayList<>();
-        homeNewsFragment_news.add(new HomeNewsFragment_News(R.drawable.profile_picture_cockroach, "cockroach", "Taipei", R.drawable.home_news_picture));
-        homeNewsFragment_news.add(new HomeNewsFragment_News(R.drawable.profile_picture_earth, "earth", "Taipei", R.drawable.home_news_picture));
-        homeNewsFragment_news.add(new HomeNewsFragment_News(R.drawable.profile_picture_pinky, "pinky", "Taipei", R.drawable.home_news_picture));
+        homeNewsFragment_news.add(new HomeNewsFragment_News(R.drawable.profile_picture_cockroach, "cockroach", "Taipei", R.drawable.testpicture1));
+        homeNewsFragment_news.add(new HomeNewsFragment_News(R.drawable.profile_picture_earth, "earth", "Taoyuan", R.drawable.testpicture3));
+        homeNewsFragment_news.add(new HomeNewsFragment_News(R.drawable.profile_picture_pinky, "pinky", "Taichung", R.drawable.testpicture4));
         rvNews.setAdapter(new HomeNewsFragmentAdapter(activity, homeNewsFragment_news));
     }
 
@@ -190,7 +190,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             holder.message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
+                    Intent intent = new Intent(getActivity(),HomeNewsActivity_Message.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("news", homeNewsFragmentnews);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */

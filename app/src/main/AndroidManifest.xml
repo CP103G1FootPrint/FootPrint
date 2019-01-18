@@ -18,7 +18,6 @@
     <!-- 相機許可 -->
     <uses-feature android:name="android.hardware.camera" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_footprint_logo"
@@ -26,7 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
         <!-- 允許應用程式將資料暫存到android裝置的外部儲存體 -->
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -37,7 +38,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <!--  google map -->
+        <!-- google map -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -45,7 +46,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCxnVm1sYfcXRLm41fpO3vIypUsJBc71Q0" />
-        <!--  fb -->
+        <!-- fb -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -58,16 +59,20 @@
         <activity android:name=".Login.MainLoginIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Home" />
         <activity android:name=".Login.LoginTerms" />
         <activity android:name=".Login.CreateNewAccount" />
-
-        <activity android:name=".ScheduleCreateActivity"></activity>
-
+        <activity android:name=".HomeNewsActivity_Personal" />
+        <activity android:name=".ScheduleCreateActivity" />
+        <activity android:name=".HomeNewsActivity_Message" />
+        <activity android:name=".FriendsMessageActivity" />
+        <activity android:name=".HomeStrokeActivity" />
+        <activity android:name=".HomeNewsActivity_Personal_Friendship"></activity>
     </application>
 
 </manifest>

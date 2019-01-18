@@ -75,8 +75,6 @@ public class HomeFragment extends Fragment implements FragmentBackHandler {
         homePagerAdapter = new HomePageAdapter(getActivity().getSupportFragmentManager(), hometabLayout.getTabCount());
         //將剛剛取到的分頁所在的頁數 顯示在Fragment上
         homeViewPager.setAdapter(homePagerAdapter);
-
-
     }
 
 
