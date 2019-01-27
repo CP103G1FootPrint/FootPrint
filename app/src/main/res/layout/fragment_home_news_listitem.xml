@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -39,16 +39,16 @@
         app:layout_constraintTop_toBottomOf="@id/ci_profile＿picture"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/ib_news_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/home_news_like"
+        app:srcCompat="@drawable/home_news_like_icon"
         app:layout_constraintTop_toBottomOf="@id/iv_news_picture"
         app:layout_constraintStart_toStartOf="@id/ci_profile＿picture"
-        android:background="@color/colortextWhite"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="308dp" />
+
     <ImageButton
         android:id="@+id/ib_news_message"
         android:layout_width="wrap_content"
@@ -60,6 +60,7 @@
         android:layout_marginStart="8dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="308dp" />
+
     <ImageButton
         android:id="@+id/ib_news_collection"
         android:layout_width="wrap_content"
@@ -71,5 +72,6 @@
         android:layout_marginStart="8dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="308dp" />
+
 
 </android.support.constraint.ConstraintLayout>

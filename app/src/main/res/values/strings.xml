@@ -102,4 +102,6 @@
     <string name="openHours">open Hours</string>
     <string name="landMarkDescription">land Mark Description</string>
     <string name="landMarkAddress">land Mark Address</string>
+    <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
+    <string name="UserName">User Name</string>
 </resources>

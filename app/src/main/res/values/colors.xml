@@ -12,4 +12,7 @@
     <color name="colorToolbar">#35D0B1</color>
     <color name="colorBlack">#000000</color>
     <color name="colorNull">#00ffffff</color>
+    <color name="colorGray">#d6d6d6</color>
+    <color name="colorWhite">#FFffffff</color>
+    <color name="colorBlackGray">#8f8f8f</color>
 </resources>

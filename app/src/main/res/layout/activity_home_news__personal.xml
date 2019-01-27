@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeNewsActivity_Personal">
+    <ImageView
+        android:id="@+id/home_news_personal_addFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add_friend_icon"
+        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/home_news_personal_message"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:src="@drawable/message_icon"-->
+        <!--app:layout_constraintEnd_toEndOf="@id/home_news_personal_addFriend"-->
+        <!--app:layout_constraintEnd_toStartOf="@id/home_news_personal_addFriend"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ci_profile＿picture"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/profile_picture_pinky"
+        app:layout_constraintTop_toBottomOf="@id/home_news_personal_addFriend"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_home_news_personal_ID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID:"
+        android:textSize="16sp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
+        app:layout_constraintTop_toTopOf="@+id/ci_profile＿picture"/>
+
+    <TextView
+        android:id="@+id/tv_home_news_personal_ID_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AA1234566"
+        android:textSize="16sp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintStart_toEndOf="@id/tv_home_news_personal_ID"
+        app:layout_constraintTop_toTopOf="@+id/ci_profile＿picture"/>
+
+    <TextView
+        android:id="@+id/tv_home_news_Birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Birthday:"
+        android:textSize="16sp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
+        app:layout_constraintTop_toBottomOf="@+id/tv_home_news_personal_ID"/>
+
+    <TextView
+        android:id="@+id/tv_home_news_personal_Birthday_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2020/01/01"
+        android:textSize="16sp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintStart_toEndOf="@id/tv_home_news_Birthday"
+        app:layout_constraintTop_toTopOf="@id/tv_home_news_Birthday"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_home_news_personal_pictures"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ci_profile＿picture"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <!--<android.support.design.widget.BottomNavigationView-->
+    <!--android:id="@+id/homeBottomNavigation"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--app:itemIconTint="@color/bottom_navigation_item_color"-->
+    <!--android:background="@color/colorbtnCreateAccount"-->
+    <!--app:menu="@menu/home_bottom_navigation_item"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent">-->
+    <!--</android.support.design.widget.BottomNavigationView>-->
+</android.support.constraint.ConstraintLayout>

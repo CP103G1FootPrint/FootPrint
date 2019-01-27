@@ -12,11 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
+import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements FragmentBackHandler {
 
     private Toolbar homeToolbar;
     private TabLayout hometabLayout;
@@ -30,7 +33,6 @@ public class HomeFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,7 +40,6 @@ public class HomeFragment extends Fragment {
         home_fragment = inflater.inflate(R.layout.fragment_home, container, false);
         handleViews();
         return home_fragment;
-
     }
 
     //initial 初始化
@@ -74,8 +75,11 @@ public class HomeFragment extends Fragment {
         homePagerAdapter = new HomePageAdapter(getActivity().getSupportFragmentManager(), hometabLayout.getTabCount());
         //將剛剛取到的分頁所在的頁數 顯示在Fragment上
         homeViewPager.setAdapter(homePagerAdapter);
-
     }
 
 
+    @Override
+    public boolean onBackPressed() {
+        return BackHandlerHelper.handleBackPress(this);
+    }
 }
