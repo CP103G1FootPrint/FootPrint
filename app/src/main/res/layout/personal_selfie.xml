@@ -22,11 +22,18 @@
 
 
         <Button
-            android:id="@+id/btTakePictureLarge"
+        android:id="@+id/btTakePictureLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onTakePictureLargeClick"
+        android:text="@string/textTakePictureLarge" />
+
+        <Button
+            android:id="@+id/btTakePictureSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onTakePictureLargeClick"
-            android:text="@string/textTakePictureLarge" />
+            android:onClick="onTakePictureSmallClick"
+            android:text="@string/textTakePictureSmall" />
 
         <Button
             android:id="@+id/btPickPicture"
@@ -34,6 +41,7 @@
             android:layout_height="wrap_content"
             android:onClick="onPickPictureClick"
             android:text="@string/textPickPicture" />
+
 
     </LinearLayout>
 

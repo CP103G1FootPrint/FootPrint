@@ -22,10 +22,10 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PersonalRecordMain extends Fragment {
+public class PersonalCollectMain extends Fragment {
 
 
-    public PersonalRecordMain() {
+    public PersonalCollectMain() {
         // Required empty public constructor
     }
 
@@ -35,7 +35,6 @@ public class PersonalRecordMain extends Fragment {
     private Button btTakePictureLarge, btPickPicture;
     private File file;
     private RecyclerView recyclerView;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +52,8 @@ public class PersonalRecordMain extends Fragment {
         recyclerView.setLayoutManager(
                 new StaggeredGridLayoutManager(3,
                         StaggeredGridLayoutManager.VERTICAL));
-        List<PersonalRecordMember> memberList = getMemberList();
-        recyclerView.setAdapter(new PersonalRecorAdapter(getActivity(), memberList));
+        List<PersonalCollectMember> memberList = getMemberList();
+        recyclerView.setAdapter(new PersonalCollectAdapter(getActivity(), memberList));
 
 
         imageView = personal_fragment.findViewById(R.id.imageView);
@@ -73,12 +72,12 @@ public class PersonalRecordMain extends Fragment {
     /* RecyclerView要透過RecyclerView.Adapter來處理欲顯示的清單內容，
    必須建立RecyclerView.Adapter子類別並覆寫對應的方法：
    getItemCount()、onCreateViewHolder()、onBindViewHolder */
-    private class PersonalRecorAdapter extends
-            RecyclerView.Adapter<PersonalRecorAdapter.MyViewHolder> {
+    private class PersonalCollectAdapter extends
+            RecyclerView.Adapter<PersonalCollectAdapter.MyViewHolder> {
         private Context context;
-        private List<PersonalRecordMember> memberList;
+        private List<PersonalCollectMember> memberList;
 
-        PersonalRecorAdapter(Context context, List<PersonalRecordMember> memberList) {
+        PersonalCollectAdapter(Context context, List<PersonalCollectMember> memberList) {
             this.context = context;
             this.memberList = memberList;
         }
@@ -105,13 +104,13 @@ public class PersonalRecordMain extends Fragment {
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             View itemView = LayoutInflater.from(context).
-                    inflate(R.layout.personal_record_item, viewGroup, false);
+                    inflate(R.layout.personal_collect_item, viewGroup, false);
             return new MyViewHolder(itemView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-            final PersonalRecordMember member = memberList.get(position);
+            final PersonalCollectMember member = memberList.get(position);
             holder.imageView.setImageResource(member.getImage());
 //            holder.tvId.setText(String.valueOf(member.getId()));
 //            holder.tvName.setText(member.getName());
@@ -143,21 +142,20 @@ public class PersonalRecordMain extends Fragment {
         }
     }
 
-    public List<PersonalRecordMember> getMemberList() {
-        List<PersonalRecordMember> memberList = new ArrayList<>();
-        memberList.add(new PersonalRecordMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalRecordMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalRecordMember(65, R.drawable.sticker, "Mark"));
-        memberList.add(new PersonalRecordMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalRecordMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalRecordMember(65, R.drawable.sticker, "Mark"));
-        memberList.add(new PersonalRecordMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalRecordMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalRecordMember(65, R.drawable.sticker, "Mark"));
-        memberList.add(new PersonalRecordMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalRecordMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalRecordMember(65, R.drawable.sticker, "Mark"));
-
+    public List<PersonalCollectMember> getMemberList() {
+        List<PersonalCollectMember> memberList = new ArrayList<>();
+        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
+        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
+        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
+        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
+        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
+        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
+        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
+        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
+        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
+        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
+        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
+        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
 
         return memberList;
     }
