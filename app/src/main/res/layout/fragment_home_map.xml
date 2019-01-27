@@ -10,5 +10,20 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+    <Spinner
+        android:id="@+id/btnMapState"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_gravity="left"
+        android:background="@color/colorTitle"
+        android:entries="@array/textMapSate" />
+<TextView
+    android:id="@+id/longitude"
+    android:layout_width="120dp"
+    android:layout_height="50dp" />
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="120dp"
+        android:layout_height="50dp" />
 </FrameLayout>

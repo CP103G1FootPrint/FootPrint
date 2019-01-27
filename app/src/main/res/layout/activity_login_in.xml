@@ -57,22 +57,11 @@
         android:layout_marginTop="10dp"
         android:gravity="center">
 
-        <ImageView
-            android:layout_width="50dp"
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="335dp"
             android:layout_height="36dp"
-            android:background="@drawable/ic_facebook_logo" />
-
-        <Button
-            android:id="@+id/loginBtnFB"
-            android:layout_width="280dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="5dp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/btnFBAccount"
-            android:textSize="20sp"
-            android:textAllCaps="false"
-            android:textColor="@color/colortextWhite"
-            android:background="@color/colorbtnFB"/>
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 
@@ -133,11 +122,32 @@
 
     </LinearLayout>
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_gravity="center_horizontal"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="直接登入"
+        android:onClick="gologinClick"/>
+
+
 
 </LinearLayout>
+
+<!--
+<ImageView
+            android:layout_width="50dp"
+            android:layout_height="36dp"
+            android:background="@drawable/ic_facebook_logo" />
+
+        <Button
+            android:id="@+id/loginBtnFB"
+            android:layout_width="280dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="5dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/btnFBAccount"
+            android:textSize="20sp"
+            android:textAllCaps="false"
+            android:textColor="@color/colortextWhite"
+            android:background="@color/colorbtnFB"/>
+-->
 
