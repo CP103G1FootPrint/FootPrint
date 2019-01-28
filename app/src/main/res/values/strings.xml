@@ -7,6 +7,8 @@
     <string name="EmailAccount">Email</string>
     <string name="Password">Password</string>
     <string name="confirm">Confirm</string>
+    <string name="msg_NoTripsFound">No trips found</string>
+    <string name="msg_NoNetwork">no network connection available</string>
     <string-array name="textConstellation">
         <item>Aquarius 1/21 - 2/19</item>
         <item>Pisces 2/20 - 3/20</item>
@@ -61,6 +63,9 @@
     <string name="textFriendList">FriendList</string>
     <string name="textTakePictureLarge">Take Picture</string>
     <string name="textPickPicture">Pick Picture</string>
+    <string name="textAddtoGroup">Add friends to the group</string>
+    <string name="textSuccess">Success</string>
+    <string name="textSend">Send</string>
     <string name="col_Name">Name</string>
     <string name="col_Type">Type</string>
     <string name="col_Address">Address</string>
@@ -68,6 +73,10 @@
     <string name="CheckInShareFormCamera">Form Camera</string>
     <string name="CheckInShareFormAlbum">Form Album</string>
     <string name="msg_NoCameraApp">No Camera App</string>
+    <string name="msg_NoImage">No image</string>
+    <string name="msg_NameIsInvalid">Trip name is invalid</string>
+    <string name="msg_InsertSuccess">Insert successfully</string>
+    <string name="msg_InsertFail">Insert fail</string>
     <string name="CheckInShareInsert">Insert</string>
     <string name="etCheckInShareDescription">Image Description</string>
     <string name="CheckInShareState">Image State</string>

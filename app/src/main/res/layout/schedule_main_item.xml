@@ -46,22 +46,23 @@
 
             <ImageButton
                 android:id="@+id/shBtPhoto"
-                android:layout_width="120dp"
+                android:layout_width="121dp"
                 android:layout_height="30dp"
                 android:layout_below="@id/shImgView"
-                android:src="@drawable/sh_chatbox" />
+                android:src="@drawable/sh_add_photo" />
 
             <ImageButton
                 android:id="@+id/shBtChat"
-                android:layout_width="120dp"
+                android:layout_width="121dp"
                 android:layout_height="30dp"
                 android:layout_below="@id/shImgView"
                 android:layout_toRightOf="@id/shBtPhoto"
-                android:src="@drawable/sh_add_photo"/>
+                android:src="@drawable/sh_chatbox" />
             <ImageButton
                 android:id="@+id/shBtAdd"
-                android:layout_width="120dp"
+                android:layout_width="121dp"
                 android:layout_height="30dp"
+                android:onClick="onAddClick"
                 android:layout_toRightOf="@id/shBtChat"
                 android:layout_below="@id/shImgView"
                 android:src="@drawable/sh_group_add"/>

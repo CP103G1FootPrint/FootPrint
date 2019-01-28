@@ -68,11 +68,13 @@
         <activity android:name=".Login.LoginTerms" />
         <activity android:name=".Login.CreateNewAccount" />
         <activity android:name=".HomeNewsActivity_Personal" />
-        <activity android:name=".ScheduleCreateActivity" />
+        <activity android:name=".Schedule.ScheduleCreateActivity" />
         <activity android:name=".HomeNewsActivity_Message" />
         <activity android:name=".FriendsMessageActivity" />
         <activity android:name=".HomeStrokeActivity" />
-        <activity android:name=".HomeNewsActivity_Personal_Friendship"></activity>
+        <activity android:name=".HomeNewsActivity_Personal_Friendship" />
+        <activity android:name=".Schedule.SchedulePlanActivity" />
+        <activity android:name=".Schedule.ScheduleChatActivity"></activity>
     </application>
 
 </manifest>

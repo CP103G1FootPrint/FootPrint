@@ -1,23 +1,25 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Schedule;
 
-public class Trip {
-    private int imageid ;
+import java.io.Serializable;
+
+public class Trip implements Serializable {
+    private int id ;
     private String title ;
     private String date ;
 
 
-    public Trip(int imageid, String title, String date) {
-        this.imageid = imageid;
+    public Trip(int id, String title, String date) {
+        this.id = id;
         this.title = title;
         this.date = date;
     }
 
-    public int getImageid() {
-        return imageid;
+    public int getId() {
+        return id;
     }
 
-    public void setImageid(int imageid) {
-        this.imageid = imageid;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
