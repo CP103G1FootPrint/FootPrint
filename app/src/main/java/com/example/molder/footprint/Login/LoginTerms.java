@@ -1,5 +1,6 @@
 package com.example.molder.footprint.Login;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,18 +19,13 @@ import java.io.InputStreamReader;
 
 public class LoginTerms extends AppCompatActivity {
     private final static String TAG = "Error on Terms page";
-    private CheckBox mCheckBox;
+    private static final int REQUEST_CODE = 1;
     private TextView tvAsset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_terms);
-
-        mCheckBox = findViewById(R.id.loginCbTerms);
-
-
-
 
         //讀取規章
         tvAsset = findViewById(R.id.tvLoginTerms);
@@ -58,6 +54,10 @@ public class LoginTerms extends AppCompatActivity {
     }
 
     public void onTermsConfirmClick(View view){
+
+        Intent intent = getIntent();
+        intent.putExtra("checkBox",true);
+        setResult(REQUEST_CODE, intent); //REQUEST_CODE 需跟AActivity.class的一樣
         finish();
     }
 

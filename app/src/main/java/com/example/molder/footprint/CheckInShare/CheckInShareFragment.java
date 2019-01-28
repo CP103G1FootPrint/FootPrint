@@ -1,13 +1,17 @@
 package com.example.molder.footprint.CheckInShare;
 
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,27 +21,38 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Home;
+import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +63,7 @@ public class CheckInShareFragment extends Fragment {
     private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private ImageView ivCheckInShare;
-    private Button btTakePicture, btPickPicture, btFinishInsert, btCancel;
+    private Button btTakePicture, btPickPicture, btFinishInsert, btCancel,btChooseLandMark;
     private Spinner spSate;
     private TextView tvShowLandMark;
     private EditText etDescription;
@@ -57,7 +72,11 @@ public class CheckInShareFragment extends Fragment {
     private static final int REQ_PICK_IMAGE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     private Uri contentUri, croppedImageUri;
-
+    private View v,rootView;
+    private ListView listView;
+    private CommonTask retrieveLocationTask;
+    private String textLandMark;
+    private int intLandMarkID;
 
     public CheckInShareFragment() {
         // Required empty public constructor
@@ -74,8 +93,10 @@ public class CheckInShareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.check_in_share_insert, container, false);
+        rootView = inflater.inflate(R.layout.check_in_share_insert, container, false);
         findViews(rootView);
+
+
         //拍照片
         btTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +133,49 @@ public class CheckInShareFragment extends Fragment {
             public void onClick(View view) {
                 Object item = spSate.getSelectedItem();
                 String category = item.toString().trim();
-                showToast(activity,category);
+
+                if (image == null) {
+                    Common.showToast(getActivity(), R.string.msg_NoImage);
+                    return;
+                }
+
+                if (tvShowLandMark == null){
+                    Common.showToast(getActivity(), R.string.msg_NoLandMark);
+                    return;
+                }
+
+                String description = etDescription.getText().toString().trim();
+
+                SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                String userId = preferences.getString("userId", "");
+
+                if (Common.networkConnected(activity)) {
+                    String url = Common.URL + "/PictureServlet";
+                    Picture picture = new Picture(0, description, category, userId, intLandMarkID);
+                    String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "shareInsert");
+                    jsonObject.addProperty("share", new Gson().toJson(picture));
+                    jsonObject.addProperty("imageBase64", imageBase64);
+                    int count = 0;
+                    try {
+                        String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                        count = Integer.valueOf(result);
+                        Intent intent = new Intent(getActivity(), Home.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (count == 0) {
+                        Common.showToast(getActivity(), R.string.msg_InsertFail);
+                    } else {
+                        Common.showToast(getActivity(), R.string.msg_InsertSuccess);
+                    }
+                } else {
+                    Common.showToast(getActivity(), R.string.msg_NoNetwork);
+                }
+
+//                fragmentManager.popBackStack();
             }
         });
 
@@ -122,8 +185,31 @@ public class CheckInShareFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Home.class);
                 startActivity(intent);
+//                fragmentManager.popBackStack();
             }
         });
+
+        //選地標
+        btChooseLandMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //清除重複choose Land Mark AlertDialog
+                if(v.getParent() != null) {
+                    ((ViewGroup)v.getParent()).removeView(v); // <- fix
+                }
+                //新建choose Land Mark AlertDialog
+                new AlertDialog.Builder(activity)
+                        .setView(v)
+                        .setNegativeButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+            }
+        });
+
         return rootView;
     }
 
@@ -136,6 +222,54 @@ public class CheckInShareFragment extends Fragment {
         spSate = rootView.findViewById(R.id.btnCheckInShareState);
         tvShowLandMark = rootView.findViewById(R.id.tvShowLandMark);
         etDescription = rootView.findViewById(R.id.etCheckInShareDescription);
+        btChooseLandMark = rootView.findViewById(R.id.btnCheckInShareStateChooseLandMark);
+
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        v = inflater.inflate(R.layout.check_in_share_choose_land_mark, null);
+        listView = v.findViewById(R.id.lvCheckInShareChooseLandMark);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                for (int i = 0; i < listView.getChildCount(); i++) {
+                    if(position == i ){
+                        listView.getChildAt(i).setBackgroundColor(Color.GREEN);
+                        LandMark member = (LandMark) parent.getItemAtPosition(position);
+                        textLandMark = member.getName();
+                        intLandMarkID = member.getId();
+                        tvShowLandMark.setText(textLandMark);
+                    }else{
+                        listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+
+            }
+        });
+
+        if (Common.networkConnected(activity)) {
+            String url = Common.URL + "/LocationServlet";
+            List<LandMark> locations = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "All");
+            //將內容轉成json字串
+            retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = retrieveLocationTask.execute().get();
+                Type listType = new TypeToken<List<LandMark>>() {
+                }.getType();
+                //解析 json to gson
+                locations = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (locations == null || locations.isEmpty()) {
+                Common.showToast(activity, R.string.msg_NoFoundLandMark);
+            } else {
+                showResult(locations);
+            }
+        } else {
+            Common.showToast(activity,R.string.msg_NoNetwork);
+        }
     }
 
     private boolean isIntentAvailable(Context context, Intent intent) {
@@ -210,6 +344,63 @@ public class CheckInShareFragment extends Fragment {
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    //listView
+    public void showResult(List<LandMark> locations) {
+        listView.setAdapter(new LandMarkAdapter(activity, locations));
+
+    }
+    private class LandMarkAdapter extends BaseAdapter {
+        Context context;
+        List<LandMark> memberList;
+
+        LandMarkAdapter(Context context, List<LandMark> memberList) {
+            this.context = context;
+            this.memberList = memberList;
+        }
+
+        @Override
+        public int getCount() {
+            return memberList.size();
+        }
+
+        @Override
+        public View getView(int position, View itemView, ViewGroup parent) {
+            if (itemView == null) {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                itemView = layoutInflater.inflate(R.layout.check_in_share_choose_land_mark_item, parent, false);
+            }
+
+            LandMark member = memberList.get(position);
+//            ImageView ivImage = itemView
+//                    .findViewById(R.id.ivImage);
+//            ivImage.setImageResource(member.getImage());
+
+            TextView tvName = itemView
+                    .findViewById(R.id.tvCheckInShareChooseLandMarkId);
+            tvName.setText(member.getName());
+            return itemView;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return memberList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return memberList.get(position).getId();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (retrieveLocationTask != null) {
+            retrieveLocationTask.cancel(true);
+            retrieveLocationTask = null;
+        }
     }
 
 }

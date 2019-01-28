@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Home;
 import com.example.molder.footprint.R;
 import com.facebook.AccessToken;
@@ -25,6 +30,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -33,18 +39,25 @@ import java.util.Set;
 
 public class MainLoginIn extends AppCompatActivity {
 
-    CallbackManager callbackManager;
+    private static final String TAG = "MainLoginIn";
+    private static final int REQUEST_CODE = 1;
+    private CallbackManager callbackManager;
     private AccessToken accessToken;
-    LoginButton loginButton;
+    private LoginButton loginButton;
     private static final int REQ_PERMISSIONS = 0;
-
-
+    private TextInputEditText tIETAccount,tIETPassword;
+    private CommonTask userValidTask;
+    private CheckBox mCheckBox;
+    private boolean result =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_in);
 
+        mCheckBox = findViewById(R.id.loginCbTerms);
+
+        setResult(RESULT_CANCELED);
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
 
@@ -117,8 +130,14 @@ public class MainLoginIn extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        Intent intent = new Intent(MainLoginIn.this, Home.class);
-        startActivity(intent);
+        switch (resultCode) {
+            case REQUEST_CODE:
+                result = data.getBooleanExtra("checkBox",false);
+                if(result){
+                    mCheckBox.setChecked(true);
+                }
+                break;
+        }
     }
 
 
@@ -127,6 +146,8 @@ public class MainLoginIn extends AppCompatActivity {
     public void onLoginInClick(View view){
         LayoutInflater inflater = LayoutInflater.from(MainLoginIn.this);
         final View v = inflater.inflate(R.layout.fragment_login_in, null);
+        tIETAccount = v.findViewById(R.id.inputAccount);
+        tIETPassword = v.findViewById(R.id.inputPassword);
         new AlertDialog.Builder(MainLoginIn.this)
                 .setTitle(R.string.textLoginIn)
                 .setView(v)
@@ -134,8 +155,28 @@ public class MainLoginIn extends AppCompatActivity {
                 .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(MainLoginIn.this, Home.class);
-                        startActivity(intent);
+                        String user = tIETAccount.getText().toString().trim();
+                        String password = tIETPassword.getText().toString().trim();
+                        if (user.length() <= 0 || password.length() <= 0) {
+                            Toast.makeText(getApplicationContext(), R.string.textNotValid, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(result == false){
+                            Toast.makeText(getApplicationContext(), R.string.textNotReadTerms, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (isUserValid(user, password)) {
+                            SharedPreferences preferences = getSharedPreferences(
+                                    Common.PREF_FILE, MODE_PRIVATE);
+                            preferences.edit().putBoolean("login", true)
+                                    .putString("userId", user)
+                                    .putString("password", password).apply();
+                            setResult(RESULT_OK);
+                            Intent intent = new Intent(MainLoginIn.this, Home.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), R.string.textNotValid, Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 })
@@ -179,7 +220,8 @@ public class MainLoginIn extends AppCompatActivity {
 
     public void onTermsClick(View view){
         Intent intent = new Intent(MainLoginIn.this, LoginTerms.class);
-        startActivity(intent);
+        intent.putExtra("checkBox",false);
+        startActivityForResult(intent,REQUEST_CODE);
     }
 
     public void onImageViewClick(View view){
@@ -190,6 +232,20 @@ public class MainLoginIn extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         askPermissions();
+
+        //自動登入
+//        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE,
+//                MODE_PRIVATE);
+//        boolean login = preferences.getBoolean("login", false);
+//        if (login) {
+//            String userId = preferences.getString("userId", "");
+//            String password = preferences.getString("password", "");
+//            if (isUserValid(userId, password)) {
+//                setResult(RESULT_OK);
+//                Intent intent = new Intent(MainLoginIn.this, Home.class);
+//                startActivity(intent);
+//            }
+//        }
     }
 
 
@@ -213,6 +269,44 @@ public class MainLoginIn extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     permissionsRequest.toArray(new String[permissionsRequest.size()]),
                     REQ_PERMISSIONS);
+        }
+    }
+
+    private boolean isUserValid(final String userId, final String password) {
+        boolean isUser = false;
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/AccountServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "accountValid");
+            jsonObject.addProperty("userId", userId);
+            jsonObject.addProperty("password", password);
+            String jsonOut = jsonObject.toString();
+            userValidTask = new CommonTask(url, jsonOut);
+            try {
+                String result = userValidTask.execute().get();
+                isUser = Boolean.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+                isUser = false;
+            }
+        } else {
+            Common.showToast(this, R.string.msg_NoNetwork);
+        }
+        return isUser;
+    }
+
+    //for debug test
+    public void gologinClick(View view){
+        Intent intent = new Intent(MainLoginIn.this, Home.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (userValidTask != null) {
+            userValidTask.cancel(true);
+            userValidTask = null;
         }
     }
 }

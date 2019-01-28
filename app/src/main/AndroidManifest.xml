@@ -75,6 +75,9 @@
         <activity android:name=".HomeNewsActivity_Personal_Friendship" />
         <activity android:name=".Schedule.SchedulePlanActivity" />
         <activity android:name=".Schedule.ScheduleChatActivity"></activity>
+        <activity android:name=".HomeNewsActivity_Personal_Friendship"></activity>
+        <activity android:name=".Map.LandMarkInfo" />
+        <activity android:name=".Map.LandMarkImageInfo"></activity>
     </application>
 
 </manifest>
