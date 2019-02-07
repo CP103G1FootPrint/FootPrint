@@ -19,6 +19,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:text="@string/textCancel"
+            android:onClick="onCancelCreateTripClick"
             android:theme="@style/MyButton"
             style="@style/Widget.AppCompat.Button.Borderless"/>
 
@@ -28,6 +29,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="190dp"
             android:text="@string/textSave"
+            android:onClick="onSaveTripClick"
             android:theme="@style/MyButton"
             style="@style/Widget.AppCompat.Button.Borderless"/>
 
@@ -115,8 +117,24 @@
         <TextView
             android:id="@+id/shTvGroupM"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="100dp"
             android:background="@color/colortextWhite"/>
+        <LinearLayout
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/shBtPickPicture"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:text="@string/textPickPicture"/>
+            <ImageView
+                android:id="@+id/shImgPhoto"
+                android:layout_width="200dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/sh_mountaine"/>
+        </LinearLayout>
 
     </LinearLayout>
     <FrameLayout

@@ -13,6 +13,7 @@ public class Common {
 //	public final static String URL = "http://10.0.2.2:8080/FootPrint";
 //	public final static String URL = "http://10.0.2.2:8080/TextToJson_Web";
 
+	public final static String PREF_FILE = "preference";
 	// check if the device connect to the network
 	public static boolean networkConnected(Activity activity) {
 		ConnectivityManager conManager =

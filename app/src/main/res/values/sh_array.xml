@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="notify_array">
+        <item>All</item>
+        <item>Personal</item>
+        <item>Group</item>
+    </array>
+</resources>

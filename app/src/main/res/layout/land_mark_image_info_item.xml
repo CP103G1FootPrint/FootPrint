@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/landMarkImageInfoProfilePicture"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/profile_picture_pinky"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="8dp"/>
+    <TextView
+        android:id="@+id/landMarkImageInfoItemUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pinky"
+        app:layout_constraintTop_toTopOf="@id/landMarkImageInfoProfilePicture"
+        app:layout_constraintStart_toEndOf="@id/landMarkImageInfoProfilePicture"
+        app:layout_constraintBottom_toBottomOf="@id/landMarkImageInfoProfilePicture"/>
+
+    <ImageView
+        android:id="@+id/landMarkImageInfoItem"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/home_news_picture"
+        app:layout_constraintTop_toBottomOf="@id/landMarkImageInfoProfilePicture"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/landMarkImageInfoItemLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/home_news_like"
+        app:layout_constraintTop_toBottomOf="@id/landMarkImageInfoItem"
+        app:layout_constraintStart_toStartOf="@id/landMarkImageInfoProfilePicture"
+        android:background="@color/colortextWhite" />
+    <ImageButton
+        android:id="@+id/landMarkImageInfoMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/home_news_message"
+        app:layout_constraintStart_toEndOf="@id/landMarkImageInfoItemLike"
+        app:layout_constraintTop_toBottomOf="@id/landMarkImageInfoItem"
+        android:background="@color/colortextWhite"
+        android:layout_marginStart="8dp" />
+    <ImageButton
+        android:id="@+id/landMarkImageInfoItemCollection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/home_news_collection"
+        app:layout_constraintStart_toEndOf="@id/landMarkImageInfoMessage"
+        app:layout_constraintTop_toBottomOf="@id/landMarkImageInfoItem"
+        android:background="@color/colortextWhite"
+        android:layout_marginStart="8dp" />
+
+</android.support.constraint.ConstraintLayout>

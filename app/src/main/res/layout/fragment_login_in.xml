@@ -12,12 +12,13 @@
         android:textSize="15sp"
         android:textStyle="bold"/>
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputAccount"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/inputAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/EmailAccount"
@@ -33,13 +34,14 @@
         android:textStyle="bold"
         android:layout_marginTop="15dp"/>
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputPassword"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:passwordToggleEnabled="true"
         app:errorEnabled="true">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/inputPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/Password"
