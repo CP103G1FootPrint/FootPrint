@@ -76,4 +76,8 @@
     <string name="textSave">Save</string>
     <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
     <string name="UserName">User Name</string>
+    <string name="msg_NoNewsFound">NoNewsFound</string>
+    <string name="msg_NoNetwork">NoNetwork</string>
+    <string name="msg_NoFoundPictures">NoFoundPictures</string>
+    <string name="msg_NoFoundNewsPictures">NoFoundNewsPictures</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.HomeNews;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.molder.footprint.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +38,8 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         if (bundle != null) {
             HomeNewsFragment_News homeNewsFragmentNews = (HomeNewsFragment_News) bundle.getSerializable("news");
             if (homeNewsFragmentNews != null) {
-                profile＿picture.setImageResource(homeNewsFragmentNews.getProfilePictureId());
-                tv_news_userName.setText(homeNewsFragmentNews.getUserName());
+//                profile＿picture.setImageResource(homeNewsFragmentNews.getProfilePictureId());
+//                tv_news_userName.setText(homeNewsFragmentNews.getUserName());
             }
         }
     }

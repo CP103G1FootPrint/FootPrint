@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Friends;
 
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.molder.footprint.R;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
 
