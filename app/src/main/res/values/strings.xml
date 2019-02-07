@@ -95,16 +95,12 @@
     <string name="msg_accountNotValid">Not a valid Email</string>
     <string name="msg_accountNotEmpty">Field can\'t be empty</string>
     <string name="msg_birthdayNotVaild">Not a valid Birthday</string>
-    <string name="msg_InsertFail">InsertFail</string>
-    <string name="msg_InsertSuccess">InsertSuccess</string>
-    <string name="msg_NoNetwork">NoNetwork</string>
     <string name="createAccountSuccess">Create Account Success</string>
     <string name="textNotValid">Not Valid</string>
     <string name="textNotReadTerms">Not Read Terms</string>
     <string name="textCheckInShareChooseLandMark">Choose Land Mark</string>
     <string name="textCheckInShareChooseLandMarkId">CheckInShareChooseLandMarkId</string>
     <string name="msg_NoFoundLandMark">No Found Land Mark</string>
-    <string name="msg_NoImage">No Image</string>
     <string name="msg_NoLandMark">No Land Mark</string>
     <string name="title_activity_land_mark_info">LandMarkInfo</string>
     <string name="mapInfoDetailTitle">mapInfoDetailTitle</string>
@@ -114,7 +110,6 @@
     <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
     <string name="UserName">User Name</string>
     <string name="msg_NoNewsFound">NoNewsFound</string>
-    <string name="msg_NoNetwork">NoNetwork</string>
     <string name="msg_NoFoundPictures">NoFoundPictures</string>
     <string name="msg_NoFoundNewsPictures">NoFoundNewsPictures</string>
 </resources>

@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.example.molder.footprint.CheckInShare.CheckInShareFragment;
 
 import com.example.molder.footprint.Friends.Friends;
+import com.example.molder.footprint.Schedule.ScheduleMainFragment;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 
 
