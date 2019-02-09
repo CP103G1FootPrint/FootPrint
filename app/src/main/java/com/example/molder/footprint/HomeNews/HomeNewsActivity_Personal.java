@@ -13,13 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Common.ImageTask;
 import com.example.molder.footprint.R;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,14 +31,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class HomeNewsActivity_Personal extends AppCompatActivity {
     private static String TAG = "TAG_HomeNewsFragmentPersonal";
     private CircleImageView profile＿picture;
-    private TextView nickName,userName;
+    private TextView nickName, userName;
     private RecyclerView recyclerView;
     private ImageView home_news_personal_addFriend;
     private AppCompatActivity HomeNewsActivity_Personal;
     private HeadImageTask headImageTask;
-    private CommonTask userIdTask;
+    private CommonTask userIdTask, personalPicturesTask;
     private String userId, userNickName;
+    private ImageTask picturesTask;
     private int imageSize;
+    private List<HomeNewsFragment_PersonalPictures> personalPictures = null;
 
 
     @Override
@@ -42,22 +48,26 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_news__personal);
         imageSize = getResources().getDisplayMetrics().widthPixels;
-//        profile＿picture = findViewById(R.id.ci_profile＿picture);
         handleViews();
-        showResults();
-        handlehandleViews();
-
+//        handlehandleViews();
     }
 
-    private void handlehandleViews() {
-
+    private void handleViews() {
         profile＿picture = findViewById(R.id.ci_profile＿picture);
         nickName = findViewById(R.id.tv_home_news_personal_NickName_);
         userName = findViewById(R.id.tv_home_news_personal_ID_);
-        //取得上一頁userId
-        Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
+        home_news_personal_addFriend = findViewById(R.id.home_news_personal_addFriend);
+        recyclerView = findViewById(R.id.rv_home_news_personal_pictures);
 
+
+        //取得上一頁userId
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            HomeNewsFragment_News homeNewsFragment_news = (HomeNewsFragment_News) bundle.getSerializable("news");
+            if (homeNewsFragment_news != null) {
+                userId = homeNewsFragment_news.getUserID();
+            }
+        }
         userName.setText(userId);
 
         //先抓userId
@@ -90,47 +100,48 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
-    //上一頁打包的資料
-    private void showResults() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            /* Bundle物件呼叫getSerializable()可以取得前頁儲存的Serializable物件 */
-            HomeNewsFragment_News homeNewsFragmentNews = (HomeNewsFragment_News) bundle.getSerializable("news");
-            if (homeNewsFragmentNews != null) {
-//                profile＿picture.setImageResource(homeNewsFragmentNews.getUserID());
-            }
-        }
-    }
 
     //使用者照片的recyclerView
-    private class PersonalPicturesAdapter extends RecyclerView.Adapter {
+    private class PersonalPicturesAdapter extends
+            RecyclerView.Adapter<PersonalPicturesAdapter.MyViewHolder> {
         Context context;
-        List<HomeNewsFragment_PersonalPictures> personalPictures;
+        private List<HomeNewsFragment_PersonalPictures> personalPictures;
+        private int imageSize;
 
-        //        private int imageSize;
-        public PersonalPicturesAdapter(Context context,
+        PersonalPicturesAdapter(Context context,
                                        List<HomeNewsFragment_PersonalPictures> PersonalPictures) {
             this.context = context;
             this.personalPictures = PersonalPictures;
-//            imageSize = getResources().getDisplayMetrics().widthPixels / 3; //getDisplayMetrics()取得目前螢幕
+            imageSize = getResources().getDisplayMetrics().widthPixels / 3; //getDisplayMetrics()取得目前螢幕
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+            ImageView imageView;
+
+            public MyViewHolder(View itemView) {
+                super(itemView);
+                imageView = itemView.findViewById(R.id.rv_home_news_personal_pictureItem);
+            }
         }
 
         @NonNull
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             View itemView = layoutInflater.inflate(R.layout.activity_home_news_personal_pictureitem, viewGroup, false);
             return new MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-            final HomeNewsFragment_PersonalPictures personalPicture = personalPictures.get(i);
-            MyViewHolder myViewHolder = (MyViewHolder) viewHolder;
-            myViewHolder.imageView.setImageResource(personalPicture.getPersonalNewsPictureId());
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            final HomeNewsFragment_PersonalPictures personalPicture = personalPictures.get(position);
+            String url = Common.URL + "/PicturesServlet";
+            final int id = personalPicture.getImageID();
+//            String userId = personalPicture.getPersonalNewsPictureId();
+            picturesTask = new ImageTask(url, id, imageSize, holder.imageView);
+            picturesTask.execute();
         }
 
         @Override
@@ -139,23 +150,23 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         }
     }
 
-    private class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
 
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.rv_home_news_personal_pictureItem);
+//    private void handleViews() {
+//        recyclerView = findViewById(R.id.rv_home_news_personal_pictures);
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,
+//                StaggeredGridLayoutManager.VERTICAL));
+
+    }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (personalPictures != null || personalPictures.isEmpty()) {
+                Common.showToast(this, R.string.msg_NoNewsFound);
+            } else {
+                recyclerView.setAdapter(new PersonalPicturesAdapter(this, personalPictures));
+            }
         }
-
-    }
-
-    private void handleViews() {
-        recyclerView = findViewById(R.id.rv_home_news_personal_pictures);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,
-                StaggeredGridLayoutManager.VERTICAL));
-        List<HomeNewsFragment_PersonalPictures> PersonalPicturesList = getPersonalPictures();
-        recyclerView.setAdapter(new PersonalPicturesAdapter(this, PersonalPicturesList));
-    }
 
     protected List<HomeNewsFragment_PersonalPictures> getPersonalPictures() {
         List<HomeNewsFragment_PersonalPictures> personalPictures = new ArrayList<>();
