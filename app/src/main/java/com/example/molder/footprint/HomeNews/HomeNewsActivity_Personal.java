@@ -91,8 +91,33 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
+
+            if (Common.networkConnected(this)) {
+                url = Common.URL + "/PicturesServlet";
+//                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "findPersonalImageId");
+                jsonObject.addProperty("userId", userId);
+                String jsonOut = jsonObject.toString();
+                personalPicturesTask = new CommonTask(url, jsonOut);
+                try {
+                    String jsonIn = personalPicturesTask.execute().get();
+                    Type listType = new TypeToken<List<HomeNewsFragment_PersonalPictures>>() {
+                    }.getType();
+                    personalPictures = new Gson().fromJson(jsonIn, listType);
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if (personalPictures == null || personalPictures.isEmpty()) {
+                    Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
+                } else {
+                    recyclerView.setAdapter(new PersonalPicturesAdapter(this, personalPictures));
+                    recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,
+                            StaggeredGridLayoutManager.VERTICAL));
+                }
+            }
         }
-        home_news_personal_addFriend = findViewById(R.id.home_news_personal_addFriend);
+
         home_news_personal_addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +169,18 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
             picturesTask.execute();
         }
 
+//        @Override
+//        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+//            final HomeNewsFragment_PersonalPictures personalPicture = personalPictures.get(i);
+//            String url = Common.URL + "/PicturesServlet";
+//            int id = personalPicture.getPersonalNewsPictureId();
+//            picturesTask = new HeadImageTask(url, id, imageSize, viewHolder.imageView);
+//            picturesTask.execute();
+//
+////            MyViewHolder myViewHolder = (MyViewHolder) viewHolder;
+////            myViewHolder.imageView.setImageResource(personalPicture.getPersonalNewsPictureId());
+//        }
+
         @Override
         public int getItemCount() {
             return personalPictures.size();
@@ -156,7 +193,25 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
 //        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,
 //                StaggeredGridLayoutManager.VERTICAL));
 
-    }
+//        List<HomeNewsFragment_PersonalPictures> PersonalPicturesList = getPersonalPictures();
+//        recyclerView.setAdapter(new PersonalPicturesAdapter(this, PersonalPicturesList));
+//    }
+
+    protected void getPersonalPictures() {
+//        List<HomeNewsFragment_PersonalPictures> personalPictures = new ArrayList<>();
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/PicturesServlet";
+            List<HomeNewsFragment_PersonalPictures> personalPictures = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findPersonalImageId");
+            jsonObject.addProperty("userId", userId);
+            String jsonOut = jsonObject.toString();
+            personalPicturesTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = personalPicturesTask.execute().get();
+                Type listType = new TypeToken<List<HomeNewsFragment_PersonalPictures>>() {
+                }.getType();
+                personalPictures = new Gson().fromJson(jsonIn, listType);
 
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -168,24 +223,22 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
             }
         }
 
-    protected List<HomeNewsFragment_PersonalPictures> getPersonalPictures() {
-        List<HomeNewsFragment_PersonalPictures> personalPictures = new ArrayList<>();
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture1));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture2));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture3));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture4));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture5));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture6));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture6));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture5));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture4));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture3));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture2));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture1));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture1));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture2));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture3));
-        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture4));
-        return personalPictures;
+
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture1));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture2));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture3));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture4));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture5));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture6));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture6));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture5));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture4));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture3));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture2));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture1));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture1));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture2));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture3));
+//        personalPictures.add(new HomeNewsFragment_PersonalPictures(R.drawable.testpicture4));
     }
 }
