@@ -15,7 +15,6 @@ public class LandMark implements Serializable {
     private int userID;
     private int imageID;
     private String timeStamp;
-
     public LandMark() {
 
     }

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Map.LandMarkInfo;
 import com.example.molder.footprint.R;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
@@ -51,8 +52,8 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
     private CommonTask newsCommonTask, userIdTask, landMarkIdTask;
     private HeadImageTask headImageTask;
     private ImageTask newsImageTask;
-    private String userId, userNickName, landMarkId, landMark;
-    private List<HomeNewsFragment_News> homeNewsFragment_news = null;
+    private String userId, userNickName, landMarkId, landMarkName;
+//    private List<HomeNewsFragment_News> homeNewsFragment_news = null;
 
 
 //    private CommonTask spotGetAllTask;
@@ -129,7 +130,8 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
         getHomeNewsFragment_News();
     }
 
-    private class HomeNewsFragmentAdapter extends RecyclerView.Adapter<HomeNewsFragmentAdapter.MyViewHolder> {
+    private class HomeNewsFragmentAdapter extends
+            RecyclerView.Adapter<HomeNewsFragmentAdapter.MyViewHolder> {
 
         private LayoutInflater layoutInflater;
         private List<HomeNewsFragment_News> homeNewsFragment_news;
@@ -144,7 +146,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
 
         class MyViewHolder extends RecyclerView.ViewHolder {
             CircleImageView profile＿picture;
-            TextView userName, landmark, description;
+            TextView userName, landMarkname, description;
             ImageView news_picture, likes;
             ImageButton message, collection;
 
@@ -154,7 +156,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                 description = itemView.findViewById(R.id.tv_News_Description);
                 profile＿picture = itemView.findViewById(R.id.ci_profile＿picture);
                 userName = itemView.findViewById(R.id.tv_news_userName);
-                landmark = itemView.findViewById(R.id.tv_news_landmark);
+                landMarkname = itemView.findViewById(R.id.tv_news_landmark);
                 news_picture = itemView.findViewById(R.id.iv_news_picture);
                 likes = itemView.findViewById(R.id.ib_news_like);
                 message = itemView.findViewById(R.id.ib_news_message);
@@ -219,7 +221,6 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
 //                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
             }
 
-
             //抓landMarkId
             if (Common.networkConnected(activity)) {
                 url = Common.URL + "/PicturesServlet";
@@ -243,8 +244,8 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                     try {
                         //顯示landMark名稱
                         String jsonIn = landMarkIdTask.execute().get();
-                        landMark = String.valueOf(jsonIn);
-                        holder.landmark.setText(landMark);
+                        landMarkName = String.valueOf(jsonIn);
+                        holder.landMarkname.setText(landMarkName);
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
@@ -255,19 +256,16 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
 
             holder.description.setText(homeNewsFragmentnews.getDescription());
 
-//          holder.profile＿picture.setImageResource(homeNewsFragmentnews.getProfilePictureId());
-//          holder.userName.setText(homeNewsFragmentnews.getUserName());
-//          holder.landmark.setText(homeNewsFragmentnews.getLandmark());
-//          holder.news_picture.setImageResource(homeNewsFragmentnews.getNewsPictureId());
-
             holder.profile＿picture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
-                    intent.putExtra("userId",userId);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("news", homeNewsFragmentnews);
+                    intent.putExtras(bundle);
 
-                    final String text = String.valueOf(userId);
-                    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
+//                    final String text = String.valueOf(userId);
+//                    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("news", homeNewsFragmentnews);
@@ -283,6 +281,11 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             holder.userName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("news", homeNewsFragmentnews);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
 //                    Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("news", homeNewsFragmentnews);
@@ -293,9 +296,14 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                 }
             });
 
-            holder.landmark.setOnClickListener(new View.OnClickListener() {
+            holder.landMarkname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), LandMarkInfo.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("landMarkName",homeNewsFragmentnews);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
 //                    Fragment fragment = new HomeNewsFragment();
 //                    Bundle bundle = new Bundle();
 //                    bundle.putSerializable("news", homeNewsFragmentnews);

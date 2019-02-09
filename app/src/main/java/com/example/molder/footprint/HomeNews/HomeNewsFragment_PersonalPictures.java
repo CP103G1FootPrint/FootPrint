@@ -1,21 +1,17 @@
 package com.example.molder.footprint.HomeNews;
 
 public class HomeNewsFragment_PersonalPictures {
-    private int  personalNewsPictureId;
+    private int  imageID;
 
-
-
-    public HomeNewsFragment_PersonalPictures(int personalNewsPictureId) {
-
-        this.personalNewsPictureId = personalNewsPictureId;
-
+    public HomeNewsFragment_PersonalPictures(int imageID) {
+        this.imageID = imageID;
     }
 
-    public int getPersonalNewsPictureId() {
-        return personalNewsPictureId;
+    public int getImageID() {
+        return imageID;
     }
 
-    public void setPersonalNewsPictureId(int personalNewsPictureId) {
-        this.personalNewsPictureId = personalNewsPictureId;
+    public void setImageID(int imageID) {
+        this.imageID = imageID;
     }
 }

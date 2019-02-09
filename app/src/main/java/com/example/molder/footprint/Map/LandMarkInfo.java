@@ -23,6 +23,7 @@ import com.example.molder.footprint.CheckInShare.Picture;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.HomeNews.HomeNewsFragment_News;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -43,8 +44,8 @@ public class LandMarkInfo extends AppCompatActivity {
     private int imageSize;
     private ImageTask landMarkImageTask;
     private InfoImageTask infoImageTask;
-    private CommonTask imageIdTask, retrieveLocationTask;
-    private int imageId;
+    private CommonTask imageIdTask, retrieveLocationTask,landMarkIdTask;
+    private int imageId,landMarkId;
     private Boolean imageIdCheck = false;
     private List<LandMark> locations = null;
     private List<Picture> pictures = null;
@@ -70,8 +71,31 @@ public class LandMarkInfo extends AppCompatActivity {
         mapInfoDetailRecyclerView = findViewById(R.id.mapInfoDetailRecyclerView);
 
         //取得地標的名稱
-        Intent intent = getIntent();
-        landMarkName = intent.getStringExtra("landMarkName");
+        if(landMarkName!=null) {
+            Intent intent = getIntent();
+            landMarkName = intent.getStringExtra("landMarkName");
+        }else{
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null){
+                HomeNewsFragment_News homeNewsFragment_news = (HomeNewsFragment_News) bundle.getSerializable("landMarkName");
+                if (homeNewsFragment_news != null){
+                    landMarkId = homeNewsFragment_news.getLandMarkID();
+                }
+            }if(Common.networkConnected(this)) {
+                String url = Common.URL + "/PicturesServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "findLandMark");
+                jsonObject.addProperty("id", landMarkId);
+                landMarkIdTask = new CommonTask(url, jsonObject.toString());
+                try {
+                    String jsonIn = landMarkIdTask.execute().get();
+                    landMarkName = String.valueOf(jsonIn);
+                    mapInfoDetailTitle.setText(landMarkName);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            }
+        }
 
         //返回上一頁
         mapInfoDetailBack.setOnClickListener(new View.OnClickListener() {
@@ -271,7 +295,6 @@ public class LandMarkInfo extends AppCompatActivity {
                 public void onClick(View view) {
                     //點選照片跳到照片詳細內容
                     Toast.makeText(LandMarkInfo.this, text, Toast.LENGTH_SHORT).show();
-
                     Intent intent = new Intent(LandMarkInfo.this, LandMarkImageInfo.class);
                     intent.putExtra("landMarkName",landMarkName);
                     intent.putExtra("position",position);
