@@ -44,8 +44,8 @@ public class LandMarkInfo extends AppCompatActivity {
     private int imageSize;
     private ImageTask landMarkImageTask;
     private InfoImageTask infoImageTask;
-    private CommonTask imageIdTask, retrieveLocationTask,landMarkIdTask;
-    private int imageId,landMarkId;
+    private CommonTask imageIdTask, retrieveLocationTask, landMarkIdTask;
+    private int imageId, landMarkId;
     private Boolean imageIdCheck = false;
     private List<LandMark> locations = null;
     private List<Picture> pictures = null;
@@ -71,17 +71,17 @@ public class LandMarkInfo extends AppCompatActivity {
         mapInfoDetailRecyclerView = findViewById(R.id.mapInfoDetailRecyclerView);
 
         //取得地標的名稱
-        if(landMarkName!=null) {
-            Intent intent = getIntent();
-            landMarkName = intent.getStringExtra("landMarkName");
-        }else{
+        Intent intent = getIntent();
+        landMarkName = intent.getStringExtra("landMarkName");
+        if (landMarkName == null) {
             Bundle bundle = getIntent().getExtras();
-            if (bundle != null){
+            if (bundle != null) {
                 HomeNewsFragment_News homeNewsFragment_news = (HomeNewsFragment_News) bundle.getSerializable("landMarkName");
-                if (homeNewsFragment_news != null){
+                if (homeNewsFragment_news != null) {
                     landMarkId = homeNewsFragment_news.getLandMarkID();
                 }
-            }if(Common.networkConnected(this)) {
+            }
+            if (Common.networkConnected(this)) {
                 String url = Common.URL + "/PicturesServlet";
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("action", "findLandMark");
@@ -296,8 +296,8 @@ public class LandMarkInfo extends AppCompatActivity {
                     //點選照片跳到照片詳細內容
                     Toast.makeText(LandMarkInfo.this, text, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LandMarkInfo.this, LandMarkImageInfo.class);
-                    intent.putExtra("landMarkName",landMarkName);
-                    intent.putExtra("position",position);
+                    intent.putExtra("landMarkName", landMarkName);
+                    intent.putExtra("position", position);
                     startActivity(intent);
                 }
             });

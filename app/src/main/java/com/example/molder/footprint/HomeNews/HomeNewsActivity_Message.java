@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeNewsActivity_Message extends AppCompatActivity {
     private static String TAG = "HomeNewsActivity_Message";
-    private CircleImageView profile＿picture, personalUserHeadPicture,guestHeadPicture;
+    private CircleImageView profile＿picture, personalUserHeadPicture;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private TextView nickName, tv_description;
     private Button sendButton;
     private EditText commentMessage;
@@ -48,6 +50,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
     private HeadImageTask headImageTask;
     private int imageSize, imageId;
     private List<HomeNewsActivity_Message_Messages> newsMessage = null;
+    private HomeNews_MessageAdapter homeNews_messageAdapter;
 
 
     @Override
@@ -76,6 +79,26 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                 imageId = homeNewsFragmentNews.getImageID();
             }
         }
+
+        //刷新資料
+        swipeRefreshLayout = this.findViewById(R.id.message_SwipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                handleViews();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        //REFERENCE
+//        recyclerView = this.findViewById(R.id.home_news);
+        //LAYOUT MANAGER
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//      rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        getHomeNewsFragment_News();
+//        recyclerView.setAdapter(homeNews_messageAdapter);
+
+
         //顯示照片描述
         tv_description.setText(description);
 

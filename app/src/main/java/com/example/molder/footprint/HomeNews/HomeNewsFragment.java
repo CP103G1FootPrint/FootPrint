@@ -76,6 +76,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_home_news, container, false);
+
         //刷新資料
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -90,7 +91,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
         rvNews = view.findViewById(R.id.home_news);
         //LAYOUT MANAGER
         rvNews.setLayoutManager(new LinearLayoutManager(activity));
-//      rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        getHomeNewsFragment_News();
         return view;
     }
@@ -284,6 +285,9 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             holder.landMarkname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    Intent intent = new Intent(getActivity(), LandMarkInfo.class);
+//                    intent.putExtra("landMarkName",landMarkName);
+//                    startActivity(intent);
                     Intent intent = new Intent(getActivity(), LandMarkInfo.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("landMarkName",homeNewsFragmentnews);
