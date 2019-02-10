@@ -92,25 +92,6 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
             }
         }
 
-        //刷新資料
-        swipeRefreshLayout = this.findViewById(R.id.message_SwipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                handleViews();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-        //REFERENCE
-//        recyclerView = this.findViewById(R.id.home_news);
-        //LAYOUT MANAGER
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//      rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        getHomeNewsFragment_News();
-//        recyclerView.setAdapter(homeNews_messageAdapter);
-
-
         //顯示照片描述
         tv_description.setText(description);
 
