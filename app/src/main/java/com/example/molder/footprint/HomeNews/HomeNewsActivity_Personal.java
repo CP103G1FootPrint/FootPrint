@@ -91,7 +91,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
-
+            //用userId 找該使用者上傳的照片id
             if (Common.networkConnected(this)) {
                 url = Common.URL + "/PicturesServlet";
                 jsonObject.addProperty("action", "findPersonalImageId");

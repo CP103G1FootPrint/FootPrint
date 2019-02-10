@@ -1,38 +1,47 @@
 package com.example.molder.footprint.HomeNews;
 
 public class HomeNewsActivity_Message_Messages {
-    private int message_ci_profile＿pictureId;
-    private String message_tv_news_userName;
-    private String message_tv_news_Comment;
+    private int  commentId;
+    private String userId;
+    private String message;
+    private int imageId;
 
-    public int getCi_profile＿pictureId() {
-        return message_ci_profile＿pictureId;
+    public HomeNewsActivity_Message_Messages(int commentId, String userId, String message, int imageId) {
+        this.commentId = commentId;
+        this.userId = userId;
+        this.message = message;
+        this.imageId = imageId;
     }
 
-    public void setCi_profile＿pictureId(int ci_profile＿pictureId) {
-        this.message_ci_profile＿pictureId = ci_profile＿pictureId;
+    public int getCommentId() {
+        return commentId;
     }
 
-    public String getTv_news_userName() {
-        return message_tv_news_userName;
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
     }
 
-    public void setTv_news_userName(String tv_news_userName) {
-        this.message_tv_news_userName = tv_news_userName;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getTv_news_Comment() {
-        return message_tv_news_Comment;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setTv_news_Comment(String tv_news_Comment) {
-        this.message_tv_news_Comment = tv_news_Comment;
+    public String getMessage() {
+        return message;
     }
 
-    public HomeNewsActivity_Message_Messages(int ci_profile＿pictureId, String tv_news_userName, String tv_news_Comment) {
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-        this.message_ci_profile＿pictureId = ci_profile＿pictureId;
-        this.message_tv_news_userName = tv_news_userName;
-        this.message_tv_news_Comment = tv_news_Comment;
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }

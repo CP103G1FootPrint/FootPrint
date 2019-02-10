@@ -54,8 +54,6 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
     private ImageTask newsImageTask;
     private String userId, userNickName, landMarkId, landMarkName;
 //    private List<HomeNewsFragment_News> homeNewsFragment_news = null;
-
-
 //    private CommonTask spotGetAllTask;
 //    private CommonTask spotDeleteTask;
 //    private ImageTask spotImageTask;
@@ -97,7 +95,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
         return view;
     }
 
-    //連servlet發送請求
+    //連servlet發送請求 取所有動態照片
     private void getHomeNewsFragment_News() {
         if (Common.networkConnected(activity)) {
             String url = Common.URL + "/PicturesServlet";
@@ -255,70 +253,53 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             }
 
             holder.description.setText(homeNewsFragmentnews.getDescription());
-
+            //點擊使用者頭像換頁至該使用者詳細資訊頁面
             holder.profile＿picture.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("news", homeNewsFragmentnews);
+                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
-
-//                    final String text = String.valueOf(userId);
-//                    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
-
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("news", homeNewsFragmentnews);
-//                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
-//                    intent.putExtras(bundle);
-//                    /* 呼叫startActivity()開啟新的頁面 */
-//                    final String text = String.valueOf(id);
-//                    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
+                    /* 呼叫startActivity()開啟新的頁面 */
                     startActivity(intent);
                 }
             });
-
+            //點擊使用者名字換頁至該使用者詳細資訊頁面
             holder.userName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("news", homeNewsFragmentnews);
+                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
+                    /* 呼叫startActivity()開啟新的頁面 */
                     startActivity(intent);
-//                    Intent intent = new Intent(getActivity(), HomeNewsActivity_Personal.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("news", homeNewsFragmentnews);
-//                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
-//                    intent.putExtras(bundle);
-//                    /* 呼叫startActivity()開啟新的頁面 */
-//                    startActivity(intent);
+
                 }
             });
-
+            //點擊地標名子換頁至該地標詳細資訊頁面
             holder.landMarkname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), LandMarkInfo.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("landMarkName",homeNewsFragmentnews);
+                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
+                    /* 呼叫startActivity()開啟新的頁面 */
                     startActivity(intent);
-//                    Fragment fragment = new HomeNewsFragment();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("news", homeNewsFragmentnews);
-//                    fragment.setArguments(bundle);
-//                    changeFragment(fragment);
                 }
             });
 
-            holder.news_picture.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
+//            holder.news_picture.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
 //            holder.likes.setOnTouchListener(new View.OnTouchListener() {
 //                @Override
 //                public boolean onTouch(View arg0, MotionEvent arg1) {
@@ -326,17 +307,17 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
 //                return true;
 //                }
 //            });
-
+            //點擊留言圖像換頁至留言頁面
             holder.message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent intent = new Intent(getActivity(),HomeNewsActivity_Message.class);
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable("news", homeNewsFragmentnews);
-//                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
-//                    intent.putExtras(bundle);
-//                    /* 呼叫startActivity()開啟新的頁面 */
-//                    startActivity(intent);
+                    Intent intent = new Intent(getActivity(),HomeNewsActivity_Message.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("news", homeNewsFragmentnews);
+                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
+                    intent.putExtras(bundle);
+                    /* 呼叫startActivity()開啟新的頁面 */
+                    startActivity(intent);
                 }
             });
         }

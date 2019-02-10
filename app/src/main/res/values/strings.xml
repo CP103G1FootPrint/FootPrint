@@ -118,4 +118,6 @@
     <string name="msg_NoNewsFound">NoNewsFound</string>
     <string name="msg_NoFoundPictures">NoFoundPictures</string>
     <string name="msg_NoFoundNewsPictures">NoFoundNewsPictures</string>
+    <string name="msg_NoMessage">NoMessage</string>
+    <string name="noCommentMessage">NoMessage</string>
 </resources>

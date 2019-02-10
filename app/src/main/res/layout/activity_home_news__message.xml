@@ -60,12 +60,12 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ci_Comment_user"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="33dp"
+        android:layout_height="34dp"
         android:layout_margin="8dp"
         android:src="@drawable/profile_picture_pinky"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/ti_Go_To_Comment"
