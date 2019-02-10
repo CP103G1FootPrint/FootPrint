@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.molder.footprint.HomeNews.HomeNewsFragment;
+import com.example.molder.footprint.HomeStroke.HomeStrokeFragment;
 import com.example.molder.footprint.Map.HomeMapFragment;
 
 

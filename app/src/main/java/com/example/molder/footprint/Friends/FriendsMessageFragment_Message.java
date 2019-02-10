@@ -1,14 +1,15 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Friends;
 
 import java.io.Serializable;
 
-public class FriendsFriendFragment_Friend implements Serializable {
+public class FriendsMessageFragment_Message implements Serializable {
     private int friends_CvProfilePicId;
-    private String friends_TvFriendsName;
+    private String friends_TvFriendsName,friends_TvMessage;
 
-    public FriendsFriendFragment_Friend(int friends_CvProfilePicId, String friends_TvFriendsName) {
+    public FriendsMessageFragment_Message(int friends_CvProfilePicId, String friends_TvFriendsName, String friends_TvMessage) {
         this.friends_CvProfilePicId = friends_CvProfilePicId;
         this.friends_TvFriendsName = friends_TvFriendsName;
+        this.friends_TvMessage = friends_TvMessage;
     }
 
     public int getFriends_CvProfilePicId() {
@@ -25,5 +26,13 @@ public class FriendsFriendFragment_Friend implements Serializable {
 
     public void setFriends_TvFriendsName(String friends_TvFriendsName) {
         this.friends_TvFriendsName = friends_TvFriendsName;
+    }
+
+    public String getFriends_TvMessage() {
+        return friends_TvMessage;
+    }
+
+    public void setFriends_TvMessage(String friends_TvMessage) {
+        this.friends_TvMessage = friends_TvMessage;
     }
 }

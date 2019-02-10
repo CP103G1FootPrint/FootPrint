@@ -66,12 +66,12 @@
         <activity android:name=".Home" />
         <activity android:name=".Login.LoginTerms" />
         <activity android:name=".Login.CreateNewAccount" />
-        <activity android:name=".HomeNewsActivity_Personal" />
+        <activity android:name=".HomeNews.HomeNewsActivity_Personal" />
         <activity android:name=".Schedule.ScheduleCreateActivity" />
-        <activity android:name=".HomeNewsActivity_Message" />
-        <activity android:name=".FriendsMessageActivity" />
-        <activity android:name=".HomeStrokeActivity" />
-        <activity android:name=".HomeNewsActivity_Personal_Friendship" />
+        <activity android:name=".HomeNews.HomeNewsActivity_Message" />
+        <activity android:name=".Friends.FriendsMessageActivity" />
+        <activity android:name=".HomeStroke.HomeStrokeActivity" />
+        <activity android:name=".HomeNews.HomeNewsActivity_Personal_Friendship" />
         <activity android:name=".Schedule.SchedulePlanActivity" />
         <activity android:name=".Schedule.ScheduleChatActivity"></activity>
         <activity android:name=".Map.LandMarkInfo" />

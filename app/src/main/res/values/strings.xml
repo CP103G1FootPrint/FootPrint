@@ -115,4 +115,7 @@
     <string name="needAllowPermission">\"These permissions are mandatory to get your location. You need to allow them.\"</string>
     <string name="msg_ok">Ok</string>
     <string name="msg_cancel">Cancel</string>
+    <string name="msg_NoNewsFound">NoNewsFound</string>
+    <string name="msg_NoFoundPictures">NoFoundPictures</string>
+    <string name="msg_NoFoundNewsPictures">NoFoundNewsPictures</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.HomeNews;
 
 public class HomeNewsActivity_Message_Messages {
     private int message_ci_profile＿pictureId;

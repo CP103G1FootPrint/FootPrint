@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.HomeStroke;
 
 
 import android.content.Context;
@@ -14,10 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.molder.footprint.R;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
 
