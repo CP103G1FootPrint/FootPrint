@@ -58,6 +58,18 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_news__message);
         imageSize = getResources().getDisplayMetrics().widthPixels;
+
+        //刷新資料
+        swipeRefreshLayout = this.findViewById(R.id.message_SwipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                showResults();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         handleViews();
         showResults();
     }

@@ -46,4 +46,6 @@ dependencies {
     //onback
     implementation 'com.github.ikidou:FragmentBackHandler:2.1'
 
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
 }

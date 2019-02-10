@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +55,8 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
     private HeadImageTask headImageTask;
     private ImageTask newsImageTask;
     private String userId, userNickName, landMarkId, landMarkName;
+    private Context context;
+    private int choosePosition = 0;
 //    private List<HomeNewsFragment_News> homeNewsFragment_news = null;
 //    private CommonTask spotGetAllTask;
 //    private CommonTask spotDeleteTask;
@@ -146,8 +150,9 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
         class MyViewHolder extends RecyclerView.ViewHolder {
             CircleImageView profile＿picture;
             TextView userName, landMarkname, description;
-            ImageView news_picture, likes;
-            ImageButton message, collection;
+            ImageView news_picture;
+//            ImageButton message;
+            CheckBox thumb,likes,collection,message;
 
 
             public MyViewHolder(View itemView) {
@@ -160,12 +165,15 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                 likes = itemView.findViewById(R.id.ib_news_like);
                 message = itemView.findViewById(R.id.ib_news_message);
                 collection = itemView.findViewById(R.id.ib_news_collection);
+//                thumb = itemView.findViewById(R.id.thumb);
             }
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            if(context==null)
+                context = parent.getContext();
             View itemView = layoutInflater.inflate(R.layout.fragment_home_news_listitem, parent, false);
             return new MyViewHolder(itemView);
         }
@@ -173,6 +181,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
             final HomeNewsFragment_News homeNewsFragmentnews = homeNewsFragment_news.get(position);
+            final Integer tag = position+1;
 
             String url = Common.URL + "/PicturesServlet";
             final int id = homeNewsFragmentnews.getImageID();
@@ -290,32 +299,19 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
 //                    startActivity(intent);
                     Intent intent = new Intent(getActivity(), LandMarkInfo.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("landMarkName",homeNewsFragmentnews);
+                    bundle.putSerializable("landMarkName", homeNewsFragmentnews);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
                     /* 呼叫startActivity()開啟新的頁面 */
                     startActivity(intent);
                 }
             });
-
-//            holder.news_picture.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
 //
-//                }
-//            });
-//            holder.likes.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View arg0, MotionEvent arg1) {
-//                likes.setSelected(arg1.getAction()== MotionEvent.ACTION_DOWN);
-//                return true;
-//                }
-//            });
             //點擊留言圖像換頁至留言頁面
             holder.message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(),HomeNewsActivity_Message.class);
+                    Intent intent = new Intent(getActivity(), HomeNewsActivity_Message.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("news", homeNewsFragmentnews);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
