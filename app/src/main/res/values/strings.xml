@@ -4,7 +4,7 @@
     <string name="btnCreateAccount">FootPrint Login In</string>
     <string name="btnFBAccount">FaceBook</string>
     <string name="textTerms">I Agree to Terms of Service and Privacy Policy</string>
-    <string name="EmailAccount">Email</string>
+    <string name="EmailAccount">Google Email</string>
     <string name="Password">Password</string>
     <string name="confirm">Confirm</string>
     <string-array name="textConstellation">
@@ -21,6 +21,20 @@
         <item>Sagittarius 11/22 - 12/20</item>
         <item>Capricorn 12/21 - 1/20</item>
     </string-array>
+
+    <string-array name="textCheckInShareState">
+        <item>Public</item>
+        <item>Private</item>
+        <item>Only Friends</item>
+    </string-array>
+
+    <string-array name="textMapSate">
+        <item>All</item>
+        <item>餐廳</item>
+        <item>飯店</item>
+        <item>景點</item>
+    </string-array>
+
 
     <string name="facebook_app_id">1637855299849357</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -55,17 +69,44 @@
     <string name="textFriendList">FriendList</string>
     <string name="textTakePictureLarge">Take Picture</string>
     <string name="textPickPicture">Pick Picture</string>
-    <string name="logout">LOGOUT</string>
-    <string name="reminder">Close reminder</string>
-    <string name="notify">notify</string>
-    <string name="textTakePictureSmall">TAKE PICTURE SMALL</string>
-    <string name="textNoCameraAppsFound">NoCameraAppsFound</string>
-    <string name="title_activity_personal_record_selfie_main">PersonalRecordSelfieMainActivity
-    </string>
-    <string name="title_activity_personal_collect_member">PersonalCollectMember</string>
-    <string name="set">set notification</string>
-    <string name="cancle">cancle notification</string>
-    <string name="title_activity_personal_notify_member">PersonalNotifyMember</string>
-    <string name="title_activity_personal_exchange_member">PersonalExchangeMember</string>
-
+    <string name="col_Name">Name</string>
+    <string name="col_Type">Type</string>
+    <string name="col_Address">Address</string>
+    <string name="CheckInSharePopUpOption">Options</string>
+    <string name="CheckInShareFormCamera">Form Camera</string>
+    <string name="CheckInShareFormAlbum">Form Album</string>
+    <string name="msg_NoCameraApp">No Camera App</string>
+    <string name="CheckInShareInsert">Insert</string>
+    <string name="etCheckInShareDescription">Image Description</string>
+    <string name="CheckInShareState">Image State</string>
+    <string name="CheckInShareLandMark">Choose LandMark</string>
+    <string name="checkInShareNoCameraApp">No Camera App</string>
+    <string name="textSave">Save</string>
+    <string name="msg_accountExist">Account Exist</string>
+    <string name="msg_accountNotValid">Not a valid Email</string>
+    <string name="msg_accountNotEmpty">Field can\'t be empty</string>
+    <string name="msg_birthdayNotVaild">Not a valid Birthday</string>
+    <string name="msg_InsertFail">InsertFail</string>
+    <string name="msg_InsertSuccess">InsertSuccess</string>
+    <string name="msg_NoNetwork">NoNetwork</string>
+    <string name="createAccountSuccess">Create Account Success</string>
+    <string name="textNotValid">Not Valid</string>
+    <string name="textNotReadTerms">Not Read Terms</string>
+    <string name="textCheckInShareChooseLandMark">Choose Land Mark</string>
+    <string name="textCheckInShareChooseLandMarkId">CheckInShareChooseLandMarkId</string>
+    <string name="msg_NoFoundLandMark">No Found Land Mark</string>
+    <string name="msg_NoImage">No Image</string>
+    <string name="msg_NoLandMark">No Land Mark</string>
+    <string name="title_activity_land_mark_info">LandMarkInfo</string>
+    <string name="mapInfoDetailTitle">mapInfoDetailTitle</string>
+    <string name="openHours">open Hours</string>
+    <string name="landMarkDescription">land Mark Description</string>
+    <string name="landMarkAddress">land Mark Address</string>
+    <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
+    <string name="UserName">User Name</string>
+    <string name="set">set</string>
+    <string name="reminder">reminder</string>
+    <string name="logout">logout</string>
+    <string name="cancle">cancle</string>
+    <string name="textTakePictureSmall">Take Picture (small)</string>
 </resources>

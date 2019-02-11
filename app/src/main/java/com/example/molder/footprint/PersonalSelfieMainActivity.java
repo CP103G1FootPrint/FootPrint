@@ -50,8 +50,8 @@ public class PersonalSelfieMainActivity extends AppCompatActivity {
         if (isIntentAvailable(this, intent)) {
             startActivityForResult(intent, REQUEST_TAKE_PICTURE_SMALL);
         } else {
-            Toast.makeText(this, R.string.textNoCameraAppsFound,
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, R.string.textNoCameraAppsFound,
+//                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -65,8 +65,8 @@ public class PersonalSelfieMainActivity extends AppCompatActivity {
         if (isIntentAvailable(this, intent)) {
             startActivityForResult(intent, REQUEST_TAKE_PICTURE_LARGE);
         } else {
-            Toast.makeText(this, R.string.textNoCameraAppsFound,
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, R.string.textNoCameraAppsFound,
+//                    Toast.LENGTH_SHORT).show();
         }
     }
 

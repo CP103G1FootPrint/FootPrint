@@ -6,40 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/personal_tabBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorbtnCreateAccount"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@android:color/black"
-        tools:layout_editor_absoluteY="100dp">
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/personal_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Record" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/personal_collect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Collect" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/personal_notify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Notify" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/personal_exchange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Exchange" />
-
-    </android.support.design.widget.TabLayout>
 
 
     <android.support.v7.widget.Toolbar
@@ -100,6 +67,40 @@
 
 
     </android.support.v7.widget.Toolbar>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/personal_tabBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorbtnCreateAccount"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="@android:color/black"
+        tools:layout_editor_absoluteY="100dp">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/personal_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Record" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/personal_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Collect" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/personal_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notify" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/personal_exchange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exchange" />
+
+    </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
     android:id="@+id/fragment_home"

@@ -1,6 +1,7 @@
 package com.example.molder.footprint;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
+
+
+import com.example.molder.footprint.Common.ImageTask;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +44,7 @@ public class PersonalExchangeMain extends Fragment {
     }
 
     private View personal_fragment;
+    private Context mContext;
     private ImageView imageView;
     private Button btTakePictureLarge, btPickPicture;
     private File file;
@@ -38,24 +52,26 @@ public class PersonalExchangeMain extends Fragment {
     private ImageView piggy;
     private TextView id;
     private TextView point;
+    private CommonTask retrieveExchangeTask;
+    private ImageTask imageTask;
+    private List<PersonalExchangeMemberr> exchange;
+    private int imageSize;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         personal_fragment = inflater.inflate(R.layout.personal_main, container, false);
+        mContext = getActivity();
         findViews();
+
         return personal_fragment;
+
     }
 
     private void findViews() {
 //        b = personal_fragment.findViewById(R.id.persona_pic);
         recyclerView = personal_fragment.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(1,
-                        StaggeredGridLayoutManager.VERTICAL));
-        List<PersonalExchangeMember> memberList = getMemberList();
-        recyclerView.setAdapter(new PersonalExchangeMain.PersonalExchangeAdapter(getActivity(), memberList));
 
 
         imageView = personal_fragment.findViewById(R.id.imageView);
@@ -66,35 +82,57 @@ public class PersonalExchangeMain extends Fragment {
         point = personal_fragment.findViewById(R.id.point);
 
 
-//        b.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), PersonalSelfieMainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        if (Common.networkConnected((Activity) mContext)) {
+            String url = Common.URL + "/ExchangeServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getAll");
+//            jsonObject.addProperty("name", landMarkName); 指定條件搜尋ＴＡＢＬＥ內的欄位
+            //將內容轉成json字串
+            retrieveExchangeTask = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = retrieveExchangeTask.execute().get();
+                Type listType = new TypeToken<List<PersonalExchangeMemberr>>() {
+                }.getType();
+                //解析 json to gson
+                exchange = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+            }
+            if (exchange == null || exchange.isEmpty()) {
+//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+
+            }else {
+                recyclerView.setLayoutManager(
+                        new StaggeredGridLayoutManager(1,
+                                StaggeredGridLayoutManager.VERTICAL));
+                recyclerView.setAdapter(new PersonalExchangeAdapter(getActivity(), exchange));
+
+            }
+        }
+
 
 
     }
 
     /* RecyclerView要透過RecyclerView.Adapter來處理欲顯示的清單內容，
-     必須建立RecyclerView.Adapter子類別並覆寫對應的方法：
-     getItemCount()、onCreateViewHolder()、onBindViewHolder */
+    必須建立RecyclerView.Adapter子類別並覆寫對應的方法：
+    getItemCount()、onCreateViewHolder()、onBindViewHolder */
     private class PersonalExchangeAdapter extends
-            RecyclerView.Adapter<PersonalExchangeMain.PersonalExchangeAdapter.MyViewHolder> {
+            RecyclerView.Adapter<PersonalExchangeAdapter.MyViewHolder> {
         private Context context;
-        private List<PersonalExchangeMember> memberList;
+        private List<PersonalExchangeMemberr> memberList;
 
-        PersonalExchangeAdapter(Context context, List<PersonalExchangeMember> memberList) {
+        PersonalExchangeAdapter(Context context, List<PersonalExchangeMemberr> memberList) {
             this.context = context;
             this.memberList = memberList;
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView personal_pic;
+            ImageButton personal_pic;
             TextView id;
             TextView point;
             ImageView piggy;
+
 
 
             MyViewHolder(View itemView) {
@@ -103,6 +141,7 @@ public class PersonalExchangeMain extends Fragment {
                 id = itemView.findViewById(R.id.id);
                 point = itemView.findViewById(R.id.point);
                 piggy = itemView.findViewById(R.id.piggy);
+                imageSize = getResources().getDisplayMetrics().widthPixels / 3;
 
             }
         }
@@ -115,57 +154,27 @@ public class PersonalExchangeMain extends Fragment {
 
         @NonNull
         @Override
-        public PersonalExchangeMain.PersonalExchangeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        public PersonalExchangeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             View itemView = LayoutInflater.from(context).
                     inflate(R.layout.personal_exchange_item, viewGroup, false);
-            return new PersonalExchangeMain.PersonalExchangeAdapter.MyViewHolder(itemView);
+            return new PersonalExchangeAdapter.MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final PersonalExchangeMain.PersonalExchangeAdapter.MyViewHolder holder, int position) {
-            final PersonalExchangeMember member = memberList.get(position);
-            holder.personal_pic.setImageResource(member.getImage());
-            holder.id.setText(String.valueOf(member.getId()));
-            holder.point.setText(String.valueOf(member.getPoint()));
-            holder.piggy.setImageResource(member.getPiggy());
+        public void onBindViewHolder(@NonNull final PersonalExchangeAdapter.MyViewHolder holder, int position) {
+            final PersonalExchangeMemberr member = memberList.get(position);
+            String url = Common.URL + "/LocationServlet";
+            int id = member.getId();
+            imageTask = new ImageTask(url, id, imageSize, holder.personal_pic);
+            imageTask.execute();
+            holder.id.setText(String.valueOf(member.getProductName()));
+            holder.point.setText(String.valueOf(member.getProductPoint()));
+            holder.piggy.setImageResource(R.drawable.ic_piggy_bank_with_dollar_coins);
 
 
-//            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    // 要呼叫CardView.setsetCardBackgroundColor()方能精準改變CardView背景
-//                    CardView cardView = (CardView) holder.itemView;
-//                    int colorActionDown = getResources().getColor(R.color.colorPrimary);
-//                    int colorActionUp = getResources().getColor(R.color.colorLightGray);
-//                    switch (event.getAction()) {
-//                        case MotionEvent.ACTION_DOWN:
-//                            cardView.setCardBackgroundColor(colorActionDown);
-//                            ImageView iv = new ImageView(context);
-//                            iv.setImageResource(member.getImage());
-//                            Toast toast = new Toast(context);
-//                            toast.setView(iv);
-//                            toast.setDuration(Toast.LENGTH_SHORT);
-//                            toast.show();
-//                            break;
-//                        default:
-//                            cardView.setCardBackgroundColor(colorActionUp);
-//                            break;
-//                    }
-//                    return true;
-//                }
-//            });
+
         }
     }
 
-    public List<PersonalExchangeMember> getMemberList() {
-        List<PersonalExchangeMember> memberList = new ArrayList<>();
-        memberList.add(new PersonalExchangeMember(23, R.drawable.cofee, 100,R.drawable.ic_piggy_bank_with_dollar_coins));
-        memberList.add(new PersonalExchangeMember(75, R.drawable.cofee, 50,R.drawable.ic_piggy_bank_with_dollar_coins));
-        memberList.add(new PersonalExchangeMember(65, R.drawable.cofee, 30,R.drawable.ic_piggy_bank_with_dollar_coins));
-        memberList.add(new PersonalExchangeMember(23, R.drawable.cofee, 100,R.drawable.ic_piggy_bank_with_dollar_coins));
-        memberList.add(new PersonalExchangeMember(75, R.drawable.cofee, 50,R.drawable.ic_piggy_bank_with_dollar_coins));
-        memberList.add(new PersonalExchangeMember(65, R.drawable.cofee, 30,R.drawable.ic_piggy_bank_with_dollar_coins));
 
-        return memberList;
-    }
 }
