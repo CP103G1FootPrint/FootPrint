@@ -34,7 +34,8 @@ import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
-import com.example.molder.footprint.FriendsFriendFragment_Friend;
+import com.example.molder.footprint.Friends.FriendsFriendFragment_Friend;
+
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
