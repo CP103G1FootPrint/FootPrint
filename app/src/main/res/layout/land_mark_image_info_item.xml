@@ -51,7 +51,7 @@
         android:id="@+id/landMarkImageInfoItemCollection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/home_news_collection"
+        android:src="@drawable/home_news_collection_black"
         app:layout_constraintStart_toEndOf="@id/landMarkImageInfoMessage"
         app:layout_constraintTop_toBottomOf="@id/landMarkImageInfoItem"
         android:background="@color/colortextWhite"

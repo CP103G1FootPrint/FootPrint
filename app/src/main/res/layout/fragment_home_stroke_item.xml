@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="15dp"
-    tools:context=".HomeStrokeFragment">
+    tools:context=".HomeStroke.HomeStrokeFragment">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
                 android:layout_height="30dp"
                 android:layout_toRightOf="@id/stroke_IvMessage"
                 android:layout_below="@id/stroke_ImgView"
-                android:src="@drawable/home_news_collection"/>
+                android:src="@drawable/home_news_collection_black"/>
 
 
         </RelativeLayout>

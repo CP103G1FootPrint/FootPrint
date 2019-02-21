@@ -1,7 +1,9 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.HomeNews;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.example.molder.footprint.R;
 
 public class HomeNewsActivity_Personal_Friendship extends Activity {
 

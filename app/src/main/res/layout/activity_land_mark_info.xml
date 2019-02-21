@@ -38,7 +38,7 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/home_news_collection"
+                android:src="@drawable/home_news_collection_black"
                 android:background="@color/colorbtnCreateAccount"/>
 
         </android.support.constraint.ConstraintLayout>

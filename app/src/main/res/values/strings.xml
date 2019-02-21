@@ -113,5 +113,16 @@
     <string name="landMarkAddress">land Mark Address</string>
     <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
     <string name="UserName">User Name</string>
+    <string name="install">You need to install</string>
+    <string name="noAnything">You do not choose anything</string>
+    <string name="msg_permission">You need to enable permission to display location!</string>
+    <string name="needAllowPermission">\"These permissions are mandatory to get your location. You need to allow them.\"</string>
+    <string name="msg_ok">Ok</string>
+    <string name="msg_cancel">Cancel</string>
+    <string name="msg_NoNewsFound">NoNewsFound</string>
+    <string name="msg_NoFoundPictures">NoFoundPictures</string>
+    <string name="msg_NoFoundNewsPictures">NoFoundNewsPictures</string>
+    <string name="msg_NoMessage">NoMessage</string>
+    <string name="noCommentMessage">NoMessage</string>
     <string name="textShare">Share</string>
 </resources>

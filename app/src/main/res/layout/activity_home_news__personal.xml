@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeNewsActivity_Personal">
+    tools:context=".HomeNews.HomeNewsActivity_Personal">
     <ImageView
         android:id="@+id/home_news_personal_addFriend"
         android:layout_width="wrap_content"
@@ -54,6 +54,27 @@
         app:layout_constraintTop_toTopOf="@+id/ci_profile＿picture"/>
 
     <TextView
+        android:id="@+id/tv_home_news_personal_NickName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nickname:"
+        android:textSize="16sp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_news_personal_ID"/>
+
+    <TextView
+        android:id="@+id/tv_home_news_personal_NickName_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AA1234566"
+        android:textSize="16sp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintStart_toEndOf="@id/tv_home_news_personal_NickName"
+        app:layout_constraintTop_toBottomOf="@id/tv_home_news_personal_ID_"/>
+
+
+    <TextView
         android:id="@+id/tv_home_news_Birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,7 +82,7 @@
         android:textSize="16sp"
         android:layout_marginStart="25dp"
         app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
-        app:layout_constraintTop_toBottomOf="@+id/tv_home_news_personal_ID"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_home_news_personal_NickName"/>
 
     <TextView
         android:id="@+id/tv_home_news_personal_Birthday_"
@@ -71,7 +92,7 @@
         android:textSize="16sp"
         android:layout_marginStart="2dp"
         app:layout_constraintStart_toEndOf="@id/tv_home_news_Birthday"
-        app:layout_constraintTop_toTopOf="@id/tv_home_news_Birthday"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_home_news_personal_NickName_"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_home_news_personal_pictures"

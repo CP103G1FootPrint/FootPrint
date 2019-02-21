@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Friends;
 
 
 import android.content.Context;
@@ -16,10 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.molder.footprint.R;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

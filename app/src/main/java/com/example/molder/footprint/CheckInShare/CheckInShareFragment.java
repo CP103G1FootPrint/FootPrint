@@ -1,6 +1,8 @@
 package com.example.molder.footprint.CheckInShare;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -16,10 +18,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.util.Log;
@@ -34,7 +39,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
@@ -48,8 +52,13 @@ import com.google.gson.reflect.TypeToken;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -63,7 +72,7 @@ public class CheckInShareFragment extends Fragment {
     private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private ImageView ivCheckInShare;
-    private Button btTakePicture, btPickPicture, btFinishInsert, btCancel,btChooseLandMark;
+    private Button btTakePicture, btPickPicture, btFinishInsert, btCancel, btChooseLandMark;
     private Spinner spSate;
     private TextView tvShowLandMark;
     private EditText etDescription;
@@ -71,12 +80,15 @@ public class CheckInShareFragment extends Fragment {
     private static final int REQ_TAKE_PICTURE = 0;
     private static final int REQ_PICK_IMAGE = 1;
     private static final int REQ_CROP_PICTURE = 2;
+    public static final int REQ_EXTERNAL_STORAGE = 3;
     private Uri contentUri, croppedImageUri;
-    private View v,rootView;
+    private View v, rootView;
     private ListView listView;
     private CommonTask retrieveLocationTask;
     private String textLandMark;
     private int intLandMarkID;
+    private String mCurrentPhotoPath;
+    private File photoFile;
 
     public CheckInShareFragment() {
         // Required empty public constructor
@@ -87,6 +99,28 @@ public class CheckInShareFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = getActivity();
         fragmentManager = getFragmentManager();
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+
+        File images = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        mCurrentPhotoPath = "路徑" + images.getAbsolutePath();
+        return images;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(Uri.fromFile(photoFile));
+        activity.sendBroadcast(mediaScanIntent);
     }
 
     @Override
@@ -102,17 +136,22 @@ public class CheckInShareFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // 指定存檔路徑
-                File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                file = new File(file, "picture.jpg");
-                contentUri = FileProvider.getUriForFile(
-                        activity, activity.getPackageName() + ".provider", file);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+                photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (photoFile != null) {
+                    if (isIntentAvailable(activity, intent)) {
+                        contentUri = FileProvider.getUriForFile(
+                                activity, activity.getPackageName() + ".provider", photoFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+                        startActivityForResult(intent, REQ_TAKE_PICTURE);
 
-                if (isIntentAvailable(activity, intent)) {
-                    startActivityForResult(intent, REQ_TAKE_PICTURE);
-                } else {
-                    Common.showToast(getActivity(), R.string.checkInShareNoCameraApp);
+                    } else {
+                        Common.showToast(getActivity(), R.string.checkInShareNoCameraApp);
+                    }
                 }
             }
         });
@@ -139,7 +178,7 @@ public class CheckInShareFragment extends Fragment {
                     return;
                 }
 
-                if (tvShowLandMark == null){
+                if (tvShowLandMark == null) {
                     Common.showToast(getActivity(), R.string.msg_NoLandMark);
                     return;
                 }
@@ -174,8 +213,6 @@ public class CheckInShareFragment extends Fragment {
                 } else {
                     Common.showToast(getActivity(), R.string.msg_NoNetwork);
                 }
-
-//                fragmentManager.popBackStack();
             }
         });
 
@@ -185,7 +222,6 @@ public class CheckInShareFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Home.class);
                 startActivity(intent);
-//                fragmentManager.popBackStack();
             }
         });
 
@@ -194,8 +230,8 @@ public class CheckInShareFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //清除重複choose Land Mark AlertDialog
-                if(v.getParent() != null) {
-                    ((ViewGroup)v.getParent()).removeView(v); // <- fix
+                if (v.getParent() != null) {
+                    ((ViewGroup) v.getParent()).removeView(v); // <- fix
                 }
                 //新建choose Land Mark AlertDialog
                 new AlertDialog.Builder(activity)
@@ -232,13 +268,13 @@ public class CheckInShareFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 for (int i = 0; i < listView.getChildCount(); i++) {
-                    if(position == i ){
+                    if (position == i) {
                         listView.getChildAt(i).setBackgroundColor(Color.GREEN);
                         LandMark member = (LandMark) parent.getItemAtPosition(position);
                         textLandMark = member.getName();
                         intLandMarkID = member.getId();
                         tvShowLandMark.setText(textLandMark);
-                    }else{
+                    } else {
                         listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
                     }
                 }
@@ -268,7 +304,7 @@ public class CheckInShareFragment extends Fragment {
                 showResult(locations);
             }
         } else {
-            Common.showToast(activity,R.string.msg_NoNetwork);
+            Common.showToast(activity, R.string.msg_NoNetwork);
         }
     }
 
@@ -286,6 +322,7 @@ public class CheckInShareFragment extends Fragment {
             switch (requestCode) {
                 case REQ_TAKE_PICTURE:
                     crop(contentUri);
+                    galleryAddPic();
                     break;
                 case REQ_PICK_IMAGE:
                     Uri uri = intent.getData();
@@ -342,15 +379,12 @@ public class CheckInShareFragment extends Fragment {
         }
     }
 
-    public static void showToast(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
-
     //listView
     public void showResult(List<LandMark> locations) {
         listView.setAdapter(new LandMarkAdapter(activity, locations));
 
     }
+
     private class LandMarkAdapter extends BaseAdapter {
         Context context;
         List<LandMark> memberList;
@@ -373,10 +407,6 @@ public class CheckInShareFragment extends Fragment {
             }
 
             LandMark member = memberList.get(position);
-//            ImageView ivImage = itemView
-//                    .findViewById(R.id.ivImage);
-//            ivImage.setImageResource(member.getImage());
-
             TextView tvName = itemView
                     .findViewById(R.id.tvCheckInShareChooseLandMarkId);
             tvName.setText(member.getName());
@@ -395,11 +425,51 @@ public class CheckInShareFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        askPermissions(activity, permissions, REQ_EXTERNAL_STORAGE);
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         if (retrieveLocationTask != null) {
             retrieveLocationTask.cancel(true);
             retrieveLocationTask = null;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    btPickPicture.setEnabled(true);
+                } else {
+                    btPickPicture.setEnabled(false);
+                }
+                break;
+        }
+    }
+
+    // New Permission see Appendix A
+    public static void askPermissions(Activity activity, String[] permissions, int requestCode) {
+        Set<String> permissionsRequest = new HashSet<>();
+        for (String permission : permissions) {
+            int result = ContextCompat.checkSelfPermission(activity, permission);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                permissionsRequest.add(permission);
+            }
+        }
+
+        if (!permissionsRequest.isEmpty()) {
+            ActivityCompat.requestPermissions(activity,
+                    permissionsRequest.toArray(new String[permissionsRequest.size()]),
+                    requestCode);
         }
     }
 

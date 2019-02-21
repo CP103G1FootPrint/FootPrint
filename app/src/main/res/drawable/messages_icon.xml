@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_checked="true" android:drawable="@drawable/home_new_like_icon_green" />
-    <item android:drawable="@drawable/home_news_like_icon" />
+    <item android:state_checked="true" android:drawable="@drawable/message_icon" />
+    <item android:drawable="@drawable/message_icon" />
 
 </selector>
 
