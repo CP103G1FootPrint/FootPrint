@@ -84,7 +84,7 @@
     <string name="msg_NoImage">No image</string>
     <string name="msg_NameIsInvalid">Trip name is invalid</string>
     <string name="msg_InsertSuccess">Insert successfully</string>
-    <string name="msg_InsertFail">Insert fail</string>
+
     <string name="CheckInShareInsert">Insert</string>
     <string name="etCheckInShareDescription">Image Description</string>
     <string name="CheckInShareState">Image State</string>
@@ -96,15 +96,15 @@
     <string name="msg_accountNotEmpty">Field can\'t be empty</string>
     <string name="msg_birthdayNotVaild">Not a valid Birthday</string>
     <string name="msg_InsertFail">InsertFail</string>
-    <string name="msg_InsertSuccess">InsertSuccess</string>
-    <string name="msg_NoNetwork">NoNetwork</string>
+
+
     <string name="createAccountSuccess">Create Account Success</string>
     <string name="textNotValid">Not Valid</string>
     <string name="textNotReadTerms">Not Read Terms</string>
     <string name="textCheckInShareChooseLandMark">Choose Land Mark</string>
     <string name="textCheckInShareChooseLandMarkId">CheckInShareChooseLandMarkId</string>
     <string name="msg_NoFoundLandMark">No Found Land Mark</string>
-    <string name="msg_NoImage">No Image</string>
+
     <string name="msg_NoLandMark">No Land Mark</string>
     <string name="title_activity_land_mark_info">LandMarkInfo</string>
     <string name="mapInfoDetailTitle">mapInfoDetailTitle</string>
@@ -113,4 +113,5 @@
     <string name="landMarkAddress">land Mark Address</string>
     <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
     <string name="UserName">User Name</string>
+    <string name="textShare">Share</string>
 </resources>

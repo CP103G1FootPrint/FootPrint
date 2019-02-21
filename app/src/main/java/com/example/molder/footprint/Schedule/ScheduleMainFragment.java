@@ -1,5 +1,6 @@
 package com.example.molder.footprint.Schedule;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -37,15 +39,17 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ScheduleMainFragment extends Fragment {
     private static final String TAG = "TripListFragment";
     private SwipeRefreshLayout swipeRefreshLayout;
     private FragmentActivity activity;
     private CommonTask tripGetAllTask;
-    private CommonTask tripDeleteTask;
+    private CommonTask tripDeleteTask,retrieveTripTask;
     private ImageTask tripImageTask;
     private RecyclerView recyclerView ;
     private Spinner shSpinner ;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class ScheduleMainFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true); //開啟動畫
-                showAllTrips(); //顯示所有旅遊景點
+//                showAllTrips(); //顯示所有旅遊景點
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -79,35 +83,37 @@ public class ScheduleMainFragment extends Fragment {
 
     }
 
-    private void showAllTrips() {
-        if (Common.networkConnected(activity)) {
-            String url = Common.URL + "/TripServlet";
-            List<Trip> trips = null;
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
-            String jsonOut = jsonObject.toString();
-            tripGetAllTask = new CommonTask(url, jsonOut);
-            try {
-                String jsonIn = tripGetAllTask.execute().get();
-                Type listType = new TypeToken<List<Trip>>() {
-                }.getType();
-                trips = new Gson().fromJson(jsonIn, listType);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (trips == null || trips.isEmpty()) {
-                Common.showToast(activity, R.string.msg_NoTripsFound);
-            } else {
-                recyclerView.setAdapter(new TripAdapter(activity, trips));
-            }
-        } else {
-            Common.showToast(activity, R.string.msg_NoNetwork);
-        }
-    }
+//    private void showAllTrips() {
+//        if (Common.networkConnected(activity)) {
+//            String url = Common.URL + "/TripServlet";
+//            List<Trip> trips = null;
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("action", "All");
+//            String jsonOut = jsonObject.toString();
+//            tripGetAllTask = new CommonTask(url, jsonOut);
+//            try {
+//                String jsonIn = tripGetAllTask.execute().get();
+//                Type listType = new TypeToken<List<Trip>>() {
+//                }.getType();
+//                trips = new Gson().fromJson(jsonIn, listType);
+//            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+//            }
+//            if (trips == null || trips.isEmpty()) {
+//                Common.showToast(activity, R.string.msg_NoTripsFound);
+//            } else {
+//                recyclerView.setAdapter(new TripAdapter(activity, trips));
+//            }
+//        } else {
+//            Common.showToast(activity, R.string.msg_NoNetwork);
+//        }
+//    }
+
+
     @Override
     public void onStart() {
         super.onStart();
-        showAllTrips(); //重刷抓資料
+//        showAllTrips(); //重刷抓資料
     }
 
 
@@ -158,7 +164,7 @@ public class ScheduleMainFragment extends Fragment {
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
             final Trip trip = trips.get(i);
             String url = Common.URL + "/TripServlet"; //圖還未載入
-            int id = trip.getId();
+            int id = trip.getTripID();
             tripImageTask = new ImageTask(url, id, imageSize, myViewHolder.imageView);
             //主執行緒繼續執行 新開的執行緒去抓圖，抓圖需要網址、id ，抓到圖後show在imageView上
             tripImageTask.execute(); //ImageTask類似MyTask 去server端抓圖
@@ -250,6 +256,42 @@ public class ScheduleMainFragment extends Fragment {
 
     private void handleViews(View view){
         shSpinner =view.findViewById(R.id.shSpinner);
+        shSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
+                if (Common.networkConnected((activity) )) {
+                    String url = Common.URL + "/TripServlet";
+                    List<Trip> trips = null;
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", adapterView.getSelectedItem().toString());
+                    jsonObject.addProperty("type", adapterView.getSelectedItem().toString());
+                    //將內容轉成json字串
+                    retrieveTripTask = new CommonTask(url, jsonObject.toString());
+                    try {
+                        String jsonIn = retrieveTripTask.execute().get();
+                        Type listType = new TypeToken<List<Trip>>() {
+                        }.getType();
+                        //解析 json to gson
+                        trips = new Gson().fromJson(jsonIn, listType);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (trips == null || trips.isEmpty()) {
+                        Toast.makeText(activity, R.string.msg_NoTripsFound, Toast.LENGTH_SHORT).show();
+                    } else {
+//                        showAllTrips();
+                        recyclerView.setAdapter(new TripAdapter(activity, trips));
+                    }
+                } else {
+                    Toast.makeText(activity, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         recyclerView = view.findViewById(R.id.shRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
@@ -264,17 +306,17 @@ public class ScheduleMainFragment extends Fragment {
             }
         });
 
-        shSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
+//        shSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
 
 
     }
