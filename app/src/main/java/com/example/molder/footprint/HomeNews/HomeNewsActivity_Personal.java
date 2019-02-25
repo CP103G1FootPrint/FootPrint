@@ -2,6 +2,7 @@ package com.example.molder.footprint.HomeNews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,14 +36,15 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
     private CircleImageView profile＿picture;
     private TextView nickName, userName;
     private RecyclerView recyclerView;
-    private ImageView home_news_personal_addFriend;
+    private CheckBox home_news_personal_addFriend;
     private AppCompatActivity HomeNewsActivity_Personal;
     private HeadImageTask headImageTask;
-    private CommonTask userIdTask, personalPicturesTask;
-    private String userId, userNickName;
+    private CommonTask userIdTask, personalPicturesTask, userTask;
+    private String userId, userNickName, userNowId;
     private ImageTask picturesTask;
     private int imageSize;
     private List<HomeNewsFragment_PersonalPictures> personalPictures = null;
+    private List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends;
 
 
     @Override
@@ -49,7 +53,11 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         setContentView(R.layout.activity_home_news__personal);
         imageSize = getResources().getDisplayMetrics().widthPixels;
         handleViews();
-//        handlehandleViews();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        handleViews();
     }
 
     private void handleViews() {
@@ -59,6 +67,10 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         home_news_personal_addFriend = findViewById(R.id.home_news_personal_addFriend);
         recyclerView = findViewById(R.id.rv_home_news_personal_pictures);
 
+
+        // 取得上一頁userId
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("userId");
 
         //取得上一頁userId
         Bundle bundle = getIntent().getExtras();
@@ -116,16 +128,84 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                 }
             }
         }
+        //取得目前登入使用者id
+        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        userNowId = preferences.getString("userId", "");
+        //判斷欲加好友的使用者id和目前登入使用者的id是否相同
+        if (userId.equals(userNowId)) {
+            home_news_personal_addFriend.setVisibility(View.INVISIBLE);
+        } else {
+            home_news_personal_addFriend.setVisibility(View.VISIBLE);
+        }
 
-        home_news_personal_addFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeNewsActivity_Personal.this, HomeNewsActivity_Personal_Friendship.class);
-                startActivity(intent);
+        //判斷兩人是否為好友
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/FriendsServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findFriendId");
+            jsonObject.addProperty("userId", userNowId);
+            jsonObject.addProperty("inviteeId", userId);
+            String jsonOut = jsonObject.toString();
+            userTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = userTask.execute().get();
+                Type listType = new TypeToken<List<HomeNewsActivity_Personal_Friendship_Friends>>() {
+                }.getType();
+                friendship_Friends = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
             }
-        });
-    }
+            if (friendship_Friends == null || friendship_Friends.isEmpty()) {
+                home_news_personal_addFriend.setChecked(false);
+            } else {
+                home_news_personal_addFriend.setChecked(true);
+            }
+        }
 
+        if(home_news_personal_addFriend.isChecked()){
+            home_news_personal_addFriend.setClickable(false);
+            home_news_personal_addFriend.setFocusable(false);
+            home_news_personal_addFriend.setFocusableInTouchMode(false);
+            home_news_personal_addFriend.setEnabled(false);
+        }else {
+            home_news_personal_addFriend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    home_news_personal_addFriend.setChecked(false);
+                    Intent intent = new Intent(HomeNewsActivity_Personal.this, HomeNewsActivity_Personal_Friendship.class);
+                    intent.putExtra("userId", userId);
+                    startActivity(intent);
+                }
+//            }); {
+//
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if(home_news_personal_addFriend.isChecked()){
+//                        home_news_personal_addFriend.setClickable(false);
+//                        home_news_personal_addFriend.setFocusable(false);
+//                        home_news_personal_addFriend.setFocusableInTouchMode(false);
+//                        home_news_personal_addFriend.setEnabled(false);
+////
+//                    }else{
+//                        Intent intent = new Intent(HomeNewsActivity_Personal.this, HomeNewsActivity_Personal_Friendship.class);
+//                        intent.putExtra("userId", userId);
+//                        startActivity(intent);
+//
+//                    }
+//                }
+//            });
+            });
+
+        }
+//        home_news_personal_addFriend.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(HomeNewsActivity_Personal.this, HomeNewsActivity_Personal_Friendship.class);
+//                intent.putExtra("userId", userId);
+//                startActivity(intent);
+//            }
+//        });
+    }
 
     //使用者照片的recyclerView
     private class PersonalPicturesAdapter extends
@@ -135,7 +215,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         private int imageSize;
 
         PersonalPicturesAdapter(Context context,
-                                       List<HomeNewsFragment_PersonalPictures> PersonalPictures) {
+                                List<HomeNewsFragment_PersonalPictures> PersonalPictures) {
             this.context = context;
             this.personalPictures = PersonalPictures;
             imageSize = getResources().getDisplayMetrics().widthPixels / 3; //getDisplayMetrics()取得目前螢幕

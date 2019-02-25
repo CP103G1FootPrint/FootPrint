@@ -16,6 +16,9 @@
     <!-- 相機許可 -->
     <uses-feature android:name="android.hardware.camera"
                   android:required="true"/>
+    <!-- websocket透過網路傳遞資訊 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
