@@ -123,4 +123,5 @@
     <string name="msg_CollectionSuccess">收藏</string>
     <string name="msg_Liked">讚</string>
     <string name="msg_InsertFrindSuccess">好友邀請送出</string>
+    <string name="textShare">Share</string>
 </resources>

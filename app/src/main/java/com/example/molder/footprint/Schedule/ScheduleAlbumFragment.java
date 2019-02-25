@@ -1,9 +1,16 @@
 package com.example.molder.footprint.Schedule;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +20,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +31,19 @@ import android.widget.TextView;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Home;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,11 +52,15 @@ public class ScheduleAlbumFragment extends Fragment {
     private static final String TAG = "ScheduleAlbumFragment";
     private RecyclerView rvAlbum ;
     private FragmentActivity activity;
-    private CommonTask albumGetAllTask;
+    private CommonTask albumGetAllTask,albumDeleteTask;
 
     private ImageTask albumImageTask;
     private static final int REQ_PICK_IMAGE = 0 ;
     private SwipeRefreshLayout shAlbumSwipeRefreshLayout ;
+    private static final int REQ_CROP_PICTURE = 2;
+    private Uri contentUri,croppedImageUri;
+    private  ImageView shAlbumImg ;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +93,7 @@ public class ScheduleAlbumFragment extends Fragment {
             String url = Common.URL + "/GroupAlbumServlet";
             List<GroupAlbum> groupAlbums = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getImage");
+            jsonObject.addProperty("action", "getAll");
             String jsonOut = jsonObject.toString();
             albumGetAllTask = new CommonTask(url, jsonOut);
             try {
@@ -89,6 +107,9 @@ public class ScheduleAlbumFragment extends Fragment {
             if (groupAlbums == null || groupAlbums.isEmpty()) {
                 Common.showToast(activity, R.string.msg_NoImage);
             } else {
+                rvAlbum.setLayoutManager(
+                        new StaggeredGridLayoutManager(3,
+                                StaggeredGridLayoutManager.VERTICAL));
                 rvAlbum.setAdapter(new GroupAdapter(activity, groupAlbums));
             }
         } else {
@@ -164,12 +185,58 @@ public class ScheduleAlbumFragment extends Fragment {
             }
         });
     }
+
+
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+
+                case REQ_PICK_IMAGE:
+//                    Uri uri = intent.getData(); //資源路徑Uri
+//                    if (uri != null) {
+//                        String[] columns = {MediaStore.Images.Media.DATA};
+//                        Cursor cursor = getContentResolver().query(uri, columns,//cursor指標
+//                                null, null, null);
+//                        if (cursor != null && cursor.moveToFirst()) {
+//                            String imagePath = cursor.getString(0);
+//                            cursor.close();
+//
+//                        }
+//                    }
+
+
+                    Intent intentss = new Intent(getActivity(), ScheduleAlbumInsertActivity.class);
+                    startActivity(intentss);
+
+
+
+
+
+
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+
     @Override
     public void onStop() {
         super.onStop();
-        if (albumImageTask != null) {
-            albumImageTask.cancel(true);
-            albumImageTask = null;
+        if (albumGetAllTask != null) {
+            albumGetAllTask.cancel(true);
+            albumGetAllTask = null;
         }
 
         if (albumImageTask != null) {
@@ -177,10 +244,45 @@ public class ScheduleAlbumFragment extends Fragment {
             albumImageTask = null;
         }
 
-        if (albumImageTask != null) {
-            albumImageTask.cancel(true);
-            albumImageTask = null;
+        if (albumDeleteTask != null) {
+            albumDeleteTask.cancel(true);
+            albumDeleteTask = null;
         }
     }
+
+
+//    private void crop(Uri sourceImageUri) {
+//        File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        file = new File(file, "picture_cropped.jpg");
+//        croppedImageUri = Uri.fromFile(file);
+//        // take care of exceptions
+//        try {
+//            // call the standard crop action intent (the user device may not support it)
+//            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+//            // the recipient of this Intent can read soruceImageUri's data
+//            cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            // set image source Uri and type
+//            cropIntent.setDataAndType(sourceImageUri, "image/*");
+//            // send crop message
+//            cropIntent.putExtra("crop", "true");
+//            // aspect ratio of the cropped area, 0 means user define
+//            cropIntent.putExtra("aspectX", 0); // this sets the max width
+//            cropIntent.putExtra("aspectY", 0); // this sets the max height
+//            // output with and height, 0 keeps original size
+//            cropIntent.putExtra("outputX", 0);
+//            cropIntent.putExtra("outputY", 0);
+//            // whether keep original aspect ratio
+//            cropIntent.putExtra("scale", true);
+//            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, croppedImageUri);
+//            // whether return data by the intent
+//            cropIntent.putExtra("return-data", true);
+//            // start the activity - we handle returning in onActivityResult
+//            startActivityForResult(cropIntent, REQ_CROP_PICTURE);
+//        }
+//        // respond to users whose devices do not support the crop action
+//        catch (ActivityNotFoundException anfe) {
+//            Common.showToast(activity, "This device doesn't support the crop action!");
+//        }
+//    }
 
 }

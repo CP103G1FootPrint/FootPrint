@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,16 +22,20 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Friends.FriendsFriendFragment_Friend;
+
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -38,6 +43,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Type;
 import java.util.Calendar;
 
 public class ScheduleCreateActivity extends AppCompatActivity implements
@@ -54,6 +60,9 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     private byte[] image;
     private ImageView shImgPhoto ;
     private Uri contentUri,croppedImageUri;
+    private ListView listView ;
+    private String textFriend ;
+    private int intFriendid ;
 
 
     @Override
@@ -142,6 +151,25 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                 LayoutInflater inflater = LayoutInflater.from(ScheduleCreateActivity.this);
                 final View a = inflater.inflate(R.layout.schedule_friendlist, null);
 
+                listView = a.findViewById(R.id.lvCheckFriend);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        for(int i =0 ; i < listView.getChildCount();i++){
+                            if( position == i){
+                                listView.getChildAt(i).setBackgroundColor(Color.GREEN);
+                                FriendsFriendFragment_Friend member = (FriendsFriendFragment_Friend) parent.getItemAtPosition(position);
+                                textFriend = member.getFriends_TvFriendsName();
+                                intFriendid = member.getFriends_CvProfilePicId();
+                                shTvGroupM.setText(textFriend);
+
+                            }else {
+                                listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                            }
+                        }
+                    }
+                });
+
 
                 new AlertDialog.Builder(ScheduleCreateActivity.this)
 
@@ -186,43 +214,45 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     }
 
     public void onSaveTripClick(View view) {
-        String title = shEtTripName.getText().toString().trim();
-        if (title.length() <= 0) {
-            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NameIsInvalid);
-            return;
-        }
-        String date = shTvDatePicker.getText().toString();
-        if (image == null) {
-            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoImage);
-            return;
-        }
-        if (Common.networkConnected(activity)) {
-            String url = Common.URL + "/TripServlet";
-            Trip trip = new Trip(0, title, date);
-            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "tripInsert");
-            jsonObject.addProperty("trip", new Gson().toJson(trip));
-            jsonObject.addProperty("imageBase64", imageBase64);
-            int count = 0;
-            try {
-                String result = new CommonTask(url, jsonObject.toString()).execute().get();
-                count = Integer.valueOf(result);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (count == 0) {
-                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
-            } else {
-                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
-            }
-        } else {
-            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
-        }
-        ScheduleCreateActivity.this.finish();
+//        String title = shEtTripName.getText().toString().trim();
+//        if (title.length() <= 0) {
+//            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NameIsInvalid);
+//            return;
+//        }
+//        String date = shTvDatePicker.getText().toString();
+//        String type =
+//        if (image == null) {
+//            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoImage);
+//            return;
+//        }
+//        if (Common.networkConnected(activity)) {
+//            String url = Common.URL + "/TripServlet";
+//            Trip trip = new Trip(0,title,date,type);
+//            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("action", "tripInsert");
+//            jsonObject.addProperty("trip", new Gson().toJson(trip));
+//            jsonObject.addProperty("imageBase64", imageBase64);
+//            int count = 0;
+//            try {
+//                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+//                count = Integer.valueOf(result);
+//            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+//            }
+//            if (count == 0) {
+//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
+//            } else {
+//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
+//            }
+//        } else {
+//            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
+//        }
+//        ScheduleCreateActivity.this.finish();
 
-//        finish();
+        finish();
     }
+
 
     public void onCancelCreateTripClick (View view){
         finish();
@@ -242,7 +272,8 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                     Log.d(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
                     try {
                         Bitmap picture = BitmapFactory.decodeStream(
-                                activity.getContentResolver().openInputStream(croppedImageUri));
+
+                                this.getContentResolver().openInputStream(croppedImageUri));
                         shImgPhoto.setImageBitmap(picture);
                         ByteArrayOutputStream out = new ByteArrayOutputStream();
                         picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -257,7 +288,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     }
 
     private void crop(Uri sourceImageUri) {
-        File file = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File file = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         file = new File(file, "picture_cropped.jpg");
         croppedImageUri = Uri.fromFile(file);
         // take care of exceptions

@@ -3,23 +3,27 @@ package com.example.molder.footprint.Schedule;
 import java.io.Serializable;
 
 public class Trip implements Serializable {
-    private int id ;
-    private String title ;
-    private String date ;
+    private int tripID;
+    private String title;
+    private String date;
+    private String type;
+    private String createID ;
 
 
-    public Trip(int id, String title, String date) {
-        this.id = id;
+    public Trip(int tripID, String title, String date, String type, String createID) {
+        this.tripID = tripID;
         this.title = title;
         this.date = date;
+        this.type = type;
+        this.createID = createID;
     }
 
-    public int getId() {
-        return id;
+    public int getTripID() {
+        return tripID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTripID(int tripID) {
+        this.tripID = tripID;
     }
 
     public String getTitle() {
@@ -36,5 +40,21 @@ public class Trip implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCreateID() {
+        return createID;
+    }
+
+    public void setCreateID(String createID) {
+        this.createID = createID;
     }
 }
