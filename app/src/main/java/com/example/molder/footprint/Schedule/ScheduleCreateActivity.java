@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -44,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ScheduleCreateActivity extends AppCompatActivity implements
@@ -61,8 +63,16 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     private ImageView shImgPhoto ;
     private Uri contentUri,croppedImageUri;
     private ListView listView ;
-    private String textFriend ;
+    private String textFriend ,createID ;
     private int intFriendid ;
+
+    private String[] list_items;
+    private boolean[] checked_items ;
+    private ArrayList<Integer> items_selected = new ArrayList<>();
+
+
+
+
 
 
     @Override
@@ -144,63 +154,112 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         shTvGroupM = findViewById(R.id.shTvGroupM);
         shBtPickPicture = findViewById(R.id.shBtPickPicture);
         shImgPhoto = findViewById(R.id.shImgPhoto);
+        list_items = getResources().getStringArray(R.array.textFriends);
+        checked_items = new boolean[list_items.length];
 
         shBtAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = LayoutInflater.from(ScheduleCreateActivity.this);
-                final View a = inflater.inflate(R.layout.schedule_friendlist, null);
-
-                listView = a.findViewById(R.id.lvCheckFriend);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(ScheduleCreateActivity.this);
+                myBuilder.setTitle(R.string.textAddtoGroup);
+                myBuilder.setMultiChoiceItems(list_items, checked_items, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        for(int i =0 ; i < listView.getChildCount();i++){
-                            if( position == i){
-                                listView.getChildAt(i).setBackgroundColor(Color.GREEN);
-                                FriendsFriendFragment_Friend member = (FriendsFriendFragment_Friend) parent.getItemAtPosition(position);
-                                textFriend = member.getFriends_TvFriendsName();
-                                intFriendid = member.getFriends_CvProfilePicId();
-                                shTvGroupM.setText(textFriend);
-
-                            }else {
-                                listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
-                            }
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if (!items_selected.contains(which)){
+                            items_selected.add(which);
+                        }else {
+                            items_selected.remove(which);
                         }
                     }
+                }) ;
+                myBuilder.setCancelable(false);
+                myBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String items = "" ;
+                        for (int i=0;i<items_selected.size();i++){
+                            items = items + list_items[items_selected.get(i)];
+                            if (i!= items_selected.size()-1){
+                                items = items+ "";
+                            }
+                        }
+                        shTvGroupM.setText(items);
+                    }
                 });
+                myBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog dialog = myBuilder.create() ;
+                dialog.show();
 
 
-                new AlertDialog.Builder(ScheduleCreateActivity.this)
 
-                        .setTitle(R.string.textAddtoGroup)
 
-                        .setMultiChoiceItems(
-                                new String[]{"May", "Jack", "Sunny","Vivian","Tom"},
-                                new boolean[]{false,true,true,false,false},
-                                new DialogInterface.OnMultiChoiceClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                        Toast.makeText(getApplicationContext(), "which " + which + ", isChecked " + isChecked, Toast.LENGTH_SHORT).show();
-                                    }
-                                })
 
-                        .setView(a)
-                        .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), R.string.textSuccess, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        })
-                        .show();
+
+
+//                LayoutInflater inflater = LayoutInflater.from(ScheduleCreateActivity.this);
+//                final View a = inflater.inflate(R.layout.schedule_friendlist, null);
+//
+//                listView = a.findViewById(R.id.lvCheckFriend);
+//                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        for(int i =0 ; i < listView.getChildCount();i++){
+//                            if( position == i){
+//                                listView.getChildAt(i).setBackgroundColor(Color.GREEN);
+//                                FriendsFriendFragment_Friend member = (FriendsFriendFragment_Friend) parent.getItemAtPosition(position);
+//                                textFriend = member.getFriends_TvFriendsName();
+//                                intFriendid = member.getFriends_CvProfilePicId();
+//                                shTvGroupM.setText(textFriend);
+//
+//                            }else {
+//                                listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+//                            }
+//                        }
+//                    }
+//                });
+
+
+//                new AlertDialog.Builder(ScheduleCreateActivity.this)
+//
+//                        .setTitle(R.string.textAddtoGroup)
+//
+//                        .setMultiChoiceItems(
+//                                new String[]{"May", "Jack", "Sunny","Vivian","Tom"},
+//                                new boolean[]{false,true,true,false,false},
+//                                new DialogInterface.OnMultiChoiceClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+////                                        Toast.makeText(getApplicationContext(), "which " + which + ", isChecked " + isChecked, Toast.LENGTH_SHORT).show();
+//                                    }
+//                                })
+//
+//                        .setView(a)
+//                        .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Toast.makeText(getApplicationContext(), R.string.textSuccess, Toast.LENGTH_SHORT).show();
+//                            }
+//                        })
+//                        .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                            }
+//                        })
+//                        .show();
+
+
             }
         });
+
+
+
+
         shBtPickPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,44 +272,64 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
 
     }
 
-    public void onSaveTripClick(View view) {
-//        String title = shEtTripName.getText().toString().trim();
-//        if (title.length() <= 0) {
-//            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NameIsInvalid);
-//            return;
-//        }
-//        String date = shTvDatePicker.getText().toString();
-//        String type =
-//        if (image == null) {
-//            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoImage);
-//            return;
-//        }
-//        if (Common.networkConnected(activity)) {
-//            String url = Common.URL + "/TripServlet";
-//            Trip trip = new Trip(0,title,date,type);
-//            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
-//            JsonObject jsonObject = new JsonObject();
-//            jsonObject.addProperty("action", "tripInsert");
-//            jsonObject.addProperty("trip", new Gson().toJson(trip));
-//            jsonObject.addProperty("imageBase64", imageBase64);
-//            int count = 0;
-//            try {
-//                String result = new CommonTask(url, jsonObject.toString()).execute().get();
-//                count = Integer.valueOf(result);
-//            } catch (Exception e) {
-//                Log.e(TAG, e.toString());
-//            }
-//            if (count == 0) {
-//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
-//            } else {
-//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
-//            }
-//        } else {
-//            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
-//        }
-//        ScheduleCreateActivity.this.finish();
 
-        finish();
+
+
+
+    // 新增行程列表
+    public void onSaveTripClick(View view) {
+        String title = shEtTripName.getText().toString().trim();
+        if (title.length() <= 0) {
+            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NameIsInvalid);
+            return;
+        }
+        String date = shTvDatePicker.getText().toString();
+
+        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        String createID = preferences.getString("userId", "");
+
+
+
+//        String type = shTvGroupM.getText().toString().trim() ;
+        String type;
+                if (shTvGroupM == null){
+                    type = "Personal" ;
+
+                }else {
+                    type= "Group";
+                }
+
+
+        if (image == null) {
+            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoImage);
+            return;
+        }
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/TripServlet";
+            Trip trip = new Trip(0,title,date,type,createID);
+            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "tripInsert");
+            jsonObject.addProperty("trip", new Gson().toJson(trip));
+            jsonObject.addProperty("imageBase64", imageBase64);
+            int count = 0;
+            try {
+                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
+            } else {
+                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
+            }
+        } else {
+            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
+        }
+        ScheduleCreateActivity.this.finish();
+
+//        finish();
     }
 
 
@@ -259,6 +338,8 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
 
     }
 
+
+    //挑選行程列表封面照片
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -287,6 +368,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         }
     }
 
+    //裁切照片
     private void crop(Uri sourceImageUri) {
         File file = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         file = new File(file, "picture_cropped.jpg");

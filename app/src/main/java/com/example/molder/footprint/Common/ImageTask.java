@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.ref.WeakReference;
@@ -96,4 +97,15 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
         }
         return bitmap;
     }
+
+
+    public static byte[] bitmapToPNG(Bitmap srcBitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        // 轉成PNG不會失真，所以quality參數值會被忽略
+        srcBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);//Bitmap可以壓縮的功能
+
+        return baos.toByteArray();
+    }
+
+
 }

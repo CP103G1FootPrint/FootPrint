@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.HomeNews.HomeNewsActivity_Message;
 import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
@@ -38,6 +40,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class ScheduleMainFragment extends Fragment {
@@ -49,6 +53,12 @@ public class ScheduleMainFragment extends Fragment {
     private ImageTask tripImageTask;
     private RecyclerView recyclerView ;
     private Spinner shSpinner ;
+
+    private String[] list_items;
+    private boolean[] checked_items ;
+    private ArrayList<Integer> items_selected = new ArrayList<>();
+    private String createID ;
+
 
 
     @Override
@@ -112,6 +122,7 @@ public class ScheduleMainFragment extends Fragment {
 
     @Override
     public void onStart() {
+
         super.onStart();
 //        showAllTrips(); //重刷抓資料
     }
@@ -191,41 +202,86 @@ public class ScheduleMainFragment extends Fragment {
             myViewHolder.shadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AlertDialog.Builder myBuilder = new AlertDialog.Builder(getActivity());
+                    myBuilder.setTitle(R.string.textAddtoGroup);
+                    myBuilder.setMultiChoiceItems(list_items, checked_items, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            if (!items_selected.contains(which)){
+                                items_selected.add(which);
+                            }else {
+                                items_selected.remove(which);
+                            }
+                        }
+                    }) ;
+                    myBuilder.setCancelable(false);
+                    myBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String items = "" ;
+                            for (int i=0;i<items_selected.size();i++){
+                                items = items + list_items[items_selected.get(i)];
+                                if (i!= items_selected.size()-1){
+                                    items = items+ "";
+                                }
+                            }
+
+                        }
+                    });
+                    myBuilder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog dialog = myBuilder.create() ;
+                    dialog.show();
+
+
+
+
+
+
+
+
+
+
+
 //                    Fragment fragment = new ScheduleFriendListFragment();
 //                    changeFragment(fragment);
 
-                    LayoutInflater inflater = LayoutInflater.from(getActivity());
-                    final View a = inflater.inflate(R.layout.schedule_friendlist, null);
+//                    LayoutInflater inflater = LayoutInflater.from(getActivity());
+//                    final View a = inflater.inflate(R.layout.schedule_friendlist, null);
 
 
-                    new AlertDialog.Builder(getActivity())
-
-                            .setTitle(R.string.textAddtoGroup)
-
-                            .setMultiChoiceItems(
-                                    new String[]{"May", "Jack", "Sunny","Vivian","Tom"},
-                                    new boolean[]{false,true,true,false,false},
-                                    new DialogInterface.OnMultiChoiceClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                                            Toast.makeText(getActivity(), "which " + which + ", isChecked " + isChecked, Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-
-                            .setView(a)
-                            .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getActivity(), R.string.textSuccess, Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            })
-                            .show();
+//                    new AlertDialog.Builder(getActivity())
+//
+//                            .setTitle(R.string.textAddtoGroup)
+//
+//                            .setMultiChoiceItems(
+//                                    new String[]{"May", "Jack", "Sunny","Vivian","Tom"},
+//                                    new boolean[]{false,true,true,false,false},
+//                                    new DialogInterface.OnMultiChoiceClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+//                                            Toast.makeText(getActivity(), "which " + which + ", isChecked " + isChecked, Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    })
+//
+//                            .setView(a)
+//                            .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Toast.makeText(getActivity(), R.string.textSuccess, Toast.LENGTH_SHORT).show();
+//                                }
+//                            })
+//                            .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.cancel();
+//                                }
+//                            })
+//                            .show();
 
                 }
             });
@@ -241,6 +297,12 @@ public class ScheduleMainFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity,ScheduleChatActivity.class);
+
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("trip", trip );
+                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             });
@@ -254,7 +316,12 @@ public class ScheduleMainFragment extends Fragment {
 
 
 
+
+
     private void handleViews(View view){
+        //取得目前登入使用者id
+        SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        createID = preferences.getString("userId", "");
         shSpinner =view.findViewById(R.id.shSpinner);
         shSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             @Override
@@ -269,6 +336,9 @@ public class ScheduleMainFragment extends Fragment {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", adapterView.getSelectedItem().toString());
                     jsonObject.addProperty("type", adapterView.getSelectedItem().toString());
+
+                    jsonObject.addProperty("createID", createID);
+
                     //將內容轉成json字串
                     retrieveTripTask = new CommonTask(url, jsonObject.toString());
                     try {

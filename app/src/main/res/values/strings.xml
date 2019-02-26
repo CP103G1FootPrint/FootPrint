@@ -37,6 +37,16 @@
         <item>景點</item>
     </string-array>
 
+    <string-array name="textFriends">
+        <item>May</item>
+        <item>Jack</item>
+        <item>Sunny</item>
+        <item>Vivian</item>
+        <item>Tom</item>
+    </string-array>
+
+
+
 
     <string name="facebook_app_id">1637855299849357</string>
     <!-- TODO: Remove or change this placeholder text -->

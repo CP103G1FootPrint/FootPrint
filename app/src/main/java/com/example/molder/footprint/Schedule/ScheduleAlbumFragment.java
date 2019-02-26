@@ -4,6 +4,8 @@ package com.example.molder.footprint.Schedule;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -58,6 +60,8 @@ public class ScheduleAlbumFragment extends Fragment {
     private static final int REQ_PICK_IMAGE = 0 ;
     private SwipeRefreshLayout shAlbumSwipeRefreshLayout ;
     private static final int REQ_CROP_PICTURE = 2;
+    private static final int IMAGE_CODE = 1;
+
     private Uri contentUri,croppedImageUri;
     private  ImageView shAlbumImg ;
 
@@ -87,6 +91,17 @@ public class ScheduleAlbumFragment extends Fragment {
         handleViews(view);
         return view;
     }
+
+    private boolean isIntentAvailable(Context context, Intent intent) {
+        PackageManager packageManager = context.getPackageManager();
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
+    }
+
+
+
+
 
     private void showAllAlbum(){
         if (Common.networkConnected(activity)) {
@@ -180,7 +195,12 @@ public class ScheduleAlbumFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
                 startActivityForResult(intent, REQ_PICK_IMAGE);
+//                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//                galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+//                galleryIntent.setType("image/*");//圖片
+//                startActivityForResult(galleryIntent, IMAGE_CODE);
 
             }
         });
@@ -194,38 +214,45 @@ public class ScheduleAlbumFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
 
                 case REQ_PICK_IMAGE:
-//                    Uri uri = intent.getData(); //資源路徑Uri
-//                    if (uri != null) {
-//                        String[] columns = {MediaStore.Images.Media.DATA};
-//                        Cursor cursor = getContentResolver().query(uri, columns,//cursor指標
-//                                null, null, null);
-//                        if (cursor != null && cursor.moveToFirst()) {
-//                            String imagePath = cursor.getString(0);
-//                            cursor.close();
+
+                    Uri uri = intent.getData(); //資源路徑Uri
+//                    Uri selectedImage = intent.getData();
+
+                    if (uri != null) {
+                        //獲取圖片的路徑
+                        String[] columns = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getActivity().getContentResolver().query(uri, columns,//cursor指標
+                                null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            String imagePath = cursor.getString(0);
+                            cursor.close();
+
+
+                            Intent intentss = new Intent(getActivity(), ScheduleAlbumInsertActivity.class);
+                            intentss.putExtra("imagePath", imagePath);
+                            startActivity(intentss);
+                        }
+
+
+//                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        cursor.moveToFirst();
+//                        String path= cursor.getString(columnIndex);
 //
-//                        }
-//                    }
+//                        BitmapFactory.Options options = new BitmapFactory.Options(); options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                        Bitmap newBitMapPhoto = BitmapFactory.decodeFile(path,options);
 
 
-                    Intent intentss = new Intent(getActivity(), ScheduleAlbumInsertActivity.class);
-                    startActivity(intentss);
-
-
-
-
-
-
+                    }
             }
 
-
+            }
         }
 
-
-    }
 
 
 
