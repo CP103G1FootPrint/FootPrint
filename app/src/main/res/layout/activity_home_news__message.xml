@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Pinky"
         android:textColor="#000"
-        android:textSize="15dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/ci_profile＿picture"
         app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去"
         android:textColor="#000"
-        android:textSize="13dp"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
         app:layout_constraintTop_toBottomOf="@id/tv_news_userName" />

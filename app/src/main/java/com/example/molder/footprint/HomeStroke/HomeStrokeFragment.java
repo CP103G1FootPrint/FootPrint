@@ -11,16 +11,27 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.HomeNews.HeadImageTask;
 import com.example.molder.footprint.R;
+import com.example.molder.footprint.Schedule.ScheduleMainFragment;
+import com.example.molder.footprint.Schedule.Trip;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +42,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * A simple {@link Fragment} subclass.
  */
 public class HomeStrokeFragment extends Fragment implements FragmentBackHandler {
+    private static final String TAG = "HomeStrokeFragment";
     private FragmentActivity activity;
     private RecyclerView rvStroke;
+    private CommonTask tripGetAllTask,userIdTask;
+    private ImageTask tripImageTask;
+    private HeadImageTask headImageTask;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -64,41 +79,56 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
         rvStroke = view.findViewById(R.id.home_news);
         //LAYOUT MANAGER
         rvStroke.setLayoutManager(new LinearLayoutManager(activity));
-        getHomeStrokeFragment_stroke();
         return view;
     }
 
-    private void getHomeStrokeFragment_stroke() {
-        List<HomeStrokeFragment_stroke> homeStrokeFragment_strokes = new ArrayList<>();
-        homeStrokeFragment_strokes.add(new HomeStrokeFragment_stroke
-                (R.drawable.testpicture1,R.drawable.profile_picture_cockroach
-                        ,"cockroach","東京遊","2018/03/03"));
-        homeStrokeFragment_strokes.add(new HomeStrokeFragment_stroke
-                (R.drawable.testpicture2,R.drawable.profile_picture_earth
-                        ,"earth","大阪遊","2018/03/03"));
-        homeStrokeFragment_strokes.add(new HomeStrokeFragment_stroke
-                (R.drawable.testpicture3,R.drawable.profile_picture_pinky
-                        ,"pinky","北極遊","2018/03/03"));
-        homeStrokeFragment_strokes.add(new HomeStrokeFragment_stroke
-                (R.drawable.testpicture4,R.drawable.ic_footprint_logo
-                        ,"footprint","南極遊","2018/03/03"));
-        rvStroke.setAdapter(new HomeStrokeFragmentAdapter(activity, homeStrokeFragment_strokes));
+    @Override
+    public void onStart() {
+        super.onStart();
+        getHomeStrokeFragment_stroke();
+    }
 
+    private void getHomeStrokeFragment_stroke() {
+        if (Common.networkConnected(activity)) {
+            String url = Common.URL + "/TripServlet";
+            List<HomeStrokeFragment_stroke> trips = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "All");
+            String jsonOut = jsonObject.toString();
+            tripGetAllTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = tripGetAllTask.execute().get();
+                Type listType = new TypeToken<List<HomeStrokeFragment_stroke>>() {
+                }.getType();
+                trips = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (trips == null || trips.isEmpty()) {
+                Common.showToast(activity, R.string.msg_NoTripsFound);
+            } else {
+                rvStroke.setAdapter(new HomeStrokeFragmentAdapter(activity, trips));
+            }
+        } else {
+            Common.showToast(activity, R.string.msg_NoNetwork);
+        }
     }
 
     private class HomeStrokeFragmentAdapter extends RecyclerView.Adapter<HomeStrokeFragmentAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
-        private List<HomeStrokeFragment_stroke> homeStrokeFragment_strokes;
+        private List<HomeStrokeFragment_stroke> trips;
+        private int imageSize;
 
         HomeStrokeFragmentAdapter(Context context, List<HomeStrokeFragment_stroke> HomeStrokeFragment_stroke) {
             layoutInflater = LayoutInflater.from(context);
-            this.homeStrokeFragment_strokes = HomeStrokeFragment_stroke;
+            this.trips = HomeStrokeFragment_stroke;
+            imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
             CircleImageView profile＿picture;
             TextView userName, title, date;
-            ImageView imageView,likes,message,collection;
+            ImageView imageView;
 
 
             public MyViewHolder(View itemView) {
@@ -108,9 +138,6 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
                 title = itemView.findViewById(R.id.stroke_TvTitle);
                 date = itemView.findViewById(R.id.stroke_TvDate);
                 imageView = itemView.findViewById(R.id.stroke_ImgView);
-                likes = itemView.findViewById(R.id.stroke_IvLike);
-                message = itemView.findViewById(R.id.stroke_IvMessage);
-                collection = itemView.findViewById(R.id.stroke_IvCollection);
             }
         }
 
@@ -123,12 +150,40 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            final HomeStrokeFragment_stroke homeStrokeFragmentstrokes = homeStrokeFragment_strokes.get(position);
-            holder.userName.setText(homeStrokeFragmentstrokes.getStroke_TvUserName());
-            holder.date.setText(homeStrokeFragmentstrokes.getStroke_TvDate());
-            holder.title.setText(homeStrokeFragmentstrokes.getStroke_TvTitle());
-            holder.imageView.setImageResource(homeStrokeFragmentstrokes.getStroke_ImgViewId());
-            holder.profile＿picture.setImageResource(homeStrokeFragmentstrokes.getStroke_CiUserId());
+            final HomeStrokeFragment_stroke homeStrokeFragmentstrokes = trips.get(position);
+            String url = Common.URL + "/TripServlet"; //圖還未載入
+            int id = homeStrokeFragmentstrokes.getTripID();
+            tripImageTask = new ImageTask(url, id, imageSize, holder.imageView);
+            //主執行緒繼續執行 新開的執行緒去抓圖，抓圖需要網址、id ，抓到圖後show在imageView上
+            tripImageTask.execute(); //ImageTask類似MyTask 去server端抓圖
+            String userId = homeStrokeFragmentstrokes.getCreateID();
+            if (Common.networkConnected(activity)) {
+                url = Common.URL + "/PicturesServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "findUserNickName");
+                jsonObject.addProperty("id", userId);
+                userIdTask = new CommonTask(url, jsonObject.toString());
+                try {
+
+                    //顯示使用者暱稱
+                    String jsonIn = userIdTask.execute().get();
+                    String userNickName = String.valueOf(jsonIn);
+                    holder.userName.setText(userNickName);
+
+                    //使用者頭像
+                    url = Common.URL + "/PicturesServlet";
+                    headImageTask = new HeadImageTask(url, userId, imageSize, holder.profile＿picture);
+                    headImageTask.execute();
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            }else{
+//                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+        }
+
+            holder.date.setText(homeStrokeFragmentstrokes.getDate());
+            holder.title.setText(homeStrokeFragmentstrokes.getTitle());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -141,14 +196,11 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
                     startActivity(intent);
                 }
             });
-//            holder.likes.setImageResource(homeStrokeFragmentstrokes.);
-//            holder.message.setImageResource(homeStrokeFragmentstrokes.getStroke_CiUserId());
-//            holder.collection.setImageResource(homeStrokeFragmentstrokes.getStroke_CiUserId());
         }
 
         @Override
         public int getItemCount() {
-            return homeStrokeFragment_strokes.size();
+            return trips.size();
         }
 
 

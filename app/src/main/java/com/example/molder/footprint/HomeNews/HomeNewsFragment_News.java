@@ -8,14 +8,22 @@ public class HomeNewsFragment_News implements Serializable {
     private String openState;
     private String userID;
     private int landMarkID;
+    private String likesCount;
 
-    public HomeNewsFragment_News(int imageID, String description, String openState, String userID, int landMarkID) {
+    public HomeNewsFragment_News(String likesCount,int imageID) {
+        super();
+        this.likesCount = likesCount;
+        this.imageID = imageID;
+    }
+
+    public HomeNewsFragment_News(int imageID, String description, String openState, String userID, int landMarkID,String likesCount) {
         super();
         this.imageID = imageID;
         this.description = description;
         this.openState = openState;
         this.userID = userID;
         this.landMarkID = landMarkID;
+        this.likesCount = likesCount;
     }
 
     public int getImageID() {
@@ -56,6 +64,14 @@ public class HomeNewsFragment_News implements Serializable {
 
     public void setLandMarkID(int landMarkID) {
         this.landMarkID = landMarkID;
+    }
+
+    public String getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(String likesCount) {
+        this.likesCount = likesCount;
     }
 }
 

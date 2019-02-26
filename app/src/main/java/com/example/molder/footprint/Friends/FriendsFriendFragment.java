@@ -2,6 +2,7 @@ package com.example.molder.footprint.Friends;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,29 +11,58 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.HomeNews.HeadImageTask;
+import com.example.molder.footprint.HomeNews.HomeNewsActivity_Personal_Friendship_Friends;
+import com.example.molder.footprint.HomeNews.HomeNewsFragment;
+import com.example.molder.footprint.HomeNews.HomeNewsFragment_News;
 import com.example.molder.footprint.R;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * A simple {@link Fragment} subclass.
+ */
 public class FriendsFriendFragment extends Fragment implements FragmentBackHandler {
+    private static final String TAG = "FriendsFriendFragment";
     private FragmentActivity activity;
     private RecyclerView rvFriends;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CommonTask friendsCommonTask,userIdTask;
+    private HeadImageTask headImageTask;
+    private Context context;
+    private String userId,textUserId;
+    private int count;
+    private TextView textViewCounter;
 
     @Override
     public boolean onBackPressed() {
         return BackHandlerHelper.handleBackPress(this);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getFriendsFriendFragment_Friend();
     }
 
     @Override
@@ -46,7 +76,6 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
                              ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_friends_friend, container, false);
         //刷新資料
@@ -59,43 +88,65 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
 //            }
 //        });
         rvFriends = view.findViewById(R.id.friends_RvFriends);
+        textViewCounter = view.findViewById(R.id.friends_TvCounter);
         //LAYOUT MANAGER
         rvFriends.setLayoutManager(new LinearLayoutManager(activity));
-        getFriendsFriendFragment_Friend();
+//        getFriendsFriendFragment_Friend();
         return view;
     }
 
     private void getFriendsFriendFragment_Friend() {
-        List<FriendsFriendFragment_Friend> friendsFriendFragment_friends = new ArrayList<>();
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.com_facebook_profile_picture_blank_portrait,"None"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.profile_picture_cockroach,"cockroach"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.ic_footprint_logo,"footprint"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.com_facebook_tooltip_blue_bottomnub,"facebook"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.profile_picture_earth,"earth"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.profile_picture_pinky,"pinky"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.com_facebook_close,"close"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.com_facebook_favicon_blue,"blueFacebook"));
-        friendsFriendFragment_friends.add(new FriendsFriendFragment_Friend
-                (R.drawable.default_image,"image"));
+        //目前登入的使用者
+        SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
 
-        rvFriends.setAdapter(new FriendsFriendFragmentAdapter(activity, friendsFriendFragment_friends));
+        if (Common.networkConnected(activity)) {
+            String url = Common.URL + "/FriendsServlet";
+            List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getAllFriends");
+            jsonObject.addProperty("userId", userId);
+            String jsonOut = jsonObject.toString();
+            friendsCommonTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = friendsCommonTask.execute().get();
+                Type listType = new TypeToken<List<HomeNewsActivity_Personal_Friendship_Friends>>() {
+                }.getType();
+                friendship_Friends = new Gson().fromJson(jsonIn, listType);
+                count = friendship_Friends.size();
+                String texts = String.valueOf(count);
+                Toast.makeText(getActivity(), texts, Toast.LENGTH_SHORT).show();
+                textViewCounter.setText(texts);
+//                String j;
+//                for(int i = 0;i<friendship_Friends.size();i++){
+//                    friendship_Friends.remove(userId);
+//                }System.out.print(friendship_Friends);
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (friendship_Friends == null || friendship_Friends.isEmpty()) {
+                Common.showToast(activity, R.string.msg_NoNewsFound);
+            } else {
+                rvFriends.setAdapter(new FriendsFriendFragmentAdapter(activity, friendship_Friends));
+            }
+        } else {
+            Common.showToast(activity, R.string.msg_NoNetwork);
+        }
     }
 
     private class FriendsFriendFragmentAdapter extends RecyclerView.Adapter<FriendsFriendFragmentAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
         private List<FriendsFriendFragment_Friend> friendsFriendFragment_friends;
+        private List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends;
+        private int imageSize;
 
-        FriendsFriendFragmentAdapter(Context context, List<FriendsFriendFragment_Friend> FriendsFriendFragment_Friend) {
+
+        FriendsFriendFragmentAdapter(Context context, List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends_) {
             layoutInflater = LayoutInflater.from(context);
-            this.friendsFriendFragment_friends = FriendsFriendFragment_Friend;
+            this.friendship_Friends = friendship_Friends_;
+            imageSize = getResources().getDisplayMetrics().widthPixels / 4;
+
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
@@ -118,15 +169,44 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            final FriendsFriendFragment_Friend friendsFriendFragmentfriends = friendsFriendFragment_friends.get(position);
-            holder.friends_CvProfilePic.setImageResource(friendsFriendFragmentfriends.getFriends_CvProfilePicId());
-            holder.friends_TvFriendsName.setText(friendsFriendFragmentfriends.getFriends_TvFriendsName());
+            final HomeNewsActivity_Personal_Friendship_Friends friendship = friendship_Friends.get(position);
+
+            String friendsId = friendship.getInvitee();
+            if(friendsId.equals(userId)){
+                friendsId = friendship.getInviter();
+            }
+
+            if (Common.networkConnected(activity)) {
+                String url = Common.URL + "/PicturesServlet";
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "findUserNickName");
+                jsonObject.addProperty("id", friendsId);
+                userIdTask = new CommonTask(url, jsonObject.toString());
+                try {
+
+                    //顯示使用者暱稱
+                    String jsonIn = userIdTask.execute().get();
+                    String userNickName = String.valueOf(jsonIn);
+                    holder.friends_TvFriendsName.setText(userNickName);
+
+                    //使用者頭像
+                    url = Common.URL + "/PicturesServlet";
+                    headImageTask = new HeadImageTask(url, friendsId, imageSize, holder.friends_CvProfilePic);
+                    headImageTask.execute();
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+            }else{
+//                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+            }
+//
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), FriendsMessageActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("news",friendsFriendFragmentfriends);
+                    bundle.putSerializable("news",friendship);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
                     /* 呼叫startActivity()開啟新的頁面 */
@@ -137,7 +217,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
 
         @Override
         public int getItemCount() {
-            return friendsFriendFragment_friends.size();
+            return friendship_Friends.size();
         }
 
 
