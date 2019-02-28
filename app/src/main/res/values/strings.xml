@@ -37,6 +37,16 @@
         <item>景點</item>
     </string-array>
 
+    <string-array name="textFriends">
+        <item>May</item>
+        <item>Jack</item>
+        <item>Sunny</item>
+        <item>Vivian</item>
+        <item>Tom</item>
+    </string-array>
+
+
+
 
     <string name="facebook_app_id">1637855299849357</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -84,7 +94,7 @@
     <string name="msg_NoImage">No image</string>
     <string name="msg_NameIsInvalid">Trip name is invalid</string>
     <string name="msg_InsertSuccess">Insert successfully</string>
-
+    <string name="msg_InsertFail">Insert fail</string>
     <string name="CheckInShareInsert">Insert</string>
     <string name="etCheckInShareDescription">Image Description</string>
     <string name="CheckInShareState">Image State</string>
@@ -95,16 +105,12 @@
     <string name="msg_accountNotValid">Not a valid Email</string>
     <string name="msg_accountNotEmpty">Field can\'t be empty</string>
     <string name="msg_birthdayNotVaild">Not a valid Birthday</string>
-    <string name="msg_InsertFail">InsertFail</string>
-
-
     <string name="createAccountSuccess">Create Account Success</string>
     <string name="textNotValid">Not Valid</string>
     <string name="textNotReadTerms">Not Read Terms</string>
     <string name="textCheckInShareChooseLandMark">Choose Land Mark</string>
     <string name="textCheckInShareChooseLandMarkId">CheckInShareChooseLandMarkId</string>
     <string name="msg_NoFoundLandMark">No Found Land Mark</string>
-
     <string name="msg_NoLandMark">No Land Mark</string>
     <string name="title_activity_land_mark_info">LandMarkInfo</string>
     <string name="mapInfoDetailTitle">mapInfoDetailTitle</string>
@@ -124,5 +130,8 @@
     <string name="msg_NoFoundNewsPictures">NoFoundNewsPictures</string>
     <string name="msg_NoMessage">NoMessage</string>
     <string name="noCommentMessage">NoMessage</string>
+    <string name="msg_CollectionSuccess">收藏</string>
+    <string name="msg_Liked">讚</string>
+    <string name="msg_InsertFrindSuccess">好友邀請送出</string>
     <string name="textShare">Share</string>
 </resources>

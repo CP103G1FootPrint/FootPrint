@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Pinky"
         android:textColor="#000"
-        android:textSize="15dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/message_ci_profile＿picture"
         app:layout_constraintStart_toEndOf="@id/message_ci_profile＿picture"
@@ -34,10 +34,18 @@
         android:layout_height="wrap_content"
         android:text="讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去"
         android:textColor="#000"
-        android:textSize="13dp"
+        android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/message_ci_profile＿picture"
         app:layout_constraintTop_toBottomOf="@id/message_tv_news_userName"
         app:layout_constraintEnd_toEndOf="parent"/>
+    <ImageView
+        android:id="@+id/white_Line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorGray"
+        android:elevation="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message_tv_news_Comment" />
 
-                                    n
 </android.support.constraint.ConstraintLayout>

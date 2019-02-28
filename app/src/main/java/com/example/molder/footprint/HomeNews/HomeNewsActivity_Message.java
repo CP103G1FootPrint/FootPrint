@@ -1,5 +1,6 @@
 package com.example.molder.footprint.HomeNews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Home;
 import com.example.molder.footprint.R;
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -51,13 +53,15 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
     private int imageSize, imageId;
     private List<HomeNewsActivity_Message_Messages> newsMessage = null;
     private HomeNews_MessageAdapter homeNews_messageAdapter;
+    private static final String SERVER_URI =
+            "ws://10.0.2.2:8080/WSChatBasic_Web/AllChatServer/";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_news__message);
-        imageSize = getResources().getDisplayMetrics().widthPixels;
+        imageSize = getResources().getDisplayMetrics().widthPixels/10;
 
         //刷新資料
         swipeRefreshLayout = this.findViewById(R.id.message_SwipeRefreshLayout);
@@ -169,12 +173,11 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (commentMessage == null) {
-                    // Toast.makeText(this, R.string.msg_NoMessage, Toast.LENGTH_SHORT).show();
-                }
-                if (personalUserId == null) {
-                    // Toast.makeText(this, R.string.msg_NoMessage, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeNewsActivity_Message.this,"uhh",Toast.LENGTH_LONG).show();
                 } else {
                     insertMessage();
+//                  HomeNews_MessageAdapter;
+//                  HomeNewsActivity_Message.notifyDataSetChanged();
                 }
             }
         });
@@ -221,7 +224,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                                        List<HomeNewsActivity_Message_Messages> newsMessage) {
             this.context = context;
             this.newsMessage = newsMessage;
-            imageSize = getResources().getDisplayMetrics().widthPixels / 3; //getDisplayMetrics()取得目前螢幕
+            imageSize = getResources().getDisplayMetrics().widthPixels / 20; //getDisplayMetrics()取得目前螢幕
 
         }
 

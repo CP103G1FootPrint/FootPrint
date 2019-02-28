@@ -3,56 +3,58 @@ package com.example.molder.footprint.HomeStroke;
 import java.io.Serializable;
 
 public class HomeStrokeFragment_stroke implements Serializable {
-   private int stroke_ImgViewId,stroke_CiUserId;
-   private String stroke_TvUserName,stroke_TvTitle,stroke_TvDate;
+    private int tripID;
+    private String title;
+    private String date;
+    private String type;
+    private String createID ;
 
-    public int getStroke_ImgViewId() {
-        return stroke_ImgViewId;
+
+    public HomeStrokeFragment_stroke(int tripID, String title, String date, String type, String createID) {
+        this.tripID = tripID;
+        this.title = title;
+        this.date = date;
+        this.type = type;
+        this.createID = createID;
     }
 
-    public void setStroke_ImgViewId(int stroke_ImgViewId) {
-        this.stroke_ImgViewId = stroke_ImgViewId;
+    public int getTripID() {
+        return tripID;
     }
 
-    public int getStroke_CiUserId() {
-        return stroke_CiUserId;
+    public void setTripID(int tripID) {
+        this.tripID = tripID;
     }
 
-    public void setStroke_CiUserId(int stroke_CiUserId) {
-        this.stroke_CiUserId = stroke_CiUserId;
+    public String getTitle() {
+        return title;
     }
 
-    public String getStroke_TvUserName() {
-        return stroke_TvUserName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setStroke_TvUserName(String stroke_TvUserName) {
-        this.stroke_TvUserName = stroke_TvUserName;
+    public String getDate() {
+        return date;
     }
 
-    public String getStroke_TvTitle() {
-        return stroke_TvTitle;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public void setStroke_TvTitle(String stroke_TvTitle) {
-        this.stroke_TvTitle = stroke_TvTitle;
+    public String getType() {
+        return type;
     }
 
-    public String getStroke_TvDate() {
-        return stroke_TvDate;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setStroke_TvDate(String stroke_TvDate) {
-        this.stroke_TvDate = stroke_TvDate;
+    public String getCreateID() {
+        return createID;
     }
 
-    public HomeStrokeFragment_stroke(int stroke_ImgViewId, int stroke_CiUserId, String stroke_TvUserName,
-                                     String stroke_TvTitle, String stroke_TvDate) {
-        this.stroke_ImgViewId = stroke_ImgViewId;
-        this.stroke_CiUserId = stroke_CiUserId;
-        this.stroke_TvUserName = stroke_TvUserName;
-        this.stroke_TvTitle = stroke_TvTitle;
-        this.stroke_TvDate = stroke_TvDate;
-
+    public void setCreateID(String createID) {
+        this.createID = createID;
     }
 }
