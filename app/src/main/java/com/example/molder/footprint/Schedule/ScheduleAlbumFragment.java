@@ -198,21 +198,24 @@ public class ScheduleAlbumFragment extends Fragment {
             switch (requestCode) {
 
                 case REQ_PICK_IMAGE:
-//                    Uri uri = intent.getData(); //資源路徑Uri
-//                    if (uri != null) {
-//                        String[] columns = {MediaStore.Images.Media.DATA};
-//                        Cursor cursor = getContentResolver().query(uri, columns,//cursor指標
-//                                null, null, null);
-//                        if (cursor != null && cursor.moveToFirst()) {
-//                            String imagePath = cursor.getString(0);
-//                            cursor.close();
-//
-//                        }
-//                    }
+                    Uri uri = intent.getData(); //資源路徑Uri
+                    if (uri != null) {
+                        String[] columns = {MediaStore.Images.Media.DATA};
+                        Cursor cursor = getActivity().getContentResolver().query(uri, columns,//cursor指標
+                                null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            String imagePath = cursor.getString(0);
+                            cursor.close();
+
+                            Intent intentss = new Intent(getActivity(), ScheduleAlbumInsertActivity.class);
+                            intentss.putExtra("imagePath",imagePath);
+                            startActivity(intentss);
+
+                        }
+                    }
 
 
-                    Intent intentss = new Intent(getActivity(), ScheduleAlbumInsertActivity.class);
-                    startActivity(intentss);
+
 
 
 

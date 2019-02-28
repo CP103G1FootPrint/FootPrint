@@ -28,9 +28,11 @@ public class ScheduleAlbumInsertActivity extends AppCompatActivity {
         setContentView(R.layout.schedule_album_insert);
         handleViews();
 
-//        Bitmap srcImage = BitmapFactory.decodeFile(imagePath);
-//        Bitmap downsizedImage = Common.downSize(srcImage, newSize);
-//        imageView.setImageBitmap(downsizedImage);
+        Intent intent = getIntent();
+        String imagePath = intent.getStringExtra("imagePath");
+        Bitmap srcImage = BitmapFactory.decodeFile(imagePath);
+        Bitmap downsizedImage = downSize(srcImage, 512);
+        shAlbumImgConfirm.setImageBitmap(downsizedImage);
 
     }
 
@@ -38,6 +40,30 @@ public class ScheduleAlbumInsertActivity extends AppCompatActivity {
         shAlbumImgConfirm = findViewById(R.id.shAlbumImgConfirm);
         shAlbumShareBt =findViewById(R.id.shAlbumShareBt);
         shAlbumCancelBt = findViewById(R.id.shAlbumShareBt);
+    }
+
+    public static Bitmap downSize(Bitmap srcBitmap, int newSize) {
+        if (newSize <= 20) {
+            // 如果欲縮小的尺寸過小，就直接定為20
+            newSize = 20;
+        }
+        int srcWidth = srcBitmap.getWidth();
+        int srcHeight = srcBitmap.getHeight();
+        String text = "source image size = " + srcWidth + "x" + srcHeight;
+//        Log.d(TAG, text);
+        int longer = Math.max(srcWidth, srcHeight);
+
+        if (longer > newSize) {
+            double scale = longer / (double) newSize;
+            int dstWidth = (int) (srcWidth / scale);
+            int dstHeight = (int) (srcHeight / scale);
+            srcBitmap = Bitmap.createScaledBitmap(srcBitmap, dstWidth, dstHeight, false);
+            System.gc();
+            text = "\nscale = " + scale + "\nscaled image size = " +
+                    srcBitmap.getWidth() + "x" + srcBitmap.getHeight();
+//            Log.d(TAG, text);
+        }
+        return srcBitmap;
     }
 
 
