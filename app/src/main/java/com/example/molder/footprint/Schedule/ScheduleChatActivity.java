@@ -189,7 +189,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/ChatMessageServlet";
             ScheduleChatActivity_Messages messages;
-            messages = new ScheduleChatActivity_Messages(0, personalUserId, message, imageId);
+            messages = new ScheduleChatActivity_Messages(0, personalUserId, message, tripId);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "insert");
             jsonObject.addProperty("share", new Gson().toJson(messages));

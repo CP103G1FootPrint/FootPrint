@@ -3,30 +3,32 @@ package com.example.molder.footprint.Schedule;
 import java.io.Serializable;
 
 public class GroupAlbum implements Serializable {
-    private int id ;
-    private String detail ;
+    private int albumID ;
+    private int tripID ;
 
 
-    public GroupAlbum(int id, String detail) {
-        this.id = id;
 
-        this.detail = detail;
+    public GroupAlbum(int albumID, int tripID) {
+        this.albumID = albumID;
+        this.tripID = tripID;
+
     }
 
-    public int getId() {
-        return id;
+    public int getAlbumID() {
+        return albumID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAlbumID(int albumID) {
+        this.albumID = albumID;
+    }
+
+    public int getTripID() {
+        return tripID;
+    }
+
+    public void setTripID(int tripID) {
+        this.tripID = tripID;
     }
 
 
-    public String getDetail() {
-        return detail;
-    }
-
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
 }

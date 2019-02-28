@@ -2,6 +2,7 @@ package com.example.molder.footprint.Schedule;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
 import com.example.molder.footprint.R;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 
@@ -27,6 +29,8 @@ public class ScheduleAlbumInsertActivity extends AppCompatActivity {
     private byte[] image;
     private Bitmap srcImage ;
     private final static String TAG = "ScheduleAlbumInsertActivity";
+    private String userID ;
+    private int tripId ;
 
 
     @Override
@@ -83,16 +87,34 @@ public class ScheduleAlbumInsertActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     public void shareOnClick (View view){
+
+
         if (srcImage == null){
             Common.showToast(this,R.string.msg_NoImage);
             return;
         }
+
+        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        userID = preferences.getString("userId", "");
+
+        //打開上一頁的打包的資料
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Trip trip = (Trip) bundle.getSerializable("trip");
+            if (trip != null) {
+                tripId = trip.getTripID();
+            }
+        }
+
+
         if(Common.networkConnected(this)){
             String url = Common.URL +"/GroupAlbumServlet" ;
+            GroupAlbum groupAlbum = new GroupAlbum(0,tripId);
             byte[] image = ImageTask.bitmapToPNG(srcImage);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "groupalbumInsert");
+            jsonObject.addProperty("groupalbum", new Gson().toJson(groupAlbum));
             jsonObject.addProperty("imageBase64", imageBase64);
             int count = 0;
             try {

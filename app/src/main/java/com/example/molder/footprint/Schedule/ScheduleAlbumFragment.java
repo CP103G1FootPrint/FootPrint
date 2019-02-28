@@ -64,6 +64,7 @@ public class ScheduleAlbumFragment extends Fragment {
 
     private Uri contentUri,croppedImageUri;
     private  ImageView shAlbumImg ;
+    private int tripId ;
 
 
     @Override
@@ -104,32 +105,45 @@ public class ScheduleAlbumFragment extends Fragment {
 
 
     private void showAllAlbum(){
-        if (Common.networkConnected(activity)) {
-            String url = Common.URL + "/GroupAlbumServlet";
-            List<GroupAlbum> groupAlbums = null;
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
-            String jsonOut = jsonObject.toString();
-            albumGetAllTask = new CommonTask(url, jsonOut);
-            try {
-                String jsonIn = albumGetAllTask.execute().get();
-                Type listType = new TypeToken<List<GroupAlbum>>() {
-                }.getType();
-                groupAlbums = new Gson().fromJson(jsonIn, listType);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (groupAlbums == null || groupAlbums.isEmpty()) {
-                Common.showToast(activity, R.string.msg_NoImage);
-            } else {
+        //打開上一頁的打包的資料
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            Trip trip = (Trip) bundle.getSerializable("trip");
+            if (trip != null) {
+
+                tripId = trip.getTripID();
                 rvAlbum.setLayoutManager(
                         new StaggeredGridLayoutManager(3,
                                 StaggeredGridLayoutManager.VERTICAL));
-                rvAlbum.setAdapter(new GroupAdapter(activity, groupAlbums));
+                rvAlbum.setAdapter(new GroupAdapter(activity, tripId));
             }
-        } else {
-            Common.showToast(activity, R.string.msg_NoNetwork);
         }
+
+
+//        if (Common.networkConnected(activity)) {
+//            String url = Common.URL + "/GroupAlbumServlet";
+//            List<GroupAlbum> groupAlbums = null;
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("action", "getImage");
+//            jsonObject.addProperty("tripID",tripId);
+//            String jsonOut = jsonObject.toString();
+//            albumGetAllTask = new CommonTask(url, jsonOut);
+//            try {
+//                String jsonIn = albumGetAllTask.execute().get();
+//                Type listType = new TypeToken<List<GroupAlbum>>() {
+//                }.getType();
+//                groupAlbums = new Gson().fromJson(jsonIn, listType);
+//            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+//            }
+//            if (groupAlbums == null || groupAlbums.isEmpty()) {
+//                Common.showToast(activity, R.string.msg_NoImage);
+//            } else {
+//
+//            }
+//        } else {
+//            Common.showToast(activity, R.string.msg_NoNetwork);
+//        }
     }
     @Override
     public void onStart() {
@@ -139,12 +153,12 @@ public class ScheduleAlbumFragment extends Fragment {
 
     private class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
-        private List<GroupAlbum> groupAlbums;
+        private int groupAlbumsid;
         private int imageSize;
 
-        public GroupAdapter(Context context, List<GroupAlbum> groupAlbums) {
+        public GroupAdapter(Context context, int groupAlbumsid) {
             layoutInflater = LayoutInflater.from(context);
-            this.groupAlbums = groupAlbums;
+            this.groupAlbumsid = groupAlbumsid;
 
             imageSize = getResources().getDisplayMetrics().widthPixels / 4;
         }
@@ -160,7 +174,7 @@ public class ScheduleAlbumFragment extends Fragment {
         }
         @Override
         public int getItemCount() {
-            return groupAlbums.size();
+            return groupAlbumsid;
         }
         @NonNull
         @Override
@@ -171,11 +185,11 @@ public class ScheduleAlbumFragment extends Fragment {
         }
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-            final GroupAlbum groupAlbum = groupAlbums.get(i);
+            final int albumId = groupAlbumsid;
 
             String url = Common.URL + "/GroupAlbumServlet"; //圖還未載入
-            int id = groupAlbum.getId();
-            albumImageTask = new ImageTask(url, id, imageSize, myViewHolder.imageView);
+//            int albumId = groupAlbum.getAlbumID();
+            albumImageTask = new ImageTask(url, albumId, imageSize, myViewHolder.imageView);
             albumImageTask.execute();
             myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
