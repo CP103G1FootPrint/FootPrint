@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/schedule_swipe_layout"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:background="#66ddff00"
+        android:id="@+id/schedule_bottom_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/schedule_bottom"
+            android:text="删除"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+        <Button
+            android:id="@+id/schedule_share"
+            android:text="分享"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="15dp">
-
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -69,8 +92,6 @@
 
 
         </RelativeLayout>
-
-
     </android.support.v7.widget.CardView>
-
-</LinearLayout>
+    </LinearLayout>
+</com.daimajia.swipe.SwipeLayout>

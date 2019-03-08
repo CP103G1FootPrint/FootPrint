@@ -1,6 +1,5 @@
 package com.example.molder.footprint.Schedule;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,8 +11,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,17 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
-import com.example.molder.footprint.HomeNews.HomeNewsActivity_Message;
-import com.example.molder.footprint.Map.LandMark;
+import com.example.molder.footprint.Login.MainLoginIn;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -51,7 +50,7 @@ public class ScheduleMainFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private FragmentActivity activity;
     private CommonTask tripGetAllTask;
-    private CommonTask tripDeleteTask,retrieveTripTask;
+    private CommonTask tripDeleteTask,retrieveTripTask,tripShareTask;
     private ImageTask tripImageTask;
     private RecyclerView recyclerView ;
     private Spinner shSpinner ;
@@ -131,9 +130,9 @@ public class ScheduleMainFragment extends Fragment {
 
 
 
-    private class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder>{
+    private class TripAdapter extends RecyclerSwipeAdapter<TripAdapter.MyViewHolder>{
         private LayoutInflater layoutInflater;
-        //        private Context context;
+//        private Context context;
         private List<Trip> trips;
         private int imageSize;
 
@@ -149,11 +148,19 @@ public class ScheduleMainFragment extends Fragment {
             return trips.size();
         }
 
+        @Override
+        public int getSwipeLayoutResourceId(int position) {
+            return position;
+        }
+
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView ;
-            TextView shTvTitle ;
-            TextView shTvDate ;
-            ImageButton shadd,shBtPhoto,shBtChat;
+            private ImageView imageView ;
+            private TextView shTvTitle ;
+            private TextView shTvDate ;
+            private ImageButton shadd,shBtPhoto,shBtChat;
+            private SwipeLayout scheduleSwipLayout;
+            private Button scheduleButton,scheduleShare;
+
             public MyViewHolder(View itemView){
                 super(itemView);
                 imageView = itemView.findViewById(R.id.shImgView);
@@ -162,6 +169,9 @@ public class ScheduleMainFragment extends Fragment {
                 shadd = itemView.findViewById(R.id.shBtAdd);
                 shBtPhoto =itemView.findViewById(R.id.shBtPhoto);
                 shBtChat = itemView.findViewById(R.id.shBtChat);
+                scheduleSwipLayout = itemView.findViewById(R.id.schedule_swipe_layout);
+                scheduleButton = itemView.findViewById(R.id.schedule_bottom);
+                scheduleShare = itemView.findViewById(R.id.schedule_share);
             }
         }
 
@@ -174,10 +184,13 @@ public class ScheduleMainFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+        public void onBindViewHolder(@NonNull MyViewHolder myViewHolder,final int i) {
+            myViewHolder.scheduleSwipLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+//            LayoutInflater inflater = LayoutInflater.from(activity);
+//            final View v = inflater.inflate(R.layout.fragment_forgot_password, null);
             final Trip trip = trips.get(i);
             String url = Common.URL + "/TripServlet"; //圖還未載入
-            int id = trip.getTripID();
+            final int id = trip.getTripID();
             tripImageTask = new ImageTask(url, id, imageSize, myViewHolder.imageView);
             //主執行緒繼續執行 新開的執行緒去抓圖，抓圖需要網址、id ，抓到圖後show在imageView上
             tripImageTask.execute(); //ImageTask類似MyTask 去server端抓圖
@@ -188,19 +201,104 @@ public class ScheduleMainFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(activity,SchedulePlanActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("trip", trip );
+                    /* 將Bundle儲存在Intent內方便帶至下一頁 */
+                    intent.putExtras(bundle);
                     startActivity(intent);
 
                 }
             });
-//            myViewHolder.imageView.setImageResource(trip.getImageid());
 
-//            myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                }
-//            });
+            //刪除行程
+            myViewHolder.scheduleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(activity)
+                            .setTitle(R.string.delete)
+                            .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (Common.networkConnected(activity)) {
+                                        String url = Common.URL + "/TripServlet";
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "tripDelete");
+                                        jsonObject.addProperty("tripId", id);
+                                        int count = 0;
+                                        try {
+                                            tripDeleteTask = new CommonTask(url, jsonObject.toString());
+                                            String result = tripDeleteTask.execute().get();
+                                            count = Integer.valueOf(result);
+                                        } catch (Exception e) {
+                                            Log.e(TAG, e.toString());
+                                        }
+                                        if (count == 0) {
+                                            Common.showToast(activity, R.string.msg_DeleteFail);
+                                        } else {
+                                            trips.remove(i);
+                                            notifyDataSetChanged();
+                                            Common.showToast(activity, R.string.msg_DeleteSuccess);
+                                        }
+                                    } else {
+                                        Common.showToast(activity, R.string.msg_NoNetwork);
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
+                }
+            });
 
+            //分享行程
+            myViewHolder.scheduleShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new AlertDialog.Builder(activity)
+                            .setTitle(R.string.textShare)
+                            .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (Common.networkConnected(activity)) {
+                                        String url = Common.URL + "/TripServlet";
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "tripShare");
+                                        jsonObject.addProperty("openState", "open");
+                                        jsonObject.addProperty("tripId", id);
+                                        int count = 0;
+                                        try {
+                                            tripShareTask = new CommonTask(url, jsonObject.toString());
+                                            String result = tripShareTask.execute().get();
+                                            count = Integer.valueOf(result);
+                                        } catch (Exception e) {
+                                            Log.e(TAG, e.toString());
+                                        }
+                                        if (count == 0) {
+                                            Common.showToast(activity, R.string.msg_ShareFail);
+                                        } else {
+
+                                            Common.showToast(activity, R.string.msg_ShareSuccess);
+                                        }
+                                    } else {
+                                        Common.showToast(activity, R.string.msg_NoNetwork);
+                                    }
+                                }
+                            })
+                            .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .show();
+                }
+            });
+
+            //增加行程
             myViewHolder.shadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -230,7 +328,7 @@ public class ScheduleMainFragment extends Fragment {
 
                         }
                     });
-                    myBuilder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                    myBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
@@ -306,8 +404,6 @@ public class ScheduleMainFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(activity,ScheduleChatActivity.class);
-
-
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("trip", trip );
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
@@ -319,7 +415,10 @@ public class ScheduleMainFragment extends Fragment {
 
 
 
+
         }
+
+
 
     }
 
@@ -423,6 +522,14 @@ public class ScheduleMainFragment extends Fragment {
         if (tripDeleteTask != null) {
             tripDeleteTask.cancel(true);
             tripDeleteTask = null;
+        }
+        if (retrieveTripTask != null) {
+            retrieveTripTask.cancel(true);
+            retrieveTripTask = null;
+        }
+        if (tripShareTask != null) {
+            tripShareTask.cancel(true);
+            tripShareTask = null;
         }
     }
 

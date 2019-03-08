@@ -93,7 +93,7 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
             String url = Common.URL + "/TripServlet";
             List<HomeStrokeFragment_stroke> trips = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "All");
+            jsonObject.addProperty("action", "Alls");
             String jsonOut = jsonObject.toString();
             tripGetAllTask = new CommonTask(url, jsonOut);
             try {

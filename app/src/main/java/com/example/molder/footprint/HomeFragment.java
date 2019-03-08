@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment implements FragmentBackHandler {
     //initial 初始化
     private void handleViews() {
 
-        homeToolbar = home_fragment.findViewById(R.id.homeToolbar);
+//        homeToolbar = home_fragment.findViewById(R.id.homeToolbar);
         hometabLayout = home_fragment.findViewById(R.id.homeTabLayout);
         homeViewPager = home_fragment.findViewById(R.id.homeViewPager);
         homeTabNews = home_fragment.findViewById(R.id.homeTabNews);

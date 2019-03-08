@@ -42,6 +42,7 @@ public class ScheduleAlbumInsertActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String imagePath = intent.getStringExtra("imagePath");
+        tripId = intent.getIntExtra("tripId",0);
         srcImage = BitmapFactory.decodeFile(imagePath);
         Bitmap downsizedImage = downSize(srcImage,512);
         shAlbumImgConfirm.setImageBitmap(downsizedImage);
@@ -98,23 +99,23 @@ public class ScheduleAlbumInsertActivity extends AppCompatActivity {
         userID = preferences.getString("userId", "");
 
         //打開上一頁的打包的資料
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            Trip trip = (Trip) bundle.getSerializable("trip");
-            if (trip != null) {
-                tripId = trip.getTripID();
-            }
-        }
+//        Bundle bundle = getIntent().getExtras();
+//        if (bundle != null) {
+//            Trip trip = (Trip) bundle.getSerializable("trip");
+//            if (trip != null) {
+//                tripId = trip.getTripID();
+//            }
+//        }
 
 
         if(Common.networkConnected(this)){
             String url = Common.URL +"/GroupAlbumServlet" ;
-            GroupAlbum groupAlbum = new GroupAlbum(0,tripId);
+//            GroupAlbum groupAlbum = new GroupAlbum(tripId);
             byte[] image = ImageTask.bitmapToPNG(srcImage);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "groupalbumInsert");
-            jsonObject.addProperty("groupalbum", new Gson().toJson(groupAlbum));
+            jsonObject.addProperty("tripId", tripId);
             jsonObject.addProperty("imageBase64", imageBase64);
             int count = 0;
             try {

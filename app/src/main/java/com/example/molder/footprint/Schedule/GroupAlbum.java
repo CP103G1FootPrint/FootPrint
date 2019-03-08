@@ -14,6 +14,11 @@ public class GroupAlbum implements Serializable {
 
     }
 
+    public GroupAlbum(int albumID) {
+        this.albumID = albumID;
+
+    }
+
     public int getAlbumID() {
         return albumID;
     }
