@@ -116,8 +116,8 @@ public class LandMarkImageInfo extends Activity {
                     } else {
                         //recycleView
                         imageInfoRecyclerView.setLayoutManager(
-                                new StaggeredGridLayoutManager(2,
-                                        StaggeredGridLayoutManager.HORIZONTAL));
+                                new StaggeredGridLayoutManager(1,
+                                        StaggeredGridLayoutManager.VERTICAL));
                         imageInfoRecyclerView.setAdapter(new PictureInfoAdapter(this, pictures));
 //                        imageInfoRecyclerView.smoothScrollToPosition(imagePosition);
                         imageInfoRecyclerView.scrollToPosition(imagePosition);

@@ -10,8 +10,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/imageMove"
-
+            android:id="@+id/scheduleMoveMap"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -31,21 +30,54 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/move"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button android:id="@+id/button"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="56dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/scheduleEditCancel"
+                    android:text="@android:string/cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+
+                <Button
+                    android:id="@+id/scheduleAddDays"
+                    android:text="@string/Add"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"/>
+
+                <Button
+                    android:id="@+id/scheduleMoveDays"
+                    android:text="@string/moveMap"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"/>
+
+                <Button android:id="@+id/scheduleMinusDays"
+                    android:text="@string/minusDay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"/>
+
+                <Button
+                    android:id="@+id/scheduleEditSave"
+                    android:text="@string/textSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"/>
+
+            </LinearLayout>
+
             <android.support.design.widget.TabLayout
-                android:id="@+id/homeTabLayout"
+                android:id="@+id/scheduleEditTabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/homeViewPager"
+                android:id="@+id/scheduleEditViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </android.support.v4.view.ViewPager>

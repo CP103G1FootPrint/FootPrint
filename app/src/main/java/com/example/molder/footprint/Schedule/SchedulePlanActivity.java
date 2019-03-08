@@ -10,14 +10,16 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,18 +27,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 
 public class SchedulePlanActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ViewPager mViewPager;
+    private final static String TAG = "SchedulePlanActivity";
+    private ViewPager mViewPager;
 
-    private PagerAdapter homePagerAdapter;
+    private PagerAdapter schedulePlanPagerAdapter;
     private TabLayout mTabLayout;
-    private int page = 3;
-    private int yFrom,yStop,mapFrom =0,mapStop=-600;
+    private int page = 0;
+    private int tripId ;
+    private int yFrom,yStop,mapFrom = 0,mapStop = -600;
     private Boolean orientation = false;
 
-    private Button button,move;
+    private Button scheduleAddDays, scheduleMoveDays,scheduleMinusDays,scheduleEditSave,scheduleEditCancel;
     private LinearLayout linearLayout,linearImage;
     private Animator animator,animator2;
     private GoogleMap scheduleGoogleMap;
@@ -52,41 +59,131 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
         mapFragment.getMapAsync(this);
 
         initView();
+        //地圖初始往上移動
         animator2 = getTranslateAnimImage();
         animator2.start();
     }
 
     private void initView() {
-        button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        //打開上一頁的打包的資料
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Trip trip = (Trip) bundle.getSerializable("trip");
+            if (trip != null) {
+                page = trip.getDays();
+                tripId = trip.getTripID();
+            }
+        }
+
+        //儲存編輯
+        scheduleEditSave = findViewById(R.id.scheduleEditSave);
+        scheduleEditSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //行程天數
-                page = page + 1;
 
-                String string = String.valueOf(page);
-                mTabLayout.addTab(mTabLayout.newTab().setText(string));
+            }
+        });
 
-                homePagerAdapter.notifyDataSetChanged();
+        //取消編輯
+        scheduleEditCancel = findViewById(R.id.scheduleEditCancel);
+        scheduleEditCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        //減少行程天數
+        scheduleMinusDays = findViewById(R.id.scheduleMinusDays);
+        scheduleMinusDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mTabLayout.getTabCount() > 1){
+                    mTabLayout.removeTab(mTabLayout.getTabAt(mTabLayout.getTabCount()-1));
+                    page = page - 1;
+                    //更新資料庫
+                    if (Common.networkConnected(SchedulePlanActivity.this)) {
+                        String url = Common.URL + "/TripServlet";
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "dayUpdate");
+                        jsonObject.addProperty("tripId", tripId);
+                        jsonObject.addProperty("day", page);
+                        int count = 0;
+                        try {
+                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                            count = Integer.valueOf(result);
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+                        if (count == 0) {
+                            Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateFail);
+                        } else {
+                            Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateSuccess);
+                        }
+                    } else {
+                        Common.showToast(SchedulePlanActivity.this, R.string.msg_NoNetwork);
+                    }
+                    //刷新頁面
+                    schedulePlanPagerAdapter.notifyDataSetChanged();
+                }else {
+                    Toast.makeText(SchedulePlanActivity.this, R.string.msg_LastDay, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //增加行程天數
+        scheduleAddDays = findViewById(R.id.scheduleAddDays);
+        scheduleAddDays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //page =行程天數
+                page = page +1;
+                String textDay = "第 "+ String.valueOf(page) + " 天";
+                mTabLayout.addTab(mTabLayout.newTab().setText(textDay));
+                //更新資料庫
+                if (Common.networkConnected(SchedulePlanActivity.this)) {
+                    String url = Common.URL + "/TripServlet";
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "dayUpdate");
+                    jsonObject.addProperty("tripId", tripId);
+                    jsonObject.addProperty("day", page);
+                    int count = 0;
+                    try {
+                        String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                        count = Integer.valueOf(result);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (count == 0) {
+                        Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateFail);
+                    } else {
+                        Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateSuccess);
+                    }
+                } else {
+                    Common.showToast(SchedulePlanActivity.this, R.string.msg_NoNetwork);
+                }
+                //刷新頁面
+                schedulePlanPagerAdapter.notifyDataSetChanged();
             }
         });
         linearLayout = findViewById(R.id.linearMove);
-        linearImage = findViewById(R.id.imageMove);
+        linearImage = findViewById(R.id.scheduleMoveMap);
 //        linearImage.setY(-300);
 
-        move = findViewById(R.id.move);
-        move.setOnClickListener(new View.OnClickListener() {
+        //移動框
+        scheduleMoveDays = findViewById(R.id.scheduleMoveDays);
+        scheduleMoveDays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(orientation == false){
                     yFrom = 0;
-                    yStop = 1150;
+                    yStop = 1300;
                     mapFrom = 0;
                     mapStop = 0;
                     orientation = true;
 //                    setViewSize(imageView,orientation);
                 }else {
-                    yFrom = 1150;
+                    yFrom = 1300;
                     yStop = 0;
                     mapFrom = 0;
                     mapStop = -600;
@@ -99,8 +196,8 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                 animator2.start();
             }
         });
-        mViewPager = findViewById(R.id.homeViewPager);
-        mTabLayout = findViewById(R.id.homeTabLayout);
+        mViewPager = findViewById(R.id.scheduleEditViewPager);
+        mTabLayout = findViewById(R.id.scheduleEditTabLayout);
         initFragment();
     }
 
@@ -108,8 +205,8 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
     private void initFragment() {
 
         for (int i = 0;i<page;i++){
-            String string = String.valueOf(i);
-            mTabLayout.addTab(mTabLayout.newTab().setText(string));
+            String textDay = "第 "+ String.valueOf(i+1) + " 天";
+            mTabLayout.addTab(mTabLayout.newTab().setText(textDay));
         }
 
         //tabLayout監聽
@@ -132,22 +229,22 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
         //刷新 Fragment 頁面
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         //取得FragmentManager權限 並取得目前分頁所在的頁數
-        homePagerAdapter = new HomePageAdapter(this.getSupportFragmentManager(), mTabLayout.getTabCount());
+        schedulePlanPagerAdapter = new SchedulePlanPageAdapter(this.getSupportFragmentManager(), mTabLayout.getTabCount());
         //將剛剛取到的分頁所在的頁數 顯示在Fragment上
-        mViewPager.setAdapter(homePagerAdapter);
+        mViewPager.setAdapter(schedulePlanPagerAdapter);
 
     }
 
 
 
     //繼承FragmentPagerAdapter
-    public class HomePageAdapter extends FragmentStatePagerAdapter {
+    public class SchedulePlanPageAdapter extends FragmentStatePagerAdapter {
 
         //建立屬性 分頁頁數計數器
         private int numOfTabs;
 
         //建構式
-        public HomePageAdapter(FragmentManager fm, int numOfTabs) {
+        public SchedulePlanPageAdapter(FragmentManager fm, int numOfTabs) {
             super(fm);
             this.numOfTabs = numOfTabs;
         }
@@ -156,7 +253,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
         @Override
         public Fragment getItem(int position) {
 
-            return SchedulePlanDayFragment.newInstances(position);
+            return SchedulePlanDayFragment.newInstances(position,tripId);
         }
 
         //取得分頁頁數
