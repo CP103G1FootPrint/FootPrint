@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:padding="6dp"
+    card_view:cardBackgroundColor="#ffdddddd"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="6dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/schedulePlanDayLandMarkName"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:gravity="center"
+            tools:text="别看了，我就是一个Name" />
+
+        <TextView
+            android:id="@+id/schedulePlanDayLandMarkAddress"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:gravity="center"
+            android:layout_below="@+id/schedulePlanDayLandMarkName"
+            tools:text="别看了，我就是一个Address" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

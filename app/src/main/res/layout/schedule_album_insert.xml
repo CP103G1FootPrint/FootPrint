@@ -15,11 +15,13 @@
             android:id="@+id/shAlbumShareBt"
             android:layout_width="200dp"
             android:layout_height="50dp"
+            android:onClick="shareOnClick"
             android:text="@string/textShare"/>
         <Button
             android:id="@+id/shAlbumCancelBt"
             android:layout_width="200dp"
             android:layout_height="50dp"
+            android:onClick="insertCancelOnClick"
             android:text="@string/textCancel"/>
 
     </LinearLayout>

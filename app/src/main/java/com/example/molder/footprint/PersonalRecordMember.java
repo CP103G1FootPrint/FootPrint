@@ -1,16 +1,16 @@
 package com.example.molder.footprint;
 
-public class PersonalRecordParameter
+public class PersonalRecordMember
  {
     private int id; // 會員編號
     private int image; // 會員照片
 
 
-    public PersonalRecordParameter() {
+    public PersonalRecordMember() {
         super();
     }
 
-    public PersonalRecordParameter(int id, int image, String name) {
+    public PersonalRecordMember(int id, int image, String name) {
         super();
         this.id = id;
         this.image = image;

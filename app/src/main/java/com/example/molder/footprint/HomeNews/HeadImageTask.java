@@ -34,7 +34,12 @@ public class HeadImageTask extends AsyncTask<Object,Integer,Bitmap> {
     public HeadImageTask(String url, String userId, int imageSize, ImageView imageView) {
         this.url = url;
         this.userId = userId;
-        this.imageSize = imageSize;
+        if(imageSize >100){
+            this.imageSize = 100;
+        }else{
+            this.imageSize = imageSize;
+        }
+
         //改採weak參照就不會阻止imageView被回收
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }

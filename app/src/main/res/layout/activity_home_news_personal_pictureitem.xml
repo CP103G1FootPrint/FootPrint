@@ -9,6 +9,7 @@
         android:id="@+id/rv_home_news_personal_pictureItem"
         android:layout_width="139dp"
         android:layout_height="94dp"
+        android:scaleType="fitXY"
         android:src="@drawable/home_news_picture"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

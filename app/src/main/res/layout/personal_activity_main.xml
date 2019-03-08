@@ -6,14 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
+
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageButton
-                android:id="@+id/personal_pic"
+
+            <ImageView
+                android:id="@+id/selfePic"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_margin="10dp"
@@ -24,11 +29,10 @@
                 android:layout_width="100dp"
                 android:layout_height="25dp"
                 android:layout_margin="10dp"
-                android:textSize="20dp"
                 android:text="小強"
-                app:layout_constraintTop_toTopOf="@+id/persona_pic"
-                app:layout_constraintStart_toEndOf="@id/personal_pic"
-                />
+                android:textSize="20dp"
+                app:layout_constraintStart_toEndOf="@id/selfePic"
+                 />
 
             <TextView
                 android:id="@+id/tv_point"
@@ -37,23 +41,21 @@
                 android:layout_margin="10dp"
                 android:text="633"
                 android:textSize="25dp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_id"
-                app:layout_constraintStart_toEndOf="@id/personal_pic"
-                />
+                app:layout_constraintStart_toEndOf="@id/selfePic"
+                app:layout_constraintTop_toBottomOf="@+id/tv_id" />
 
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/piggy"
                 android:layout_width="36dp"
                 android:layout_height="40dp"
-              android:layout_margin="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_id"
+                android:layout_margin="10dp"
                 app:layout_constraintStart_toEndOf="@id/tv_point"
-                app:srcCompat="@drawable/ic_piggy_bank_with_dollar_coins"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tv_id"
+                app:srcCompat="@drawable/ic_piggy_bank_with_dollar_coins" />
 
             <ImageButton
-                android:id="@+id/persona_pic"
+                android:id="@+id/btSetting"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_margin="10dp"
@@ -61,13 +63,10 @@
                 app:srcCompat="@drawable/groupnn" />
 
 
-
         </android.support.constraint.ConstraintLayout>
 
 
-
     </android.support.v7.widget.Toolbar>
-
     <android.support.design.widget.TabLayout
         android:id="@+id/personal_tabBar"
         android:layout_width="match_parent"
@@ -103,17 +102,23 @@
 
     </android.support.design.widget.TabLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@+id/personal_tabBar">
+    <android.support.v4.view.ViewPager
+    android:id="@+id/fragment_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-    </FrameLayout>
+
+</android.support.v4.view.ViewPager>
+
+
+
+
 
 
 </LinearLayout>
+
+<!--<android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->

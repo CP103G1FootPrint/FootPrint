@@ -8,16 +8,36 @@ public class Account {
     private String constellation;
     private int integral;
 
+
     public Account() {
 
     }
 
-    public Account(String account, String password, String nickname, String birthday, String constellation, int integral) {
+
+    public Account(String account, String password, String nickname, String birthday, int integral,String constellation) {
         this.account = account;
         this.password = password;
         this.nickname = nickname;
         this.birthday = birthday;
         this.constellation = constellation;
+        this.integral = integral;
+
+
+    }
+
+    public Account(String password, String nickname, String birthday, String constellation,String account) {
+        this.password = password;
+        this.nickname = nickname;
+        this.birthday = birthday;
+        this.constellation = constellation;
+        this.account = account;
+
+
+    }
+
+    public Account(String nickname, int integral) {
+        super();
+        this.nickname = nickname;
         this.integral = integral;
     }
 
