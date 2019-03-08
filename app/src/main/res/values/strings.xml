@@ -136,4 +136,7 @@
     <string name="msg_ShareFail">Share Fail</string>
     <string name="msg_ShareSuccess">Share Success</string>
     <string name="text_MessageEmpty">MessageEmpty</string>
+    <string name="textAddtoGroup">Add Trip</string>
+    <string name="msg_NoTripsFound">NoTripsFound</string>
+    <string name="msg_NameIsInvalid">NameIsInvalid</string>
 </resources>
