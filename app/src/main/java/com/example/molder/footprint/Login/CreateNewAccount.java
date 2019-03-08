@@ -165,7 +165,7 @@ public class CreateNewAccount extends AppCompatActivity {
 
             if (Common.networkConnected(this)) {
                 String url = Common.URL + "/AccountServlet";
-                Account account = new Account(emailInput, passwordInput, nickName, birthday, category,integral);
+                Account account = new Account(emailInput, passwordInput, nickName, birthday, integral,category);
                 JsonObject jsonObject = new JsonObject();
                 //新增
                 jsonObject.addProperty("action", "accountInsert");

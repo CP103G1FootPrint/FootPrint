@@ -2,25 +2,25 @@ package com.example.molder.footprint;
 
 public class PersonalCollectMember {
     private int id; // 會員編號
-    private int image; // 會員照片
+    private int imageId; // 會員照片
 
 
     public PersonalCollectMember() {
         super();
     }
 
-    public PersonalCollectMember(int id, int image, String name) {
+    public PersonalCollectMember(int id, int imageId) {
         super();
         this.id = id;
-        this.image = image;
+        this.imageId = imageId;
     }
 
     public int getImage() {
-        return image;
+        return imageId;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setImage(int imageId) {
+        this.imageId = imageId;
     }
 
     public int getId() {
@@ -30,4 +30,7 @@ public class PersonalCollectMember {
     public void setId(int id) {
         this.id = id;
     }
+
+
+
 }

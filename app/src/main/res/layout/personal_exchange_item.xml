@@ -13,30 +13,40 @@
             android:layout_height="wrap_content">
 
 
-            <ImageButton
-                android:id="@+id/personal_pic"
+            <ImageView
+                android:id="@+id/productId"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_margin="10dp"
                 app:srcCompat="@mipmap/ic_launcher_round" />
 
             <TextView
-                android:id="@+id/id"
+                android:id="@+id/productName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:text="冰美式"
-                android:textSize="30dp"
-                app:layout_constraintStart_toEndOf="@id/personal_pic"
+                android:layout_marginTop="20dp"
+                android:text="IPhone X"
+                android:textSize="29dp"
+                app:layout_constraintStart_toEndOf="@id/productId"
                 app:layout_constraintTop_toTopOf="@+id/persona_pic" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="原廠 32G 白色"
+                android:textSize="20dp"
+                app:layout_constraintStart_toEndOf="@id/productId"
+                app:layout_constraintTop_toTopOf="@+id/productName" />
 
             <TextView
                 android:id="@+id/point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Ponits 30"
-                android:textSize="25dp"
+                android:text="Ponits 650"
+                android:textSize="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/piggy" />
 
 

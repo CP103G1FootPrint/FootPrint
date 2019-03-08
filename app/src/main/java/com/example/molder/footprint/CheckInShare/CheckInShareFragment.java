@@ -188,7 +188,7 @@ public class CheckInShareFragment extends Fragment {
                 SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
                 String userId = preferences.getString("userId", "");
 
-                if (Common.networkConnected(activity)) {
+                if (Common.networkConnected(activity)){
                     String url = Common.URL + "/PictureServlet";
                     Picture picture = new Picture(0, description, category, userId, intLandMarkID);
                     String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);

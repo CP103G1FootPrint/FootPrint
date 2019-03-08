@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/personal_pic"
+            android:id="@+id/productId"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="10dp"
@@ -26,7 +26,7 @@
             android:layout_margin="10dp"
             android:text="小強"
             android:textSize="25dp"
-            app:layout_constraintStart_toEndOf="@id/personal_pic"
+            app:layout_constraintStart_toEndOf="@id/productId"
             app:layout_constraintTop_toTopOf="@+id/persona_pic" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_marginStart="8dp"
             android:text="按了你相片讚。"
             android:textSize="25dp"
-            app:layout_constraintStart_toEndOf="@id/personal_pic"
+            app:layout_constraintStart_toEndOf="@id/productId"
             app:layout_constraintTop_toBottomOf="@+id/id" />
 
 

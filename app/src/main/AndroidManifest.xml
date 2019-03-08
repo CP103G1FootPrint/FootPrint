@@ -2,7 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.molder.footprint">
 
+    <!-- 允許應用程式透過internet下載地圖資訊 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 允許應用程式透過網路連線 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 允許應用程式將資料暫存到android裝置的外部儲存體 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 允許應用程式透過 WiFi 或行動網路來定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 允許應用程式透過 GPS 來定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 相機許可 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -11,40 +25,61 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <!-- 允許應用程式將資料暫存到android裝置的外部儲存體 -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <!-- google map -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <!-- google map key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCxnVm1sYfcXRLm41fpO3vIypUsJBc71Q0" />
+        <!-- fb -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
+        <!-- fb key -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider1637855299849357"
             android:exported="true" />
 
-        <activity android:name=".MainLoginIn">
+        <activity android:name=".Login.MainLoginIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Home" />
-        <activity android:name=".LoginTerms" />
-        <activity android:name=".CreateNewAccount" />
-        <activity android:name=".TakePicture" />
-        <activity
-            android:name=".PersonalSelfieMainActivity" />
-        <activity
-            android:name=".PersonalCollectMember"
-            android:label="@string/title_activity_personal_collect_member"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".PersonalNotifyMember"
-            android:label="@string/title_activity_personal_notify_member"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".PersonalExchangeMember"
-            android:label="@string/title_activity_personal_exchange_member"
-            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".Login.LoginTerms" />
+        <activity android:name=".Login.CreateNewAccount" />
+        <activity android:name=".HomeNews.HomeNewsActivity_Personal" />
+        <activity android:name=".Schedule.ScheduleCreateActivity" />
+        <activity android:name=".HomeNews.HomeNewsActivity_Message" />
+        <activity android:name=".Friends.FriendsMessageActivity" />
+        <activity android:name=".HomeStroke.HomeStrokeActivity" />
+        <activity android:name=".HomeNews.HomeNewsActivity_Personal_Friendship" />
+        <activity android:name=".Schedule.SchedulePlanActivity" />
+        <activity android:name=".Schedule.ScheduleChatActivity" />
+        <activity android:name=".Map.LandMarkInfo" />
+        <activity android:name=".Map.LandMarkImageInfo" />
+        <activity android:name=".Qrcode" />
+        <activity android:name=".Schedule.PersonalSetting" />
+        <activity android:name=".choosePic"></activity>
     </application>
 
 </manifest>

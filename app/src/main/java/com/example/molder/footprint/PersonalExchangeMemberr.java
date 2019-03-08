@@ -3,13 +3,19 @@ package com.example.molder.footprint;
 public class PersonalExchangeMemberr {
 
     private int id;
-    private String productName;
-    private String productPoint;
+    private String productId;
+    private String point;
+    private String description;
 
-    public PersonalExchangeMemberr(int id, String productName, String productPoint) {
+    public PersonalExchangeMemberr(int id,  String productId, String point, String description
+    ) {
+        super();
         this.id = id;
-        this.productName = productName;
-        this.productPoint = productPoint;
+        this.productId = productId;
+        this.point = point;
+        this.description = description;
+
+
     }
 
     public int getId() {
@@ -20,20 +26,28 @@ public class PersonalExchangeMemberr {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public String getProductPoint() {
-        return productPoint;
+    public String getPoint() {
+        return point;
     }
 
-    public void setProductPoint(String productPoint) {
-        this.productPoint = productPoint;
+    public void setPoint(String point) {
+        this.point = point;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }
-

@@ -1,37 +1,45 @@
 package com.example.molder.footprint;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
+import android.util.EventLogTags;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.molder.footprint.CheckInShare.CheckInShareFragment;
+import com.example.molder.footprint.CheckInShare.Picture;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 
 
-import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Login.CreateNewAccount;
+import com.example.molder.footprint.Login.MainLoginIn;
+import com.example.molder.footprint.Map.InfoImageTask;
+import com.example.molder.footprint.Map.LandMark;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,136 +51,145 @@ public class PersonalExchangeMain extends Fragment {
         // Required empty public constructor
     }
 
+    private ListView listView;
     private View personal_fragment;
-    private Context mContext;
-    private ImageView imageView;
-    private Button btTakePictureLarge, btPickPicture;
-    private File file;
-    private RecyclerView recyclerView;
-    private ImageView piggy;
-    private TextView id;
-    private TextView point;
-    private CommonTask retrieveExchangeTask;
-    private ImageTask imageTask;
-    private List<PersonalExchangeMemberr> exchange;
+    private List<PersonalExchangeMemberr> exchangeList = null;
+    //與PersonalExchangeMemberr連結宣告實體變數
+    private CommonTask retrieveLocationTask;
+    private InfoImageTask infoImageTask;
     private int imageSize;
+    private PersonalExchangeMemberr member;
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        personal_fragment = inflater.inflate(R.layout.personal_main, container, false);
-        mContext = getActivity();
-        findViews();
 
+        imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+        personal_fragment = inflater.inflate(R.layout.personal_list_main, container, false);
+        findViews();
         return personal_fragment;
 
     }
 
+
     private void findViews() {
-//        b = personal_fragment.findViewById(R.id.persona_pic);
-        recyclerView = personal_fragment.findViewById(R.id.recyclerView);
 
+        listView = personal_fragment.findViewById(R.id.listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-        imageView = personal_fragment.findViewById(R.id.imageView);
-        btTakePictureLarge = personal_fragment.findViewById(R.id.btTakePictureLarge);
-        btPickPicture = personal_fragment.findViewById(R.id.btPickPicture);
-        piggy = personal_fragment.findViewById(R.id.piggy);
-        id = personal_fragment.findViewById(R.id.id);
-        point = personal_fragment.findViewById(R.id.point);
+                member= exchangeList.get(position);
+                String productId = member.getProductId();
+                if(productId != null || productId != ""){
+                    Intent intent = new Intent(getActivity(), Qrcode.class); //從PersonalExchangeMain到Qrcode.class
+                    intent.putExtra("key",productId); //類似bundle
+                    startActivity(intent);
+                }else{
 
+                }
 
-        if (Common.networkConnected((Activity) mContext)) {
+            }
+        });
+
+//        SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+//        String userId = preferences.getString("userId", "");
+
+        if (Common.networkConnected(getActivity())) {
             String url = Common.URL + "/ExchangeServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAll");
-//            jsonObject.addProperty("name", landMarkName); 指定條件搜尋ＴＡＢＬＥ內的欄位
             //將內容轉成json字串
-            retrieveExchangeTask = new CommonTask(url, jsonObject.toString());
-            try {
-                String jsonIn = retrieveExchangeTask.execute().get();
+
+            retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+            try {   //接收資料
+                String jsonIn = retrieveLocationTask.execute().get();
                 Type listType = new TypeToken<List<PersonalExchangeMemberr>>() {
                 }.getType();
                 //解析 json to gson
-                exchange = new Gson().fromJson(jsonIn, listType);
+                exchangeList = new Gson().fromJson(jsonIn, listType); //暫存資料
             } catch (Exception e) {
 //                Log.e(TAG, e.toString());
             }
-            if (exchange == null || exchange.isEmpty()) {
-//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
 
-            }else {
-                recyclerView.setLayoutManager(
-                        new StaggeredGridLayoutManager(1,
-                                StaggeredGridLayoutManager.VERTICAL));
-                recyclerView.setAdapter(new PersonalExchangeAdapter(getActivity(), exchange));
+            if (exchangeList == null || exchangeList.isEmpty()) {
+//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+            } //顯示資料
+else {
+//設定recycleView 指定以recycleView的樣式呈現。ＸＸＸManager為取得權限。
+//                recyclerView.setLayoutManager(
+//                        new StaggeredGridLayoutManager(3,
+//                                StaggeredGridLayoutManager.VERTICAL));
+//   listView.setAdapter(new PersonalExchangeMain.PersonalExchangeAdapter(getActivity(), exchangeList));
+               showResult( exchangeList); //執行114行
+
 
             }
         }
-
+        else {
+            Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+        }
 
 
     }
 
-    /* RecyclerView要透過RecyclerView.Adapter來處理欲顯示的清單內容，
-    必須建立RecyclerView.Adapter子類別並覆寫對應的方法：
-    getItemCount()、onCreateViewHolder()、onBindViewHolder */
-    private class PersonalExchangeAdapter extends
-            RecyclerView.Adapter<PersonalExchangeAdapter.MyViewHolder> {
-        private Context context;
-        private List<PersonalExchangeMemberr> memberList;
 
-        PersonalExchangeAdapter(Context context, List<PersonalExchangeMemberr> memberList) {
+    //listView
+    public void showResult(List<PersonalExchangeMemberr> exchangeList) {
+        listView.setAdapter(new ExchangeAdapter(getActivity(), exchangeList));
+
+    }
+
+    private class ExchangeAdapter extends BaseAdapter {
+        Context context;
+        List<PersonalExchangeMemberr> exchangeList;
+
+        ExchangeAdapter(Context context, List<PersonalExchangeMemberr> exchangeList) {
             this.context = context;
-            this.memberList = memberList;
+            this.exchangeList = exchangeList;
         }
 
-        class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageButton personal_pic;
-            TextView id;
-            TextView point;
-            ImageView piggy;
+        @Override
+        public int getCount() {
+            return exchangeList.size();
+        }
 
-
-
-            MyViewHolder(View itemView) {
-                super(itemView);
-                personal_pic = itemView.findViewById(R.id.personal_pic);
-                id = itemView.findViewById(R.id.id);
-                point = itemView.findViewById(R.id.point);
-                piggy = itemView.findViewById(R.id.piggy);
-                imageSize = getResources().getDisplayMetrics().widthPixels / 3;
-
+        @Override
+        public View getView(int position, View itemView, ViewGroup parent) {
+            if (itemView == null) {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                itemView = layoutInflater.inflate(R.layout.personal_exchange_item, parent, false);
             }
+
+            member= exchangeList.get(position);
+            ImageView productId = itemView.findViewById(R.id.productId);
+            TextView productName = itemView.findViewById(R.id.productName);
+            TextView description = itemView.findViewById(R.id.description);
+            TextView point = itemView.findViewById(R.id.point);
+
+
+            String url = Common.URL + "/ExchangeServlet"; //抓圖片
+            int id_exchange = member.getId(); //根據id_exchange抓圖
+            infoImageTask = new InfoImageTask(url, id_exchange, imageSize, productId);
+            infoImageTask.execute();
+
+            productName.setText(member.getProductId());
+            description.setText(member.getDescription());
+            point.setText(member.getPoint());
+
+            return itemView;
         }
 
         @Override
-        public int getItemCount() {
-            return memberList.size();
-        }
-
-
-        @NonNull
-        @Override
-        public PersonalExchangeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            View itemView = LayoutInflater.from(context).
-                    inflate(R.layout.personal_exchange_item, viewGroup, false);
-            return new PersonalExchangeAdapter.MyViewHolder(itemView);
+        public Object getItem(int position) {
+            return exchangeList.get(position);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final PersonalExchangeAdapter.MyViewHolder holder, int position) {
-            final PersonalExchangeMemberr member = memberList.get(position);
-            String url = Common.URL + "/LocationServlet";
-            int id = member.getId();
-            imageTask = new ImageTask(url, id, imageSize, holder.personal_pic);
-            imageTask.execute();
-            holder.id.setText(String.valueOf(member.getProductName()));
-            holder.point.setText(String.valueOf(member.getProductPoint()));
-            holder.piggy.setImageResource(R.drawable.ic_piggy_bank_with_dollar_coins);
-
-
-
+        public long getItemId(int position) {
+            return exchangeList.get(position).getId();
         }
     }
 

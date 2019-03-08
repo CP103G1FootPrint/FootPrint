@@ -1,23 +1,39 @@
 package com.example.molder.footprint;
 
-
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Map.InfoImageTask;
+import com.example.molder.footprint.Map.LandMarkInfo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,138 +42,113 @@ public class PersonalCollectMain extends Fragment {
 
 
     public PersonalCollectMain() {
-        // Required empty public constructor
     }
 
-    private ImageButton b;
-    private View personal_fragment;
-    private ImageView imageView;
-    private Button btTakePictureLarge, btPickPicture;
-    private File file;
+
     private RecyclerView recyclerView;
+    private View personal_fragment;
+    private List<PersonalCollectMember> pictures = null; //存imageID
+    private CommonTask retrieveLocationTask;
+    private InfoImageTask infoImageTask;
+    private int imageSize;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        imageSize = getResources().getDisplayMetrics().widthPixels / 3;
         personal_fragment = inflater.inflate(R.layout.personal_main, container, false);
         findViews();
         return personal_fragment;
 
     }
 
+
     private void findViews() {
-        b = personal_fragment.findViewById(R.id.persona_pic);
+
         recyclerView = personal_fragment.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(
-                new StaggeredGridLayoutManager(3,
-                        StaggeredGridLayoutManager.VERTICAL));
-        List<PersonalCollectMember> memberList = getMemberList();
-        recyclerView.setAdapter(new PersonalCollectAdapter(getActivity(), memberList));
+        SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        String userId = preferences.getString("userId", "");
+
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/CollectServlet";  //改
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findImageId");
+            jsonObject.addProperty("id", userId); //
+            //將內容轉成json字串
+
+            retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = retrieveLocationTask.execute().get();
+                Type listType = new TypeToken<List<PersonalCollectMember>>() {
+                }.getType();
+                //解析 json to gson
+                pictures = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+            }
+            if (pictures == null || pictures.isEmpty()) {
+//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+            } else {
+                //recycleView
+                recyclerView.setLayoutManager(
+                        new StaggeredGridLayoutManager(3,
+                                StaggeredGridLayoutManager.VERTICAL));
+                recyclerView.setAdapter(new PersonalCollectMain.PersonalCollectAdapter(getActivity(), pictures));
+            }
+        } else {
+            Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+        }
 
 
-        imageView = personal_fragment.findViewById(R.id.imageView);
-        btTakePictureLarge = personal_fragment.findViewById(R.id.btTakePictureLarge);
-        btPickPicture = personal_fragment.findViewById(R.id.btPickPicture);
-
-//            b.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(getActivity(), PersonalSelfieMainActivity.class);
-//                    startActivity(intent);
-//                }
-//            });
     }
 
-    /* RecyclerView要透過RecyclerView.Adapter來處理欲顯示的清單內容，
-   必須建立RecyclerView.Adapter子類別並覆寫對應的方法：
-   getItemCount()、onCreateViewHolder()、onBindViewHolder */
-    private class PersonalCollectAdapter extends
-            RecyclerView.Adapter<PersonalCollectAdapter.MyViewHolder> {
-        private Context context;
-        private List<PersonalCollectMember> memberList;
 
-        PersonalCollectAdapter(Context context, List<PersonalCollectMember> memberList) {
+    private class PersonalCollectAdapter extends
+            RecyclerView.Adapter<PersonalCollectMain.PersonalCollectAdapter.MyViewHolder> {
+        private Context context;
+        private List<PersonalCollectMember> picList;
+
+        PersonalCollectAdapter(Context context, List<PersonalCollectMember> picList) {
             this.context = context;
-            this.memberList = memberList;
+            this.picList = picList;
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
+
             ImageView imageView;
-//            TextView tvId, tvName;
+
 
             MyViewHolder(View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.imageView);
-//                tvId = itemView.findViewById(R.id.tvId);
-//                tvName = itemView.findViewById(R.id.tvName);
+
             }
         }
 
         @Override
         public int getItemCount() {
-            return memberList.size();
+            return picList.size();
         }
 
 
         @NonNull
         @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        public PersonalCollectMain.PersonalCollectAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             View itemView = LayoutInflater.from(context).
                     inflate(R.layout.personal_collect_item, viewGroup, false);
-            return new MyViewHolder(itemView);
+            return new PersonalCollectMain.PersonalCollectAdapter.MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-            final PersonalCollectMember member = memberList.get(position);
-            holder.imageView.setImageResource(member.getImage());
-//            holder.tvId.setText(String.valueOf(member.getId()));
-//            holder.tvName.setText(member.getName());
-
-//            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    // 要呼叫CardView.setsetCardBackgroundColor()方能精準改變CardView背景
-//                    CardView cardView = (CardView) holder.itemView;
-//                    int colorActionDown = getResources().getColor(R.color.colorPrimary);
-//                    int colorActionUp = getResources().getColor(R.color.colorLightGray);
-//                    switch (event.getAction()) {
-//                        case MotionEvent.ACTION_DOWN:
-//                            cardView.setCardBackgroundColor(colorActionDown);
-//                            ImageView iv = new ImageView(context);
-//                            iv.setImageResource(member.getImage());
-//                            Toast toast = new Toast(context);
-//                            toast.setView(iv);
-//                            toast.setDuration(Toast.LENGTH_SHORT);
-//                            toast.show();
-//                            break;
-//                        default:
-//                            cardView.setCardBackgroundColor(colorActionUp);
-//                            break;
-//                    }
-//                    return true;
-//                }
-//            });
+        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+            final PersonalCollectMember picture = picList.get(position);
+            String url = Common.URL + "/CollectServlet";
+            int id = picture.getImage();
+            infoImageTask = new InfoImageTask(url, id, imageSize, holder.imageView);
+            infoImageTask.execute();
         }
-    }
-
-    public List<PersonalCollectMember> getMemberList() {
-        List<PersonalCollectMember> memberList = new ArrayList<>();
-        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
-        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
-        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
-        memberList.add(new PersonalCollectMember(23, R.drawable.sticker, "John"));
-        memberList.add(new PersonalCollectMember(75, R.drawable.sticker, "Jack"));
-        memberList.add(new PersonalCollectMember(65, R.drawable.sticker, "Mark"));
-
-        return memberList;
     }
 
 
