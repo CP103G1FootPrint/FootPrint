@@ -1,7 +1,10 @@
 package com.example.molder.footprint.Schedule;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,16 +13,24 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +47,7 @@ public class SchedulePlanDayFragment extends Fragment {
 //    private String mParam1;
 //    private String mParam2;
     private int day, tripId;
-//    private TextView textView;
+    //    private TextView textView;
     private View view;
 
     private Context mContext;
@@ -45,9 +56,11 @@ public class SchedulePlanDayFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private MainAdapter mAdapter;
-    private List<String> mDatas;
-    private List<String> mDatas2;
+    private List<LandMark> mDatas;
+    private CommonTask retrieveLocationTask;
     private int iNumber = 0;
+    private View v;
+    private ListView listView;
 
     public SchedulePlanDayFragment() {
         // Required empty public constructor
@@ -89,35 +102,98 @@ public class SchedulePlanDayFragment extends Fragment {
 
         mContext = getActivity();
         mDatas = new ArrayList<>();
-        mDatas2 = new ArrayList<>();
+//        mDatas2 = new ArrayList<>();
 
         //刷新
-        swipeRefreshLayout =
-                view.findViewById(R.id.planSwipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                initData();
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+//        swipeRefreshLayout =
+//                view.findViewById(R.id.planSwipeRefreshLayout);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeRefreshLayout.setRefreshing(true);
+//                initData();
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
 
         //加地標
         landMarkAdd = view.findViewById(R.id.landMarkAdd);
         landMarkAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                mDatas2.add("" + (char) iNumber+1);
+                //清除重複choose Land Mark AlertDialog
+                if (v.getParent() != null) {
+                    ((ViewGroup) v.getParent()).removeView(v); // <- fix
+                }
+                //新建choose Land Mark AlertDialog
+                new AlertDialog.Builder(mContext)
+                        .setView(v)
+                        .setNegativeButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
             }
         });
 
-        initData();
+        LayoutInflater inflaterView = LayoutInflater.from(mContext);
+        v = inflaterView.inflate(R.layout.check_in_share_choose_land_mark, null);
+        listView = v.findViewById(R.id.lvCheckInShareChooseLandMark);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                for (int i = 0; i < listView.getChildCount(); i++) {
+
+                    if (position == i) {
+
+                        listView.getChildAt(i).setBackgroundColor(Color.GREEN);
+                        LandMark member = (LandMark) parent.getItemAtPosition(position);
+                        mDatas.add(member);
+
+//                        mDatas.add("" + (char) iNumber + 1);
+                        mAdapter.notifyDataSetChanged();
+
+                    } else {
+                        listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+
+            }
+        });
+
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/LocationServlet";
+            List<LandMark> locations = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "All");
+            //將內容轉成json字串
+            retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = retrieveLocationTask.execute().get();
+                Type listType = new TypeToken<List<LandMark>>() {
+                }.getType();
+                //解析 json to gson
+                locations = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (locations == null || locations.isEmpty()) {
+                Common.showToast(mContext, R.string.msg_NoFoundLandMark);
+            } else {
+                showResult(locations);
+            }
+        } else {
+            Common.showToast(mContext, R.string.msg_NoNetwork);
+        }
+
+//        initData();
         mRecyclerView = view.findViewById(R.id.planRecycleView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext,DividerItemDecoration.VERTICAL));
-        mAdapter = new MainAdapter(mContext,mDatas);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+        mAdapter = new MainAdapter(mContext, mDatas);
         mRecyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.SimpleCallback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT,
@@ -179,6 +255,51 @@ public class SchedulePlanDayFragment extends Fragment {
         return view;
     }
 
+    //listView
+    public void showResult(List<LandMark> locations) {
+        listView.setAdapter(new LandMarkAdapter(mContext, locations));
+
+    }
+
+    private class LandMarkAdapter extends BaseAdapter {
+        Context context;
+        List<LandMark> memberList;
+
+        LandMarkAdapter(Context context, List<LandMark> memberList) {
+            this.context = context;
+            this.memberList = memberList;
+        }
+
+        @Override
+        public int getCount() {
+            return memberList.size();
+        }
+
+        @Override
+        public View getView(int position, View itemView, ViewGroup parent) {
+            if (itemView == null) {
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                itemView = layoutInflater.inflate(R.layout.check_in_share_choose_land_mark_item, parent, false);
+            }
+
+            LandMark member = memberList.get(position);
+            TextView tvName = itemView
+                    .findViewById(R.id.tvCheckInShareChooseLandMarkId);
+            tvName.setText(member.getName());
+            return itemView;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return memberList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return memberList.get(position).getId();
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -186,20 +307,20 @@ public class SchedulePlanDayFragment extends Fragment {
     }
 
 
-    private void initData() {
+//    private void initData() {
 
-        mDatas = mDatas2;
+//        mDatas = mDatas2;
 //        for (int i = 'A'; i < 'Z'; i++) {
 //            mDatas.add("" + (char) i);
 //        }
-    }
+//    }
 
     public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
 
         private Context mContext;
-        private List<String> mDatas;
+        private List<LandMark> mDatas;
 
-        public MainAdapter(Context context, List<String> mDatas) {
+        public MainAdapter(Context context, List<LandMark> mDatas) {
             this.mContext = context;
             this.mDatas = mDatas;
         }
@@ -212,8 +333,9 @@ public class SchedulePlanDayFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-            holder.landMarkName.setText(mDatas.get(position));
-            holder.landMarkAddress.setText(mDatas.get(position));
+            LandMark landMark = mDatas.get(position);
+            holder.landMarkName.setText(landMark.getName());
+            holder.landMarkAddress.setText(landMark.getAddress());
         }
 
         @Override
@@ -222,7 +344,7 @@ public class SchedulePlanDayFragment extends Fragment {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            private TextView landMarkName,landMarkAddress;
+            private TextView landMarkName, landMarkAddress;
 
             public MyViewHolder(View view) {
                 super(view);
@@ -232,4 +354,12 @@ public class SchedulePlanDayFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (retrieveLocationTask != null) {
+            retrieveLocationTask.cancel(true);
+            retrieveLocationTask = null;
+        }
+    }
 }

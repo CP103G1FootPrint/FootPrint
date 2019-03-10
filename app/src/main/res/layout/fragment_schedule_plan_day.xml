@@ -7,16 +7,13 @@
     tools:context=".Schedule.SchedulePlanDayFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/planSwipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/planRecycleView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/planCoordinatorLayout"
@@ -36,3 +33,12 @@
     </android.support.design.widget.CoordinatorLayout>
 
 </FrameLayout>
+
+<!--
+<android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/planSwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+</android.support.v4.widget.SwipeRefreshLayout>
+
+-->

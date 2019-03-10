@@ -449,8 +449,10 @@ public class CheckInShareFragment extends Fragment {
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     btPickPicture.setEnabled(true);
+                    btTakePicture.setEnabled(true);
                 } else {
                     btPickPicture.setEnabled(false);
+                    btTakePicture.setEnabled(false);
                 }
                 break;
         }

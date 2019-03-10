@@ -15,6 +15,9 @@ public class LandMark implements Serializable {
     private int userID;
     private int imageID;
     private String timeStamp;
+    private String nickName;
+    private String account;
+    private double star;
     public LandMark() {
 
     }
@@ -28,6 +31,26 @@ public class LandMark implements Serializable {
         this.description = description;
         this.openingHours = openingHours;
         this.type = type;
+    }
+
+    public LandMark(int id, String name, String address, double latitude, double longitude, String description, String openingHours, String type,double star) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.description = description;
+        this.openingHours = openingHours;
+        this.type = type;
+        this.star = star;
+    }
+
+    public LandMark(String account, int imageID, String nickName) {
+        super();
+        this.account = account;
+        this.imageID = imageID;
+        this.nickName = nickName;
+
     }
 
     public int getId() {
@@ -116,5 +139,29 @@ public class LandMark implements Serializable {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public double getStar() {
+        return star;
+    }
+
+    public void setStar(double star) {
+        this.star = star;
     }
 }

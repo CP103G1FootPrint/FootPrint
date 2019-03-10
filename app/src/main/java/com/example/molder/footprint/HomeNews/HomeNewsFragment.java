@@ -108,7 +108,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             String url = Common.URL + "/PicturesServlet";
             List<HomeNewsFragment_News> newsFragment_news = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "getAll");
+            jsonObject.addProperty("action", "getAlls");
             String jsonOut = jsonObject.toString();
             newsCommonTask = new CommonTask(url, jsonOut);
             try {
@@ -182,136 +182,160 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             return new MyViewHolder(itemView);
         }
 
-
-
         @Override
         public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
             final HomeNewsFragment_News homeNewsFragmentnews = homeNewsFragment_news.get(position);
-
-            String url = Common.URL + "/PicturesServlet";
             final int id = homeNewsFragmentnews.getImageID();
+            String userId = homeNewsFragmentnews.getUserID();
+            int newsLikes = homeNewsFragmentnews.getLikeId();
+            int newsCollection = homeNewsFragmentnews.getCollectionId();
+            String nickName = homeNewsFragmentnews.getNickName();
+            String landMarkName = homeNewsFragmentnews.getLandMarkName();
+
+            //景點圖片
+            String url = Common.URL + "/PicturesServlet";
             newsImageTask = new ImageTask(url, id, imageSize, holder.news_picture);
             newsImageTask.execute();
 
-            //先抓userId
-            if (Common.networkConnected(activity)) {
-                url = Common.URL + "/PicturesServlet";
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "findUserId");
-                jsonObject.addProperty("id", id);
-                //將內容轉成json字串
-                userIdTask = new CommonTask(url, jsonObject.toString());
-                try {
-                    String jsonIn = userIdTask.execute().get();
-                    userId = String.valueOf(jsonIn);
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-                if (homeNewsFragment_news == null || homeNewsFragment_news.isEmpty()) {
-//                    Toast.makeText(HomeNewsFragment.this,R.string.NoFoundNewsPictures,Toast.LENGTH_SHORT).show();
-                } else {
-                    url = Common.URL + "/PicturesServlet";
-                    jsonObject.addProperty("action", "findUserNickName");
-                    jsonObject.addProperty("id", userId);
-                    userIdTask = new CommonTask(url, jsonObject.toString());
-                    try {
+            //使用者頭像
+            url = Common.URL + "/PicturesServlet";
+            headImageTask = new HeadImageTask(url, userId, imageSize, holder.profile＿picture);
+            headImageTask.execute();
 
-                        //顯示使用者暱稱
-                        String jsonIn = userIdTask.execute().get();
-                        userNickName = String.valueOf(jsonIn);
-                        holder.userName.setText(userNickName);
+            //顯示使用者暱稱
+            holder.userName.setText(nickName);
 
-                        //使用者頭像
-                        url = Common.URL + "/PicturesServlet";
-                        headImageTask = new HeadImageTask(url, userId, imageSize, holder.profile＿picture);
-                        headImageTask.execute();
+            //顯示landMark名稱
+            holder.landMarkname.setText(landMarkName);
 
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                }
-            } else {
-//                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
-            }
-
-            //抓landMarkId
-            if (Common.networkConnected(activity)) {
-                url = Common.URL + "/PicturesServlet";
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "findLandMarkId");
-                jsonObject.addProperty("id", id);
-                landMarkIdTask = new CommonTask(url, jsonObject.toString());
-                try {
-                    String jsonIn = landMarkIdTask.execute().get();
-                    landMarkId = String.valueOf(jsonIn);
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-                if (homeNewsFragment_news == null || homeNewsFragment_news.isEmpty()) {
-//                    Toast.makeText(HomeNewsFragment.this,R.string.NoFoundNewsPictures,Toast.LENGTH_SHORT).show();
-                } else {
-                    url = Common.URL + "/PicturesServlet";
-                    jsonObject.addProperty("action", "findLandMark");
-                    jsonObject.addProperty("id", landMarkId);
-                    landMarkIdTask = new CommonTask(url, jsonObject.toString());
-                    try {
-                        //顯示landMark名稱
-                        String jsonIn = landMarkIdTask.execute().get();
-                        landMarkName = String.valueOf(jsonIn);
-                        holder.landMarkname.setText(landMarkName);
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                }
-            } else {
-//                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
-            }
-
-            //抓目前使用者對照片按讚的id及收藏的id
-            if (Common.networkConnected(activity)) {
-                url = Common.URL + "/LikesServlet";
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "findLikesImageId");
-                jsonObject.addProperty("userId", personalUserId);
-                jsonObject.addProperty("imageId", id);
-                String jsonOut = jsonObject.toString();
-                picturesIdTask = new CommonTask(url, jsonOut);
-                try {
-                    String jsonIn = picturesIdTask.execute().get();
-                    Type listType = new TypeToken<List<HomeNewsFragment_News_Likes>>() {
-                    }.getType();
-                    newsLikes = new Gson().fromJson(jsonIn, listType);
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-                if (newsLikes == null || newsLikes.isEmpty()) {
+            if (newsLikes == 0) {
                     holder.likes.setChecked(false);
                 } else {
                     holder.likes.setChecked(true);
                 }
-            }
-            if (Common.networkConnected(activity)) {
-                url = Common.URL + "/CollectionServlet";
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("action", "findCollectionId");
-                jsonObject.addProperty("userId", personalUserId);
-                jsonObject.addProperty("imageId", id);
-                String jsonOut = jsonObject.toString();
-                picturesIdTask = new CommonTask(url, jsonOut);
-                try {
-                    String jsonIn = picturesIdTask.execute().get();
-                    Type listType = new TypeToken<List<HomeNewsFragment_News_Collection>>() {
-                    }.getType();
-                    newsCollection = new Gson().fromJson(jsonIn, listType);
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-                if (newsCollection == null || newsCollection.isEmpty()) {
+
+            if (newsCollection == 0) {
                     holder.collection.setChecked(false);
                 } else {
                     holder.collection.setChecked(true);
                 }
-            }
+
+//            //先抓userId
+//            if (Common.networkConnected(activity)) {
+//                url = Common.URL + "/PicturesServlet";
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.addProperty("action", "findUserId");
+//                jsonObject.addProperty("id", id);
+//                //將內容轉成json字串
+//                userIdTask = new CommonTask(url, jsonObject.toString());
+//                try {
+//                    String jsonIn = userIdTask.execute().get();
+//                    userId = String.valueOf(jsonIn);
+//                } catch (Exception e) {
+//                    Log.e(TAG, e.toString());
+//                }
+//                if (homeNewsFragment_news == null || homeNewsFragment_news.isEmpty()) {
+////                    Toast.makeText(HomeNewsFragment.this,R.string.NoFoundNewsPictures,Toast.LENGTH_SHORT).show();
+//                } else {
+//                    url = Common.URL + "/PicturesServlet";
+//                    jsonObject.addProperty("action", "findUserNickName");
+//                    jsonObject.addProperty("id", userId);
+//                    userIdTask = new CommonTask(url, jsonObject.toString());
+//                    try {
+//
+//                        //顯示使用者暱稱
+//                        String jsonIn = userIdTask.execute().get();
+//                        userNickName = String.valueOf(jsonIn);
+//                        holder.userName.setText(userNickName);
+//
+
+//
+//                    } catch (Exception e) {
+//                        Log.e(TAG, e.toString());
+//                    }
+//                }
+//            } else {
+////                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            //抓landMarkId
+//            if (Common.networkConnected(activity)) {
+//                url = Common.URL + "/PicturesServlet";
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.addProperty("action", "findLandMarkId");
+//                jsonObject.addProperty("id", id);
+//                landMarkIdTask = new CommonTask(url, jsonObject.toString());
+//                try {
+//                    String jsonIn = landMarkIdTask.execute().get();
+//                    landMarkId = String.valueOf(jsonIn);
+//                } catch (Exception e) {
+//                    Log.e(TAG, e.toString());
+//                }
+//                if (homeNewsFragment_news == null || homeNewsFragment_news.isEmpty()) {
+////                    Toast.makeText(HomeNewsFragment.this,R.string.NoFoundNewsPictures,Toast.LENGTH_SHORT).show();
+//                } else {
+//                    url = Common.URL + "/PicturesServlet";
+//                    jsonObject.addProperty("action", "findLandMark");
+//                    jsonObject.addProperty("id", landMarkId);
+//                    landMarkIdTask = new CommonTask(url, jsonObject.toString());
+//                    try {
+//                        //顯示landMark名稱
+//                        String jsonIn = landMarkIdTask.execute().get();
+//                        landMarkName = String.valueOf(jsonIn);
+//                        holder.landMarkname.setText(landMarkName);
+//                    } catch (Exception e) {
+//                        Log.e(TAG, e.toString());
+//                    }
+//                }
+//            } else {
+////                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            //抓目前使用者對照片按讚的id及收藏的id
+//            if (Common.networkConnected(activity)) {
+//                url = Common.URL + "/LikesServlet";
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.addProperty("action", "findLikesImageId");
+//                jsonObject.addProperty("userId", personalUserId);
+//                jsonObject.addProperty("imageId", id);
+//                String jsonOut = jsonObject.toString();
+//                picturesIdTask = new CommonTask(url, jsonOut);
+//                try {
+//                    String jsonIn = picturesIdTask.execute().get();
+//                    Type listType = new TypeToken<List<HomeNewsFragment_News_Likes>>() {
+//                    }.getType();
+//                    newsLikes = new Gson().fromJson(jsonIn, listType);
+//                } catch (Exception e) {
+//                    Log.e(TAG, e.toString());
+//                }
+//                if (newsLikes == null || newsLikes.isEmpty()) {
+//                    holder.likes.setChecked(false);
+//                } else {
+//                    holder.likes.setChecked(true);
+//                }
+//            }
+//            if (Common.networkConnected(activity)) {
+//                url = Common.URL + "/CollectionServlet";
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.addProperty("action", "findCollectionId");
+//                jsonObject.addProperty("userId", personalUserId);
+//                jsonObject.addProperty("imageId", id);
+//                String jsonOut = jsonObject.toString();
+//                picturesIdTask = new CommonTask(url, jsonOut);
+//                try {
+//                    String jsonIn = picturesIdTask.execute().get();
+//                    Type listType = new TypeToken<List<HomeNewsFragment_News_Collection>>() {
+//                    }.getType();
+//                    newsCollection = new Gson().fromJson(jsonIn, listType);
+//                } catch (Exception e) {
+//                    Log.e(TAG, e.toString());
+//                }
+//                if (newsCollection == null || newsCollection.isEmpty()) {
+//                    holder.collection.setChecked(false);
+//                } else {
+//                    holder.collection.setChecked(true);
+//                }
+//            }
 
             holder.description.setText(homeNewsFragmentnews.getDescription());
             //點擊使用者頭像換頁至該使用者詳細資訊頁面
