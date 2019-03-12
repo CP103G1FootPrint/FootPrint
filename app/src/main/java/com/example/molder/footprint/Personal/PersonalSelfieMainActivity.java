@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,7 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import com.example.molder.footprint.R;
 
 import java.io.File;
 import java.util.List;

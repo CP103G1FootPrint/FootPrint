@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.molder.footprint.R;
 import com.example.molder.footprint.qrcode.Contents;
 import com.example.molder.footprint.qrcode.QRCodeEncoder;
 import com.google.zxing.BarcodeFormat;

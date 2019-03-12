@@ -89,11 +89,11 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Map.LandMarkImageInfo"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".Qrcode"
+        <activity android:name=".Personal.Qrcode"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".Schedule.PersonalSetting"
+        <activity android:name=".Personal.PersonalSetting"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".choosePic"
+        <activity android:name=".Personal.choosePic"
             android:screenOrientation="portrait"></activity>
     </application>
 

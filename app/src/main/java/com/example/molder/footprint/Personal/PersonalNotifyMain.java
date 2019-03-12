@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 
 import android.content.Context;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.molder.footprint.CheckInShare.Picture;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Map.InfoImageTask;
+import com.example.molder.footprint.R;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 public class PersonalCollectMember {
     private int id; // 會員編號
