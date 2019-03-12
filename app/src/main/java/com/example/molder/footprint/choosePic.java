@@ -109,8 +109,9 @@ public class choosePic extends AppCompatActivity {
         cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(choosePic.this, PersonalSetting.class);
-                startActivity(intent);
+//                Intent intent = new Intent(choosePic.this, PersonalSetting.class);
+//                startActivity(intent);
+                finish();
             }
         });
 

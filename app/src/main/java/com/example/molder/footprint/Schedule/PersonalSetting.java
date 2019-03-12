@@ -106,9 +106,10 @@ public class PersonalSetting extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent = new Intent(PersonalSetting.this, PersonalHome.class);
 //                startActivity(intent);
-                Fragment fragment = new PersonalHome();
-                Fragment f = new Fragment();
-                  loadFragment(fragment);
+//                Fragment fragment = new PersonalHome();
+//                Fragment f = new Fragment();
+//                  loadFragment(fragment);
+                finish();
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {

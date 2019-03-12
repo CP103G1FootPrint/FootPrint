@@ -447,28 +447,28 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                     }
                 }
 
-                if(permissionRejected.size() >= 0){
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        if(shouldShowRequestPermissionRationale(permissionRejected.get(0))){
-                            new AlertDialog.Builder(mContext)
-                                    .setMessage(R.string.needAllowPermission)
-                                    .setPositiveButton(R.string.msg_ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                                                requestPermissions(permissionRejected.toArray(new String[permissionRejected.size()]),ALL_PERMISSIONS_RESULT);
-                                            }
-                                        }
-                                    })
-                                    .setNegativeButton(R.string.msg_cancel,null).create().show();
-                            return;
-                        }
-                    }
-                }else {
-                    if(googleApiClient != null){
-                        googleApiClient.connect();
-                    }
-                }
+//                if(permissionRejected.size() >= 0){
+//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//                        if(shouldShowRequestPermissionRationale(permissionRejected.get(0))){
+//                            new AlertDialog.Builder(mContext)
+//                                    .setMessage(R.string.needAllowPermission)
+//                                    .setPositiveButton(R.string.msg_ok, new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialogInterface, int i) {
+//                                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//                                                requestPermissions(permissionRejected.toArray(new String[permissionRejected.size()]),ALL_PERMISSIONS_RESULT);
+//                                            }
+//                                        }
+//                                    })
+//                                    .setNegativeButton(R.string.msg_cancel,null).create().show();
+//                            return;
+//                        }
+//                    }
+//                }else {
+//                    if(googleApiClient != null){
+//                        googleApiClient.connect();
+//                    }
+//                }
 
                 break;
         }
