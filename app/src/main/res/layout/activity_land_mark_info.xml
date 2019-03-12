@@ -15,6 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/mapInfoDetailTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toEndOf="@id/mapInfoDetailBack"
+                android:text="@string/mapInfoDetailTitle"
+                android:gravity="center" />
 
             <ImageButton
                 android:id="@+id/mapInfoDetailBack"
@@ -24,41 +31,38 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:src="@drawable/baseline_keyboard_arrow_left_black_36" />
 
-            <TextView
-                android:id="@+id/mapInfoDetailTitle"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintStart_toEndOf="@id/mapInfoDetailBack"
-                app:layout_constraintEnd_toStartOf="@id/mapInfoDetailPlan"
-                android:text="@string/mapInfoDetailTitle"
-                android:gravity="center" />
-
-            <ImageButton
-                android:id="@+id/mapInfoDetailPlan"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:src="@drawable/home_news_collection_black"
-                android:background="@color/colorbtnCreateAccount"/>
-
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.Toolbar>
 
     <ImageView
         android:id="@+id/mapInfoDetailPicture"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         android:layout_gravity="center"
+        android:scaleType="fitXY"
         android:src="@drawable/home_news_picture"/>
 
-    <RatingBar
-        android:id="@+id/mapInfoDetailRatingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:numStars="5"
-        android:stepSize="0.5" />
+    <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+        <RatingBar
+            android:id="@+id/mapInfoDetailRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:numStars="5"
+            android:stepSize="0.5" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onClick="onImageViewClick"
+            android:background="@color/colorNull" />
+
+    </FrameLayout>
+
 
     <TextView
         android:id="@+id/mapInfoDetailAddress"
@@ -84,3 +88,13 @@
         android:layout_height="match_parent" />
 
 </LinearLayout>
+
+<!--
+     <ImageButton
+                android:id="@+id/mapInfoDetailPlan"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/home_news_collection_black"
+                android:background="@color/colorbtnCreateAccount"/>
+-->

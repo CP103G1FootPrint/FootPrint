@@ -55,13 +55,13 @@ public class LandMarkInfo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_land_mark_info);
-        imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+        imageSize = getResources().getDisplayMetrics().widthPixels ;
         handleView();
     }
 
     public void handleView() {
         mapInfoDetailBack = findViewById(R.id.mapInfoDetailBack);
-        mapInfoDetailPlan = findViewById(R.id.mapInfoDetailPlan);
+//        mapInfoDetailPlan = findViewById(R.id.mapInfoDetailPlan);
         mapInfoDetailTitle = findViewById(R.id.mapInfoDetailTitle);
         mapInfoDetailAddress = findViewById(R.id.mapInfoDetailAddress);
         mapInfoDetailDescription = findViewById(R.id.mapInfoDetailDescription);
@@ -106,13 +106,13 @@ public class LandMarkInfo extends AppCompatActivity {
         });
 
         //加入行程
-        mapInfoDetailPlan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //跳到選行程？
-                Toast.makeText(LandMarkInfo.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mapInfoDetailPlan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //跳到選行程？
+//                Toast.makeText(LandMarkInfo.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         //用title＝landMark name 比對找出landMarkID 就可以知道imageID
         if (Common.networkConnected(this)) {
@@ -183,6 +183,8 @@ public class LandMarkInfo extends AppCompatActivity {
                 mapInfoDetailDescription.setText("Description : " + location.getDescription());
                 //顯示地標開放時間
                 mapInfoDetailOpenHours.setText("Open Hours : " + location.getOpeningHours());
+                //顯示地標星星數
+                mapInfoDetailRatingBar.setRating((float) location.getStar());
 
                 //找出地標裡所有照片id
                 if (Common.networkConnected(this)) {
@@ -294,7 +296,7 @@ public class LandMarkInfo extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //點選照片跳到照片詳細內容
-                    Toast.makeText(LandMarkInfo.this, text, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LandMarkInfo.this, text, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LandMarkInfo.this, LandMarkImageInfo.class);
                     intent.putExtra("landMarkName", landMarkName);
                     intent.putExtra("position", position);
@@ -302,6 +304,10 @@ public class LandMarkInfo extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void onImageViewClick(View view){
+        //do nothing. 遮蔽用
     }
 
 }

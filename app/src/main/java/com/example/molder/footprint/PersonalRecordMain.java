@@ -1,125 +1,154 @@
 package com.example.molder.footprint;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.molder.footprint.CheckInShare.Picture;
+import com.example.molder.footprint.Common.Common;
+import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Map.InfoImageTask;
+import com.example.molder.footprint.Map.LandMarkInfo;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonalRecordMain {
+import static android.content.Context.MODE_PRIVATE;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class PersonalRecordMain extends Fragment {
 
 
+    public PersonalRecordMain() {
+    }
 
-//import java.util.ArrayList;
-//import java.util.List;
 
-    public class MainActivity extends AppCompatActivity {
-        private RecyclerView recyclerView;
+    private RecyclerView recyclerView;
+    private View personal_fragment;
+    private List<Picture> pictures = null; //存imageID
+    private CommonTask retrieveLocationTask;
+    private InfoImageTask infoImageTask;
+    private int imageSize;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.personal_activity_main);
-//            handleViews();
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        imageSize = getResources().getDisplayMetrics().widthPixels / 3;
+        personal_fragment = inflater.inflate(R.layout.personal_main, container, false);
+        findViews();
+        return personal_fragment;
+
+    }
+
+
+    private void findViews() {
+
+        SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        String userID = preferences.getString("userId", "");
+        recyclerView = personal_fragment.findViewById(R.id.recyclerView);
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/RecordServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findImageId");
+            jsonObject.addProperty("id", userID);
+            //將內容轉成json字串
+
+            retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = retrieveLocationTask.execute().get();
+                Type listType = new TypeToken<List<Picture>>() {
+                }.getType();
+                //解析 json to gson
+                pictures = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+//                Log.e(TAG, e.toString());
+            }
+            if (pictures == null || pictures.isEmpty()) {
+//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+            } else {
+                //recycleView
+                recyclerView.setLayoutManager(
+                        new StaggeredGridLayoutManager(3,
+                                StaggeredGridLayoutManager.VERTICAL));
+                recyclerView.setAdapter(new PersonalRecorAdapter(getActivity(), pictures));
+            }
+        } else {
+            Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
         }
 
-//        private void handleViews() {
-//            recyclerView = findViewById(R.id.recyclerView);
-//            recyclerView.setLayoutManager(
-//                    new StaggeredGridLayoutManager(2,
-//                            StaggeredGridLayoutManager.HORIZONTAL));
-//            List<PersonalRecordParameter> memberList = getMemberList();
-//            recyclerView.setAdapter(new MemberAdapter(this, memberList));
-//        }
-//
-//        /* RecyclerView要透過RecyclerView.Adapter來處理欲顯示的清單內容，
-//           必須建立RecyclerView.Adapter子類別並覆寫對應的方法：
-//           getItemCount()、onCreateViewHolder()、onBindViewHolder */
-//        private class MemberAdapter extends
-//                RecyclerView.Adapter<MemberAdapter.MyViewHolder> {
-//            private Context context;
-//            private List<PersonalRecordParameter> memberList;
-//
-//            MemberAdapter(Context context, List<PersonalRecordParameter> memberList) {
-//                this.context = context;
-//                this.memberList = memberList;
-//            }
-//
-//            class MyViewHolder extends RecyclerView.ViewHolder {
-//                ImageView imageView;
-//                TextView tvId, tvName;
-//
-//                MyViewHolder(View itemView) {
-//                    super(itemView);
-//                    imageView = itemView.findViewById(R.id.imageView);
-//                    tvId = itemView.findViewById(R.id.tvId);
-//
-//                }
-//            }
-//
-//            @Override
-//            public int getItemCount() {
-//                return memberList.size();
-//            }
-//
-//
-//            @NonNull
-//            @Override
-//            public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-//                View itemView = LayoutInflater.from(context).
-//                        inflate(R.layout.personal_record_item, viewGroup, false);
-//                return new MyViewHolder(itemView);
-//            }
-//
-//            @Override
-//            public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
-//                final PersonalRecordParameter member = memberList.get(position);
-//                holder.imageView.setImageResource(member.getImage());
-//                holder.tvId.setText(String.valueOf(member.getId()));
-//
-//                holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-//                    @Override
-//                    public boolean onTouch(View v, MotionEvent event) {
-//                        // 要呼叫CardView.setsetCardBackgroundColor()方能精準改變CardView背景
-//                        CardView cardView = (CardView) holder.itemView;
-//                        int colorActionDown = getResources().getColor(R.color.colorPrimary);
-//                        switch (event.getAction()) {
-//                            case MotionEvent.ACTION_DOWN:
-//                                cardView.setCardBackgroundColor(colorActionDown);
-//                                ImageView iv = new ImageView(context);
-//                                iv.setImageResource(member.getImage());
-//                                Toast toast = new Toast(context);
-//                                toast.setView(iv);
-//                                toast.setDuration(Toast.LENGTH_SHORT);
-//                                toast.show();
-//                                break;
-//                            default:
-//
-//                                break;
-//                        }
-//                        return true;
-//                    }
-//                });
-//            }
-//        }
-//
-//        public List<PersonalRecordParameter> getMemberList() {
-//            List<PersonalRecordParameter> memberList = new ArrayList<>();
-//
-//            return memberList;
-//        }
-//    }
+
     }
+
+
+    private class PersonalRecorAdapter extends
+            RecyclerView.Adapter<PersonalRecorAdapter.MyViewHolder> {
+        private Context context;
+        private List<Picture> picList;
+
+        PersonalRecorAdapter(Context context, List<Picture> picList) {
+            this.context = context;
+            this.picList = picList;
+        }
+
+        class MyViewHolder extends RecyclerView.ViewHolder {
+
+            ImageView imageView;
+
+
+            MyViewHolder(View itemView) {
+                super(itemView);
+                imageView = itemView.findViewById(R.id.imageView);
+
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return picList.size();
+        }
+
+
+        @NonNull
+        @Override
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+            View itemView = LayoutInflater.from(context).
+                    inflate(R.layout.personal_record_item, viewGroup, false);
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+            final Picture picture = picList.get(position);
+            String url = Common.URL + "/RecordServlet";
+            int id = picture.getImageID();
+            infoImageTask = new InfoImageTask(url, id, imageSize, holder.imageView);
+            infoImageTask.execute();
+        }
+    }
+
+
 }

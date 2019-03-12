@@ -16,8 +16,9 @@
 
             <ImageView
                 android:id="@+id/ivCheckInShare"
-                android:layout_width="wrap_content"
-                android:layout_height="300dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/ic_launcher" />
 
@@ -27,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/btCheckInShareTakePicture"
-                android:layout_toRightOf="@+id/btCheckInShareTakePicture"
+                android:layout_alignEnd="@id/ivCheckInShare"
                 android:onClick="onPickPictureClick"
                 android:text="@string/CheckInShareFormAlbum" />
 
@@ -36,8 +37,8 @@
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
                 android:layout_below="@+id/ivCheckInShare"
+                android:layout_alignLeft="@id/ivCheckInShare"
                 android:onClick="onTakePictureClick"
                 android:text="@string/CheckInShareFormCamera" />
         </RelativeLayout>

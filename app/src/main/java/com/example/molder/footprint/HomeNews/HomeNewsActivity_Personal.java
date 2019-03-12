@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -76,8 +77,11 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             HomeNewsFragment_News homeNewsFragment_news = (HomeNewsFragment_News) bundle.getSerializable("news");
+            LandMark landMark = (LandMark) bundle.getSerializable("landMarkImageInfo");
             if (homeNewsFragment_news != null) {
                 userId = homeNewsFragment_news.getUserID();
+            }else if(landMark != null){
+                userId = landMark.getAccount();
             }
         }
         userName.setText(userId);

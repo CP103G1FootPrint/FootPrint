@@ -35,7 +35,12 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     public ImageTask(String url, int id, int imageSize, ImageView imageView) {
         this.url = url;
         this.id = id;
-        this.imageSize = imageSize;
+        if(imageSize >512){
+            this.imageSize = 512;
+        }else{
+            this.imageSize = imageSize;
+        }
+
         //改採weak參照就不會阻止imageView被回收
         this.imageViewWeakReference = new WeakReference<>(imageView);
     }

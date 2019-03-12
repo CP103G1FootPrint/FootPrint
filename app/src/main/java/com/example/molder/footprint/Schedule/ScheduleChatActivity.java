@@ -91,7 +91,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
                 tripId = trip.getTripID();
 
             }
-            }
+        }
 
         //用userID 尋找使用者暱稱和頭像
         if (Common.networkConnected(this)) {

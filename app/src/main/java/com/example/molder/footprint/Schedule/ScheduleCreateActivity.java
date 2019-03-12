@@ -65,6 +65,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     private ListView listView ;
     private String textFriend ,createID ;
     private int intFriendid ;
+    private String itemFriends = null ;
 
     private String[] list_items;
     private boolean[] checked_items ;
@@ -176,14 +177,14 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                 myBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String items = "" ;
+
                         for (int i=0;i<items_selected.size();i++){
-                            items = items + list_items[items_selected.get(i)];
+                            itemFriends = itemFriends + list_items[items_selected.get(i)];
                             if (i!= items_selected.size()-1){
-                                items = items+ "";
+                                itemFriends = itemFriends+ "";
                             }
                         }
-                        shTvGroupM.setText(items);
+                        shTvGroupM.setText(itemFriends);
                     }
                 });
                 myBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -288,17 +289,16 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         String createID = preferences.getString("userId", "");
 
+        String stringDays = shEtDay.getText().toString().trim() ;
+        int days = Integer.valueOf(stringDays);
 
-
-//        String type = shTvGroupM.getText().toString().trim() ;
-        String type;
-                if (shTvGroupM == null){
+        String type ;
+                if (itemFriends == null){
                     type = "Personal" ;
 
                 }else {
                     type= "Group";
                 }
-
 
         if (image == null) {
             Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoImage);
@@ -306,7 +306,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         }
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/TripServlet";
-            Trip trip = new Trip(0,title,date,type,createID);
+            Trip trip = new Trip(title,date,type,createID,days);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "tripInsert");
@@ -329,7 +329,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         }
         ScheduleCreateActivity.this.finish();
 
-//        finish();
+
     }
 
 
