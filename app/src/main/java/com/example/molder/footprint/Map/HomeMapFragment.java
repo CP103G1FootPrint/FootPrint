@@ -240,7 +240,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
+        setMap();
         googleMap.setOnInfoWindowClickListener(this);
         if (ActivityCompat.checkSelfPermission(mContext,
                 Manifest.permission.ACCESS_COARSE_LOCATION) ==

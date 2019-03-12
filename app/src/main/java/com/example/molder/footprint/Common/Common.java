@@ -18,14 +18,16 @@ public class Common {
 	// Android官方模擬器連結本機web server可以直接使用 http://10.0.2.2
 //	public final static String URL = "http://10.0.2.2:8080/";
 //    public final static String URL = "http://sewd.no-ip.org:8080/FootPrint";
-//    public final static String URL = "http://192.168.50.207:8080/FootPrint";
-    public final static String URL = "http://10.0.2.2:8080/FootPrint";
+    public final static String URL = "http://192.168.196.157:8080/FootPrint";
+//    public final static String URL = "http://10.0.2.2:8080/FootPrint";
 //	public final static String URL = "http://10.0.2.2:8080/FootPrint";
 //	public final static String URL = "http://10.0.2.2:8080/TextToJson_Web";
 
     private final static String TAG = "Common";
+//    public static final String SERVER_URI =
+//            "ws://10.0.2.2:8080/WSChatBasic_Web/TwoChatServer/";
     public static final String SERVER_URI =
-            "ws://10.0.2.2:8080/WSChatBasic_Web/TwoChatServer/";
+            "ws://192.168.196.157/WSChatBasic_Web/TwoChatServer/";
     public static WebSocketClient webSocketClient;
 
     // 建立WebSocket連線

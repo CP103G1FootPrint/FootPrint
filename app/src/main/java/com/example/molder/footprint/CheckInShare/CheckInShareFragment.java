@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -427,7 +428,8 @@ public class CheckInShareFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+//        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         askPermissions(activity, permissions, REQ_EXTERNAL_STORAGE);
     }
 

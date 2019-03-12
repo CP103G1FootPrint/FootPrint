@@ -14,13 +14,12 @@
     <!-- 允許應用程式透過 GPS 來定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 相機許可 -->
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
+    <!--<uses-feature-->
+        <!--android:name="android.hardware.camera"-->
+        <!--android:required="true" />-->
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_footprint_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -56,30 +55,46 @@
             android:authorities="com.facebook.app.FacebookContentProvider1637855299849357"
             android:exported="true" />
 
-        <activity android:name=".Login.MainLoginIn">
+        <activity android:name=".Login.MainLoginIn"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Home" />
-        <activity android:name=".Login.LoginTerms" />
-        <activity android:name=".Login.CreateNewAccount" />
-        <activity android:name=".HomeNews.HomeNewsActivity_Personal" />
-        <activity android:name=".Schedule.ScheduleCreateActivity" />
-        <activity android:name=".HomeNews.HomeNewsActivity_Message" />
-        <activity android:name=".Friends.FriendsMessageActivity" />
-        <activity android:name=".HomeStroke.HomeStrokeActivity" />
-        <activity android:name=".HomeNews.HomeNewsActivity_Personal_Friendship" />
-        <activity android:name=".Schedule.SchedulePlanActivity" />
-        <activity android:name=".Schedule.ScheduleChatActivity" />
-        <activity android:name=".Map.LandMarkInfo" />
-        <activity android:name=".Map.LandMarkImageInfo" />
-        <activity android:name=".Qrcode" />
-        <activity android:name=".Schedule.PersonalSetting" />
-        <activity android:name=".choosePic"></activity>
+        <activity android:name=".Home"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Login.LoginTerms"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Login.CreateNewAccount"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".HomeNews.HomeNewsActivity_Personal"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Schedule.ScheduleCreateActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".HomeNews.HomeNewsActivity_Message"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Friends.FriendsMessageActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".HomeStroke.HomeStrokeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".HomeNews.HomeNewsActivity_Personal_Friendship"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Schedule.SchedulePlanActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Schedule.ScheduleChatActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Map.LandMarkInfo"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Map.LandMarkImageInfo"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Qrcode"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Schedule.PersonalSetting"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".choosePic"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
