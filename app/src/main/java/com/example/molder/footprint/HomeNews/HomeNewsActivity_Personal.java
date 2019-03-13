@@ -53,7 +53,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_news__personal);
         imageSize = getResources().getDisplayMetrics().widthPixels;
-        handleViews();
+//        handleViews();
     }
     @Override
     public void onStart() {

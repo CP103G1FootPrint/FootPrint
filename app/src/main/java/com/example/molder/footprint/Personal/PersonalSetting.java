@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Home;
 import com.example.molder.footprint.HomeNews.HeadImageTask;
 import com.example.molder.footprint.Login.Account;
 import com.example.molder.footprint.Login.MainLoginIn;
@@ -111,6 +112,11 @@ public class PersonalSetting extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                preferences.edit().putBoolean("login", false)
+                        .putString("userId", null)
+                        .putString("password", null).apply();
+                finish();
                 Intent intent = new Intent(PersonalSetting.this, MainLoginIn.class);
                 startActivity(intent);
             }

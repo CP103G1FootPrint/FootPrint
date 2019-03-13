@@ -109,6 +109,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
             List<HomeNewsFragment_News> newsFragment_news = null;
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "getAlls");
+            jsonObject.addProperty("userId",personalUserId);
             String jsonOut = jsonObject.toString();
             newsCommonTask = new CommonTask(url, jsonOut);
             try {
