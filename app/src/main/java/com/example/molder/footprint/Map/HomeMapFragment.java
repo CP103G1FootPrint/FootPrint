@@ -115,6 +115,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
     private HeadImageTask headImageTask;
     private Bitmap bitMapHeadImage = null;
     private Bitmap bitHeadImage = null;
+    private List<LandMark> locations = null;
 
     public HomeMapFragment() {
         // Required empty public constructor
@@ -136,7 +137,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
             supportMapFragment = SupportMapFragment.newInstance();
             fm.beginTransaction().replace(R.id.googleMap, supportMapFragment).commit();
         }
-        supportMapFragment.getMapAsync(this);
+//        supportMapFragment.getMapAsync(this);
 
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -240,7 +241,11 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        setMap();
+        if(locations != null){
+            googleMap.clear();
+            showMap(locations);
+            showInit();
+        }
         googleMap.setOnInfoWindowClickListener(this);
         if (ActivityCompat.checkSelfPermission(mContext,
                 Manifest.permission.ACCESS_COARSE_LOCATION) ==
@@ -255,10 +260,10 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
         //下拉選單
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
-                googleMap.clear();
+//                googleMap.clear();
                 if (Common.networkConnected((Activity) mContext)) {
                     String url = Common.URL + "/LocationServlet";
-                    List<LandMark> locations = null;
+
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("action", adapterView.getSelectedItem().toString());
                     jsonObject.addProperty("type", adapterView.getSelectedItem().toString());
@@ -276,8 +281,9 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                     if (locations == null || locations.isEmpty()) {
                         Toast.makeText(mContext, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                     } else {
-                        showMap(locations);
-                        showInit();
+//                        showMap(locations);
+//                        showInit();
+                        supportMapFragment.getMapAsync(HomeMapFragment.this);
                     }
                 } else {
                     Toast.makeText(mContext, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();

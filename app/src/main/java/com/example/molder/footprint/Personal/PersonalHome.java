@@ -121,7 +121,7 @@ public class PersonalHome extends Fragment {
         btSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+//                getActivity().finish();
                 Intent intent = new Intent(getActivity(), PersonalSetting.class);
                 startActivity(intent);
 
