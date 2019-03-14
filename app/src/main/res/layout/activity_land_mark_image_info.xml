@@ -16,6 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/mapInfoImageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toEndOf="@id/mapInfoImageBack"
+                android:text="@string/mapInfoDetailTitle"
+                android:gravity="center" />
+
             <ImageButton
                 android:id="@+id/mapInfoImageBack"
                 android:layout_width="50dp"
@@ -23,15 +31,6 @@
                 android:background="@color/colorbtnCreateAccount"
                 app:layout_constraintStart_toStartOf="parent"
                 android:src="@drawable/baseline_keyboard_arrow_left_black_36"/>
-
-            <TextView
-                android:id="@+id/mapInfoImageTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="120dp"
-                app:layout_constraintStart_toEndOf="@id/mapInfoImageBack"
-                android:text="@string/mapInfoDetailTitle"
-                android:gravity="center" />
 
         </android.support.constraint.ConstraintLayout>
 

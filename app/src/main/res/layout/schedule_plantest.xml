@@ -24,7 +24,7 @@
 
         <LinearLayout
             android:layout_marginTop="120dp"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorbtnCreateAccount"
             android:id="@+id/linearMove"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

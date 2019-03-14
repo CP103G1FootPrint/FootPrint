@@ -44,7 +44,7 @@
     <string name="homeTakePictureBtnNavigation">Share</string>
     <string name="homeFriendsBtnNavigation">Friends</string>
     <string name="homePersonalBtnNavigation">Personal</string>
-    <string name="createNewAccount">Create New FootPrint Account</string>
+    <string name="createNewAccount">Create New  Account</string>
     <string name="forgotPassword">Forgot Password?</string>
     <string name="Account">Account</string>
     <string name="Constellation">Constellation</string>
@@ -139,8 +139,7 @@
     <string name="textAddtoGroup">Add Trip</string>
     <string name="msg_NoTripsFound">NoTripsFound</string>
     <string name="msg_NameIsInvalid">NameIsInvalid</string>
-    <string name="text_Exit">EXIT</string>
-    <string name="msg_WantToExit">WantToExit</string>
-    <string name="text_Yes">Yes</string>
-    <string name="text_No">NO</string>
+    <string name="text_Exit">Exit</string>
+    <string name="msg_WantToExit">Do you want to Exit</string>
+    <string name="text_No">No</string>
 </resources>

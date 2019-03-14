@@ -1,7 +1,6 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,14 +22,12 @@ import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.HomeNews.HeadImageTask;
 import com.example.molder.footprint.Login.Account;
-import com.example.molder.footprint.Schedule.PersonalSetting;
+import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
 import java.lang.reflect.Type;
-import java.net.URL;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -125,6 +121,7 @@ public class PersonalHome extends Fragment {
         btSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                getActivity().finish();
                 Intent intent = new Intent(getActivity(), PersonalSetting.class);
                 startActivity(intent);
 

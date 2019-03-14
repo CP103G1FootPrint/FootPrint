@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,12 +18,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
+import com.example.molder.footprint.CheckInShare.Picture;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
 import com.example.molder.footprint.Map.InfoImageTask;
 import com.example.molder.footprint.Map.LandMarkInfo;
+import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -38,16 +39,16 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PersonalCollectMain extends Fragment {
+public class PersonalRecordMain extends Fragment {
 
 
-    public PersonalCollectMain() {
+    public PersonalRecordMain() {
     }
 
 
     private RecyclerView recyclerView;
     private View personal_fragment;
-    private List<PersonalCollectMember> pictures = null; //存imageID
+    private List<Picture> pictures = null; //存imageID
     private CommonTask retrieveLocationTask;
     private InfoImageTask infoImageTask;
     private int imageSize;
@@ -67,21 +68,20 @@ public class PersonalCollectMain extends Fragment {
 
     private void findViews() {
 
-        recyclerView = personal_fragment.findViewById(R.id.recyclerView);
         SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        String userId = preferences.getString("userId", "");
-
+        String userID = preferences.getString("userId", "");
+        recyclerView = personal_fragment.findViewById(R.id.recyclerView);
         if (Common.networkConnected(getActivity())) {
-            String url = Common.URL + "/CollectServlet";  //改
+            String url = Common.URL + "/RecordServlet";
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "findImageId");
-            jsonObject.addProperty("id", userId); //
+            jsonObject.addProperty("id", userID);
             //將內容轉成json字串
 
             retrieveLocationTask = new CommonTask(url, jsonObject.toString());
             try {
                 String jsonIn = retrieveLocationTask.execute().get();
-                Type listType = new TypeToken<List<PersonalCollectMember>>() {
+                Type listType = new TypeToken<List<Picture>>() {
                 }.getType();
                 //解析 json to gson
                 pictures = new Gson().fromJson(jsonIn, listType);
@@ -95,7 +95,7 @@ public class PersonalCollectMain extends Fragment {
                 recyclerView.setLayoutManager(
                         new StaggeredGridLayoutManager(3,
                                 StaggeredGridLayoutManager.VERTICAL));
-                recyclerView.setAdapter(new PersonalCollectMain.PersonalCollectAdapter(getActivity(), pictures));
+                recyclerView.setAdapter(new PersonalRecorAdapter(getActivity(), pictures));
             }
         } else {
             Toast.makeText(getActivity(), R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
@@ -105,12 +105,12 @@ public class PersonalCollectMain extends Fragment {
     }
 
 
-    private class PersonalCollectAdapter extends
-            RecyclerView.Adapter<PersonalCollectMain.PersonalCollectAdapter.MyViewHolder> {
+    private class PersonalRecorAdapter extends
+            RecyclerView.Adapter<PersonalRecorAdapter.MyViewHolder> {
         private Context context;
-        private List<PersonalCollectMember> picList;
+        private List<Picture> picList;
 
-        PersonalCollectAdapter(Context context, List<PersonalCollectMember> picList) {
+        PersonalRecorAdapter(Context context, List<Picture> picList) {
             this.context = context;
             this.picList = picList;
         }
@@ -135,17 +135,17 @@ public class PersonalCollectMain extends Fragment {
 
         @NonNull
         @Override
-        public PersonalCollectMain.PersonalCollectAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
             View itemView = LayoutInflater.from(context).
-                    inflate(R.layout.personal_collect_item, viewGroup, false);
-            return new PersonalCollectMain.PersonalCollectAdapter.MyViewHolder(itemView);
+                    inflate(R.layout.personal_record_item, viewGroup, false);
+            return new MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            final PersonalCollectMember picture = picList.get(position);
-            String url = Common.URL + "/CollectServlet";
-            int id = picture.getImage();
+        public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
+            final Picture picture = picList.get(position);
+            String url = Common.URL + "/RecordServlet";
+            int id = picture.getImageID();
             infoImageTask = new InfoImageTask(url, id, imageSize, holder.imageView);
             infoImageTask.execute();
         }

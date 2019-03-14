@@ -1,4 +1,4 @@
-package com.example.molder.footprint;
+package com.example.molder.footprint.Personal;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,7 +15,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -27,12 +26,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.example.molder.footprint.CheckInShare.Picture;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
-import com.example.molder.footprint.Login.HeadImageTask;
-import com.example.molder.footprint.Schedule.PersonalSetting;
-import com.google.gson.Gson;
+import com.example.molder.footprint.R;
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
@@ -109,8 +105,9 @@ public class choosePic extends AppCompatActivity {
         cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(choosePic.this, PersonalSetting.class);
-                startActivity(intent);
+//                Intent intent = new Intent(choosePic.this, PersonalSetting.class);
+//                startActivity(intent);
+                finish();
             }
         });
 

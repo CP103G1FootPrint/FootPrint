@@ -1,13 +1,13 @@
-package com.example.molder.footprint.Schedule;
+package com.example.molder.footprint.Personal;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,18 +15,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
+import com.example.molder.footprint.Home;
 import com.example.molder.footprint.HomeNews.HeadImageTask;
 import com.example.molder.footprint.Login.Account;
 import com.example.molder.footprint.Login.MainLoginIn;
-import com.example.molder.footprint.PersonalHome;
 import com.example.molder.footprint.R;
-import com.example.molder.footprint.choosePic;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -106,15 +103,20 @@ public class PersonalSetting extends AppCompatActivity {
             public void onClick(View view) {
 //                Intent intent = new Intent(PersonalSetting.this, PersonalHome.class);
 //                startActivity(intent);
-//                android.support.v4.app.Fragment fragment = new PersonalHome();
-//                android.app.Fragment f = new Fragment();
-//                f = (android.support.v4.app.Fragment) fragment;
-//                  loadFragment(f);
+//                Fragment fragment = new PersonalHome();
+//                Fragment f = new Fragment();
+//                  loadFragment(fragment);
+                finish();
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                preferences.edit().putBoolean("login", false)
+                        .putString("userId", null)
+                        .putString("password", null).apply();
+                finish();
                 Intent intent = new Intent(PersonalSetting.this, MainLoginIn.class);
                 startActivity(intent);
             }
@@ -125,7 +127,7 @@ public class PersonalSetting extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
 
 // create a FragmentManager
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
 // create a FragmentTransaction to begin the transaction and replace the Fragment
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
 // replace the FrameLayout with new Fragment

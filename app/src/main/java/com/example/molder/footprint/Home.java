@@ -3,7 +3,6 @@ package com.example.molder.footprint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
@@ -18,6 +17,7 @@ import android.view.MenuItem;
 import com.example.molder.footprint.CheckInShare.CheckInShareFragment;
 
 import com.example.molder.footprint.Friends.Friends;
+import com.example.molder.footprint.Personal.PersonalHome;
 import com.example.molder.footprint.Schedule.ScheduleMainFragment;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 
@@ -93,6 +93,7 @@ public class Home extends AppCompatActivity {
 //        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         int count = getSupportFragmentManager().getBackStackEntryCount();
@@ -110,9 +111,8 @@ public class Home extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.text_Exit)
-//                    .setIcon(R.drawable.ic_alert)
                     .setMessage(R.string.msg_WantToExit)
-                    .setPositiveButton(R.string.text_Yes, this)
+                    .setPositiveButton(R.string.msg_ok, this)
                     .setNegativeButton(R.string.text_No, this)
                     .create();
         }
@@ -123,6 +123,7 @@ public class Home extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     if (getActivity() != null) {
                         getActivity().finish();
+
                     }
                     break;
                 default:

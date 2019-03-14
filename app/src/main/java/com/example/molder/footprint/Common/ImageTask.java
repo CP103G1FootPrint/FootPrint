@@ -35,8 +35,8 @@ public class ImageTask extends AsyncTask<Object, Integer, Bitmap> {
     public ImageTask(String url, int id, int imageSize, ImageView imageView) {
         this.url = url;
         this.id = id;
-        if(imageSize >180){
-            this.imageSize = 180;
+        if(imageSize >512){
+            this.imageSize = 512;
         }else{
             this.imageSize = imageSize;
         }
