@@ -53,6 +53,11 @@ public class LandMark implements Serializable {
 
     }
 
+    public LandMark(int id){
+        super();
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
