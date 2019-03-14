@@ -52,7 +52,7 @@ public class FriendsMessageFragment extends Fragment implements FragmentBackHand
     private String userId,friendsId;
     private HeadImageTask headImageTask;
     private CommonTask friendsCommonTask,userIdTask;
-    private List<String>friendList = new ArrayList<>();
+//    private List<String>friendList = new ArrayList<>();
     private int imageSize;
 
 //    private List friendList = new ArrayList<>();
@@ -90,7 +90,7 @@ public class FriendsMessageFragment extends Fragment implements FragmentBackHand
     }
 
     private void getFriendsMessageFragment_Message() {
-
+        List<String>friendList = new ArrayList<>();
         SharedPreferences preferences = activity.getSharedPreferences(com.example.molder.footprint.Common.Common.PREF_FILE, MODE_PRIVATE);
         userId = preferences.getString("userId", "");
 
