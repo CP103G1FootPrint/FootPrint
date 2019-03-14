@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.molder.footprint.Friends.ChatWebSocketClient;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -29,6 +31,7 @@ public class Common {
 //    public static final String SERVER_URI =
 //            "ws://192.168.196.157/WSChatBasic_Web/TwoChatServer/";
     public static WebSocketClient webSocketClient;
+
 
     // 建立WebSocket連線
     public static void connectServer(Context context, String userName) {

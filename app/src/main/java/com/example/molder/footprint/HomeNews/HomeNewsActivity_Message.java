@@ -177,7 +177,9 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                 } else {
                     insertMessage();
 //                  HomeNews_MessageAdapter;
-//                  HomeNewsActivity_Message.notifyDataSetChanged();
+//                  HomeNewsActivity_Message.this.notifyDataSetChanged();
+//                    homeNews_messageAdapter.notifyDataSetChanged();
+
                 }
             }
         });

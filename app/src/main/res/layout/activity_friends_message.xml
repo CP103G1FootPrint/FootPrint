@@ -4,25 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Friends.FriendsMessageActivity">
-
+    android:orientation="vertical">
     <android.support.design.widget.TextInputEditText
         android:id="@+id/ti_Go_To_Comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:hint="Message"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/bt_SendMessage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/bt_SendMessage"/>
+        android:hint="Message" />
+
     <Button
         android:id="@+id/bt_SendMessage"
-        android:layout_width="50dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="48dp"
+        android:layout_height="38dp"
+        android:layout_margin="1dp"
         android:background="@color/colorWhite"
         android:text="Send"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_friendChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#35D0B1"
+        android:alpha="0.8"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/ti_Go_To_Comment">
+    </android.support.v7.widget.RecyclerView>
+
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:padding="12dp" />-->
+
 </android.support.constraint.ConstraintLayout>
