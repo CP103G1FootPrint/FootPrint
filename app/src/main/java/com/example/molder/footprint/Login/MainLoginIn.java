@@ -233,7 +233,7 @@ public class MainLoginIn extends AppCompatActivity {
         super.onStart();
         askPermissions();
 
-        //自動登入
+//        //自動登入
 //        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE,
 //                MODE_PRIVATE);
 //        boolean login = preferences.getBoolean("login", false);
