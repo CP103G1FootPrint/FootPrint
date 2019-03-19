@@ -15,6 +15,8 @@ public class Common {
     private static final String TAG = "Common";
     public final static String SERVER_URI =
             "ws://10.0.2.2:8080/FootPrint/ChatServer/";
+//    public final static String SERVER_URI =
+//            "http://192.168.196.89:8080/FootPrint/ChatServer/";
     public static ChatWebSocketClient chatWebSocketClient;
     private static List<String> friendList = new ArrayList<>();
 

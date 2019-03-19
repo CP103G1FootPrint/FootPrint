@@ -62,12 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"/>
 
-                <Button
-                    android:id="@+id/scheduleEditSave"
-                    android:text="@string/textSave"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"/>
+
 
             </LinearLayout>
 
@@ -86,3 +81,12 @@
     </FrameLayout>
 
 </LinearLayout>
+
+<!--
+                    <Button
+                    android:id="@+id/scheduleEditSave"
+                    android:text="@string/textSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"/>
+-->

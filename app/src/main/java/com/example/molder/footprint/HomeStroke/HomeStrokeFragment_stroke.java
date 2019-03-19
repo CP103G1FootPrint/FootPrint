@@ -7,15 +7,17 @@ public class HomeStrokeFragment_stroke implements Serializable {
     private String title;
     private String date;
     private String type;
-    private String createID ;
+    private String createID;
+    private int days;
 
 
-    public HomeStrokeFragment_stroke(int tripID, String title, String date, String type, String createID) {
+    public HomeStrokeFragment_stroke(int tripID, String title, String date, String type, String createID,int days) {
         this.tripID = tripID;
         this.title = title;
         this.date = date;
         this.type = type;
         this.createID = createID;
+        this.days = days;
     }
 
     public int getTripID() {
@@ -56,5 +58,13 @@ public class HomeStrokeFragment_stroke implements Serializable {
 
     public void setCreateID(String createID) {
         this.createID = createID;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
     }
 }
