@@ -11,12 +11,13 @@ public class Trip implements Serializable {
     private int days;
 
 
-    public Trip(String title, String date, String type, String createID, int days) {
+    public Trip(String title, String date, String type, String createID, int days , int tripID) {
         this.title = title;
         this.date = date;
         this.type = type;
         this.createID = createID;
         this.days = days;
+        this.tripID = tripID;
     }
 
     public Trip(int tripID, String title, String date, String type) {

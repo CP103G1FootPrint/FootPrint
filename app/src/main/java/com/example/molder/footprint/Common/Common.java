@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.molder.footprint.Friends.ChatWebSocketClient;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -18,17 +20,17 @@ public class Common {
 	// Android官方模擬器連結本機web server可以直接使用 http://10.0.2.2
 //	public final static String URL = "http://10.0.2.2:8080/";
 //    public final static String URL = "http://sewd.no-ip.org:8080/FootPrint";
-    public final static String URL = "http://192.168.196.157:8080/FootPrint";
-//    public final static String URL = "http://10.0.2.2:8080/FootPrint";
-//	public final static String URL = "http://10.0.2.2:8080/FootPrint";
-//	public final static String URL = "http://10.0.2.2:8080/TextToJson_Web";
+//    public final static String URL = "http://192.168.196.89:8080/FootPrint";
+    public final static String URL = "http://10.0.2.2:8080/FootPrint";
+
 
     private final static String TAG = "Common";
-//    public static final String SERVER_URI =
-//            "ws://10.0.2.2:8080/WSChatBasic_Web/TwoChatServer/";
     public static final String SERVER_URI =
-            "ws://192.168.196.157/WSChatBasic_Web/TwoChatServer/";
+            "ws://10.0.2.2:8080/FootPrint/ChatServer/";
+//    public static final String SERVER_URI =
+//            "ws://192.168.196.157/WSChatBasic_Web/TwoChatServer/";
     public static WebSocketClient webSocketClient;
+
 
     // 建立WebSocket連線
     public static void connectServer(Context context, String userName) {

@@ -1,18 +1,23 @@
 package com.example.molder.footprint;
 
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.example.molder.footprint.CheckInShare.CheckInShareFragment;
 
 import com.example.molder.footprint.Friends.Friends;
+import com.example.molder.footprint.Personal.PersonalHome;
 import com.example.molder.footprint.Schedule.ScheduleMainFragment;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 
@@ -87,6 +92,45 @@ public class Home extends AppCompatActivity {
         fragmentTransaction.replace(R.id.content, fragment);
 //        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (keyCode == KeyEvent.KEYCODE_BACK && count == 0) {
+            new AlertDialogFragment().show(getSupportFragmentManager(), "exit");
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public static class AlertDialogFragment
+            extends DialogFragment implements DialogInterface.OnClickListener {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.text_Exit)
+                    .setMessage(R.string.msg_WantToExit)
+                    .setPositiveButton(R.string.msg_ok, this)
+                    .setNegativeButton(R.string.text_No, this)
+                    .create();
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    if (getActivity() != null) {
+                        getActivity().finish();
+
+                    }
+                    break;
+                default:
+                    dialog.cancel();
+                    break;
+            }
+        }
     }
 
 }

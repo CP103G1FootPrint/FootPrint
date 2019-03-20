@@ -139,4 +139,7 @@
     <string name="textAddtoGroup">Add Trip</string>
     <string name="msg_NoTripsFound">NoTripsFound</string>
     <string name="msg_NameIsInvalid">NameIsInvalid</string>
+    <string name="text_Exit">Exit</string>
+    <string name="msg_WantToExit">Do you want to Exit</string>
+    <string name="text_No">No</string>
 </resources>

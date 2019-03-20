@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-
-
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -19,49 +16,46 @@
 
             <ImageView
                 android:id="@+id/selfePic"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_margin="10dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 app:srcCompat="@mipmap/ic_launcher_round" />
 
             <TextView
                 android:id="@+id/tv_id"
                 android:layout_width="100dp"
-                android:layout_height="25dp"
-                android:layout_margin="10dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="小強"
-                android:textSize="20dp"
-                app:layout_constraintStart_toEndOf="@id/selfePic"
-                 />
+                android:textSize="30dp"
+                app:layout_constraintStart_toEndOf="@id/selfePic" />
 
             <TextView
                 android:id="@+id/tv_point"
                 android:layout_width="60dp"
-                android:layout_height="29dp"
+                android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:text="633"
-                android:textSize="25dp"
+                android:textSize="30dp"
                 app:layout_constraintStart_toEndOf="@id/selfePic"
-                app:layout_constraintTop_toBottomOf="@+id/tv_id" />
-
+                app:layout_constraintBottom_toBottomOf="@id/selfePic" />
 
             <ImageView
                 android:id="@+id/piggy"
-                android:layout_width="36dp"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_margin="30dp"
                 app:layout_constraintStart_toEndOf="@id/tv_point"
-                app:layout_constraintTop_toBottomOf="@+id/tv_id"
+                app:layout_constraintBottom_toBottomOf="@id/selfePic"
                 app:srcCompat="@drawable/ic_piggy_bank_with_dollar_coins" />
 
             <ImageButton
                 android:id="@+id/btSetting"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_margin="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/groupnn" />
-
 
         </android.support.constraint.ConstraintLayout>
 

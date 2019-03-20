@@ -1,13 +1,18 @@
 package com.example.molder.footprint.Schedule;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,19 +40,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.molder.footprint.Schedule.ScheduleDayServer.connectServer;
+import static com.example.molder.footprint.Schedule.ScheduleDayServer.disconnectServer;
+import static com.example.molder.footprint.Schedule.ScheduleDayServer.getUserName;
+import static com.example.molder.footprint.Schedule.ScheduleDayServer.scheduleDayWebSocketClient;
+import static com.example.molder.footprint.Schedule.SchedulePlanActivity.judgmentDay;
+
 
 public class SchedulePlanDayFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
     private final static String TAG = "SchedulePlanDayFragment";
 
     // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
     private int day, tripId;
-    //    private TextView textView;
     private View view;
 
     private Context mContext;
@@ -56,11 +66,15 @@ public class SchedulePlanDayFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private MainAdapter mAdapter;
-    private List<LandMark> mDatas;
+    private List<LandMark> mDatas = new ArrayList<>();
     private CommonTask retrieveLocationTask;
-    private int iNumber = 0;
+    private CommonTask retrieveLocationTask2;
     private View v;
     private ListView listView;
+    private LandMark chooseMember = null;
+    private LocalBroadcastManager broadcastManager;
+    private String userId;
+    private List<String> friends = null;
 
     public SchedulePlanDayFragment() {
         // Required empty public constructor
@@ -77,11 +91,13 @@ public class SchedulePlanDayFragment extends Fragment {
 //        return fragment;
 //    }
 
-    public static SchedulePlanDayFragment newInstances(int position, int tripID) {
+    public static SchedulePlanDayFragment newInstances(int position, int tripID, List<String> friends) {
         SchedulePlanDayFragment fragment = new SchedulePlanDayFragment();
+        ArrayList<String> arrayListFriends = new ArrayList<String>(friends);
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, position);
         args.putInt(ARG_PARAM2, tripID);
+        args.putStringArrayList(ARG_PARAM3,arrayListFriends);
         fragment.setArguments(args);
         return fragment;
     }
@@ -92,17 +108,20 @@ public class SchedulePlanDayFragment extends Fragment {
         if (getArguments() != null) {
             day = getArguments().getInt(ARG_PARAM1);
             tripId = getArguments().getInt(ARG_PARAM2);
+            friends = getArguments().getStringArrayList(ARG_PARAM3);
         }
+        connectServer(getContext(), getUserName(getContext()));
+        SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        broadcastManager = LocalBroadcastManager.getInstance(getContext());
+        registerScheduleDayRecycleReceiver();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_schedule_plan_day, container, false);
-
         mContext = getActivity();
-        mDatas = new ArrayList<>();
-//        mDatas2 = new ArrayList<>();
 
         //刷新
 //        swipeRefreshLayout =
@@ -131,7 +150,19 @@ public class SchedulePlanDayFragment extends Fragment {
                         .setNegativeButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
+                                if(chooseMember != null) {
+                                    mDatas.add(chooseMember);
+                                    //更新資料庫
+                                    String action = "insertLandMarkInSchedulePlanDay";
+                                    internet(action,tripId,day,chooseMember.getId());
+                                    //更新地圖
+                                    updateMap();
+                                    //通知Adapter更新状态
+                                    mAdapter.notifyDataSetChanged();
+                                    //推播
+                                    changeDateRecycle(mDatas);
+                                    dialog.cancel();
+                                }
                             }
                         })
                         .show();
@@ -146,16 +177,9 @@ public class SchedulePlanDayFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 for (int i = 0; i < listView.getChildCount(); i++) {
-
                     if (position == i) {
-
                         listView.getChildAt(i).setBackgroundColor(Color.GREEN);
-                        LandMark member = (LandMark) parent.getItemAtPosition(position);
-                        mDatas.add(member);
-
-//                        mDatas.add("" + (char) iNumber + 1);
-                        mAdapter.notifyDataSetChanged();
-
+                        chooseMember = (LandMark) parent.getItemAtPosition(position);
                     } else {
                         listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
                     }
@@ -189,7 +213,7 @@ public class SchedulePlanDayFragment extends Fragment {
             Common.showToast(mContext, R.string.msg_NoNetwork);
         }
 
-//        initData();
+        initData();
         mRecyclerView = view.findViewById(R.id.planRecycleView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
@@ -218,8 +242,15 @@ public class SchedulePlanDayFragment extends Fragment {
                         Collections.swap(mDatas, i, i - 1);
                     }
                 }
+                //更新資料庫
+                String action = "changePositionLandMarkInSchedulePlanDay";
+                changeData(action,tripId,day,mDatas);
+                //更新地圖
+                updateMap();
                 //通知Adapter更新状态
                 mAdapter.notifyItemMoved(fromPosition, toPosition);
+                //推播
+                changeDateRecycle(mDatas);
                 return true;
             }
 
@@ -232,7 +263,15 @@ public class SchedulePlanDayFragment extends Fragment {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 mDatas.remove(position);//侧滑删除数据
-                mAdapter.notifyItemRemoved(position);//通知Adapter更新状态
+                //更新資料庫
+                String action = "changePositionLandMarkInSchedulePlanDay";
+                changeData(action,tripId,day,mDatas);
+                //更新地圖
+                updateMap();
+                //通知Adapter更新状态
+                mAdapter.notifyItemRemoved(position);
+                //推播
+                changeDateRecycle(mDatas);
             }
 
             //改变Item的透明度
@@ -306,14 +345,26 @@ public class SchedulePlanDayFragment extends Fragment {
 
     }
 
-
-//    private void initData() {
-
-//        mDatas = mDatas2;
-//        for (int i = 'A'; i < 'Z'; i++) {
-//            mDatas.add("" + (char) i);
-//        }
-//    }
+    private void initData() {
+        if (Common.networkConnected(getActivity())) {
+            String url = Common.URL + "/LocationServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findLandMarkInSchedulePlanDay");
+            jsonObject.addProperty("SchedulePlanDayTripId", tripId);
+            jsonObject.addProperty("SchedulePlanDay", day);
+            //將內容轉成json字串
+            retrieveLocationTask2 = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = retrieveLocationTask2.execute().get();
+                Type listType = new TypeToken<List<LandMark>>() {
+                }.getType();
+                //解析 json to gson
+                mDatas = new Gson().fromJson(jsonIn, listType);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        }
+    }
 
     public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
 
@@ -361,5 +412,126 @@ public class SchedulePlanDayFragment extends Fragment {
             retrieveLocationTask.cancel(true);
             retrieveLocationTask = null;
         }
+        if (retrieveLocationTask2 != null) {
+            retrieveLocationTask2.cancel(true);
+            retrieveLocationTask2 = null;
+        }
     }
+
+    public void internet(String action, int tripId, int day, int landMarkId){
+        if (Common.networkConnected(getActivity())){
+            String url = Common.URL + "/LocationServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", action);
+            jsonObject.addProperty("SchedulePlanDayTripId", tripId);
+            jsonObject.addProperty("SchedulePlanDay", day);
+            jsonObject.addProperty("SchedulePlanDayLandMark", landMarkId);
+            int count = 0;
+            try {
+                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Common.showToast(getActivity(), R.string.msg_InsertFail);
+            } else {
+                Common.showToast(getActivity(), R.string.msg_InsertSuccess);
+            }
+        } else {
+            Common.showToast(getActivity(), R.string.msg_NoNetwork);
+        }
+    }
+
+    public void changeData(String action, int tripId, int day, List<LandMark> landMarks){
+        if (Common.networkConnected(getActivity())){
+            String url = Common.URL + "/LocationServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", action);
+            jsonObject.addProperty("SchedulePlanDayTripId", tripId);
+            jsonObject.addProperty("SchedulePlanDay", day);
+            jsonObject.addProperty("SchedulePlanDayLandMark", new Gson().toJson(landMarks));
+            int count = 0;
+            try {
+                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Common.showToast(getActivity(), R.string.msg_InsertFail);
+            } else {
+                Common.showToast(getActivity(), R.string.msg_InsertSuccess);
+            }
+        } else {
+            Common.showToast(getActivity(), R.string.msg_NoNetwork);
+        }
+    }
+
+    public void updateMap(){
+        //更新地圖
+        ScheduleDay scheduleDay = new ScheduleDay("ScheduleDay", day,"updateMap",userId,new Gson().toJson(friends),1,tripId);
+        String scheduleMessageJson = new Gson().toJson(scheduleDay);
+        scheduleDayWebSocketClient.send(scheduleMessageJson);
+    }
+
+    public void changeDateRecycle(List<LandMark> landMark){
+        ScheduleDay scheduleDay = new ScheduleDay("ScheduleDayRecycle", day,"judgmentDay",userId,new Gson().toJson(friends),1,tripId,new Gson().toJson(landMark));
+        String scheduleMessageJson = new Gson().toJson(scheduleDay);
+        scheduleDayWebSocketClient.send(scheduleMessageJson);
+    }
+
+    //攔截廣播     Tag: ScheduleDay
+    private void registerScheduleDayRecycleReceiver() {
+        IntentFilter scheduleDayRecycleFilter = new IntentFilter("ScheduleDayRecycle");
+        SchedulePlanDayFragment.ScheduleDayRecycleReceiver scheduleDayRecycleReceiverReceiver = new SchedulePlanDayFragment.ScheduleDayRecycleReceiver();
+        broadcastManager.registerReceiver(scheduleDayRecycleReceiverReceiver, scheduleDayRecycleFilter);
+    }
+
+    // 接收到聊天訊息會在TextView呈現
+    private class ScheduleDayRecycleReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 取得聊天訊息
+            String message = intent.getStringExtra("message");
+            ScheduleDay dayMessage = new Gson().fromJson(message, ScheduleDay.class);
+            String dayType = dayMessage.getMessageType();
+            int numberOfDay = dayMessage.getNumberOfDay();
+//            Type listType = new TypeToken<LandMark>() {}.getType();
+//            //解析 json to gson
+//            String landMark = dayMessage.getLandMark();
+//            LandMark newLandMark = new Gson().fromJson(landMark, listType);
+
+            String landMarks = dayMessage.getLandMarkList();
+            Type listTypes = new TypeToken<List<LandMark>>() {
+            }.getType();
+            //解析 json to gson
+            List<LandMark>locations = new Gson().fromJson(landMarks, listTypes);
+
+//            int scheduleOfDay = dayMessage.getNumberOfDay();
+//            int tabCount = dayMessage.getTabCount();
+//            int tripId = dayMessage.getTripId();
+            switch (dayType) {
+
+                case "judgmentDay":
+                    if(judgmentDay == numberOfDay){
+                        if(day == numberOfDay){
+                            mAdapter = new MainAdapter(mContext, locations);
+                            mRecyclerView.setAdapter(mAdapter);
+                            //通知Adapter更新状态
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    break;
+                    default: break;
+            }
+        }
+    }
+
+    // 結束即中斷WebSocket連線
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        disconnectServer();
+//    }
 }

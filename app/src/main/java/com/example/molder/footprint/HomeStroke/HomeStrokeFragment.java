@@ -73,11 +73,13 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
+                getHomeStrokeFragment_stroke();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
         rvStroke = view.findViewById(R.id.home_news);
-        //LAYOUT MANAGER
+//        getHomeStrokeFragment_stroke();
+//        LAYOUT MANAGER
         rvStroke.setLayoutManager(new LinearLayoutManager(activity));
         return view;
     }
@@ -93,7 +95,8 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
             String url = Common.URL + "/TripServlet";
             List<HomeStrokeFragment_stroke> trips = null;
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "Alls");
+            jsonObject.addProperty("action", "stroke");
+            jsonObject.addProperty("type", "open");
             String jsonOut = jsonObject.toString();
             tripGetAllTask = new CommonTask(url, jsonOut);
             try {

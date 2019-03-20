@@ -21,9 +21,11 @@
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/ic_footprint_logo"
+        android:roundIcon="@drawable/ic_footprint_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- android:roundIcon="@mipmap/ic_launcher_round"-->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -89,11 +91,11 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Map.LandMarkImageInfo"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".Qrcode"
+        <activity android:name=".Personal.Qrcode"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".Schedule.PersonalSetting"
+        <activity android:name=".Personal.PersonalSetting"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".choosePic"
+        <activity android:name=".Personal.choosePic"
             android:screenOrientation="portrait"></activity>
     </application>
 

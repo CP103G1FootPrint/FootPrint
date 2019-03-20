@@ -25,6 +25,7 @@ import com.example.molder.footprint.HomeNews.HomeNewsActivity_Personal_Friendshi
 import com.example.molder.footprint.HomeNews.HomeNewsFragment;
 import com.example.molder.footprint.HomeNews.HomeNewsFragment_News;
 import com.example.molder.footprint.R;
+import com.example.molder.footprint.Schedule.SchedulePlanDayFragment;
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper;
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler;
 import com.google.gson.Gson;
@@ -44,6 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FriendsFriendFragment extends Fragment implements FragmentBackHandler {
     private static final String TAG = "FriendsFriendFragment";
+    private static final int REQUEST_CODE = 1;
     private FragmentActivity activity;
     private RecyclerView rvFriends;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -53,6 +55,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
     private String userId,textUserId;
     private int count;
     private TextView textViewCounter;
+    private List<FriendList> friendLists = new ArrayList<>();
 
     @Override
     public boolean onBackPressed() {
@@ -100,6 +103,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
         SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         userId = preferences.getString("userId", "");
 
+        //抓取所有與使用者關係為好友的資料
         if (Common.networkConnected(activity)) {
             String url = Common.URL + "/FriendsServlet";
             List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends = null;
@@ -117,11 +121,6 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
                 String texts = String.valueOf(count);
                 Toast.makeText(getActivity(), texts, Toast.LENGTH_SHORT).show();
                 textViewCounter.setText(texts);
-//                String j;
-//                for(int i = 0;i<friendship_Friends.size();i++){
-//                    friendship_Friends.remove(userId);
-//                }System.out.print(friendship_Friends);
-
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
             }
@@ -137,7 +136,6 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
 
     private class FriendsFriendFragmentAdapter extends RecyclerView.Adapter<FriendsFriendFragmentAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
-        private List<FriendsFriendFragment_Friend> friendsFriendFragment_friends;
         private List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends;
         private int imageSize;
 
@@ -170,11 +168,21 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             final HomeNewsActivity_Personal_Friendship_Friends friendship = friendship_Friends.get(position);
-
             String friendsId = friendship.getInvitee();
             if(friendsId.equals(userId)){
                 friendsId = friendship.getInviter();
             }
+
+//            List<FriendList> friendLists = new ArrayList<>();
+//            friendLists.add(new FriendList(friendsId));
+//            friendLists.size();
+
+
+//            FriendList name;
+//            for(FriendList n:friendLists) {
+//                 name = n;
+//            }
+
 
             if (Common.networkConnected(activity)) {
                 String url = Common.URL + "/PicturesServlet";
@@ -206,7 +214,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), FriendsMessageActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("news",friendship);
+                    bundle.putSerializable("friend",friendship);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
                     /* 呼叫startActivity()開啟新的頁面 */
@@ -219,8 +227,5 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
         public int getItemCount() {
             return friendship_Friends.size();
         }
-
-
-
     }
 }

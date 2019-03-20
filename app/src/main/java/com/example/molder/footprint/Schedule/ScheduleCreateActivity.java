@@ -35,11 +35,13 @@ import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
-import com.example.molder.footprint.Friends.FriendsFriendFragment_Friend;
 
+import com.example.molder.footprint.Friends.FriendsFriendFragment;
+import com.example.molder.footprint.HomeNews.HomeNewsActivity_Personal_Friendship_Friends;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -47,6 +49,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class ScheduleCreateActivity extends AppCompatActivity implements
         DatePickerDialog.OnDateSetListener{
@@ -67,19 +70,19 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     private int intFriendid ;
     private String itemFriends = null ;
 
-    private String[] list_items;
+    private String[] list_items = null;
     private boolean[] checked_items ;
     private ArrayList<Integer> items_selected = new ArrayList<>();
-
-
-
-
-
+    private CommonTask friendsCommonTask;
+    private CommonTask tripIDCommonTask;
+    private int tripID;
+    private List<TripPlanFriend> tripPlanFriends = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_create);
+        findTripId();
         handleViews();
         showNow();
     }
@@ -155,7 +158,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         shTvGroupM = findViewById(R.id.shTvGroupM);
         shBtPickPicture = findViewById(R.id.shBtPickPicture);
         shImgPhoto = findViewById(R.id.shImgPhoto);
-        list_items = getResources().getStringArray(R.array.textFriends);
+        getFriendsFriendFragment_Friend();
         checked_items = new boolean[list_items.length];
 
         shBtAddFriend.setOnClickListener(new View.OnClickListener() {
@@ -304,9 +307,33 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
             Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoImage);
             return;
         }
+
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/TripServlet";
-            Trip trip = new Trip(title,date,type,createID,days);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "tripPlanFriendInsert");
+            jsonObject.addProperty("tripPlanFriends", new Gson().toJson(tripPlanFriends));
+            int count = 0;
+            try {
+                String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                count = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (count == 0) {
+                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
+            } else {
+                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
+            }
+        } else {
+            Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
+        }
+
+
+
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/TripServlet";
+            Trip trip = new Trip(title,date,type,createID,days,tripID + 1);
             String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "tripInsert");
@@ -400,6 +427,67 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
         // respond to users whose devices do not support the crop action
         catch (ActivityNotFoundException anfe) {
             Common.showToast(ScheduleCreateActivity.this, "This device doesn't support the crop action!");
+        }
+    }
+
+    private void getFriendsFriendFragment_Friend() {
+        //目前登入的使用者
+        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        String userId = preferences.getString("userId", "");
+
+        //抓取所有與使用者關係為好友的資料
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/FriendsServlet";
+            List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends = null;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "getAllFriends");
+            jsonObject.addProperty("userId", userId);
+            String jsonOut = jsonObject.toString();
+            friendsCommonTask = new CommonTask(url, jsonOut);
+            try {
+                String jsonIn = friendsCommonTask.execute().get();
+                Type listType = new TypeToken<List<HomeNewsActivity_Personal_Friendship_Friends>>() {
+                }.getType();
+                friendship_Friends = new Gson().fromJson(jsonIn, listType);
+                int count = friendship_Friends.size();
+                list_items = new String[count];
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            if (friendship_Friends == null || friendship_Friends.isEmpty()) {
+                Common.showToast(activity, R.string.msg_NoNewsFound);
+            } else {
+                for (int position = 0;position < friendship_Friends.size();position++){
+                    HomeNewsActivity_Personal_Friendship_Friends friendship = friendship_Friends.get(position);
+                    String friendsId = friendship.getInvitee();
+                    if(friendsId.equals(userId)){
+                        friendsId = friendship.getInviter();
+                    }
+                    list_items[position] = friendsId;
+                    TripPlanFriend tripPlanFriend = new TripPlanFriend(userId,friendsId,tripID+1);
+                    tripPlanFriends.add(tripPlanFriend);
+                }
+            }
+        } else {
+            Common.showToast(activity, R.string.msg_NoNetwork);
+        }
+    }
+
+    private void findTripId(){
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/TripServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findTripId");
+            String jsonOut = jsonObject.toString();
+            tripIDCommonTask = new CommonTask(url, jsonOut);
+            try {
+                String result = tripIDCommonTask.execute().get();
+                tripID = Integer.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        } else {
+            Common.showToast(activity, R.string.msg_NoNetwork);
         }
     }
 
