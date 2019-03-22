@@ -70,7 +70,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
     private int intFriendid ;
     private String itemFriends = null ;
 
-    private String[] list_items = null;
+    private String[] list_items ;
     private boolean[] checked_items ;
     private ArrayList<Integer> items_selected = new ArrayList<>();
     private CommonTask friendsCommonTask;
@@ -184,7 +184,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                         for (int i=0;i<items_selected.size();i++){
                             itemFriends = itemFriends + list_items[items_selected.get(i)];
                             if (i!= items_selected.size()-1){
-                                itemFriends = itemFriends+ "";
+                                itemFriends = itemFriends+ ",";
                             }
                         }
                         shTvGroupM.setText(itemFriends);
