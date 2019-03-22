@@ -32,6 +32,7 @@ import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.HomeNews.HomeNewsActivity_Personal_Friendship_Friends;
 import com.example.molder.footprint.Login.MainLoginIn;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
@@ -191,6 +192,57 @@ public class ScheduleMainFragment extends Fragment {
             final Trip trip = trips.get(i);
             String url = Common.URL + "/TripServlet"; //圖還未載入
             final int id = trip.getTripID();
+
+
+                //目前登入的使用者
+                SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+                String userId = preferences.getString("userId", "");
+
+                //抓取所有與使用者關係為好友的資料
+                if (Common.networkConnected(activity)) {
+                    String urls = Common.URL + "/FriendsServlet";
+                    List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends = null;
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "getAllFriends");
+                    jsonObject.addProperty("userId", userId);
+                    String jsonOut = jsonObject.toString();
+                    CommonTask friendsCommonTask = new CommonTask(urls, jsonOut);
+                    try {
+                        //取得所有好友array (array內包含自己)
+                        String jsonIn = friendsCommonTask.execute().get();
+                        Type listType = new TypeToken<List<HomeNewsActivity_Personal_Friendship_Friends>>() {
+                        }.getType();
+                        friendship_Friends = new Gson().fromJson(jsonIn, listType);
+                        int count = friendship_Friends.size();
+                        list_items = new String[count];
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (friendship_Friends == null || friendship_Friends.isEmpty()) {
+                        Common.showToast(activity, R.string.msg_NoNewsFound);
+                    } else {
+                        //好友array篩選把自己
+                        for (int position = 0;position < friendship_Friends.size();position++){
+                            HomeNewsActivity_Personal_Friendship_Friends friendship = friendship_Friends.get(position);
+                            String friendsId = friendship.getInvitee();
+                            if(friendsId.equals(userId)){
+                                friendsId = friendship.getInviter();
+                            }
+                            list_items[position] = friendsId;
+                        }
+
+                    }
+                } else {
+                    Common.showToast(activity, R.string.msg_NoNetwork);
+                }
+
+
+
+
+
+
+            checked_items = new boolean[list_items.length];
+            //trip圖片
             tripImageTask = new ImageTask(url, id, imageSize, myViewHolder.imageView);
             //主執行緒繼續執行 新開的執行緒去抓圖，抓圖需要網址、id ，抓到圖後show在imageView上
             tripImageTask.execute(); //ImageTask類似MyTask 去server端抓圖
@@ -298,7 +350,7 @@ public class ScheduleMainFragment extends Fragment {
                 }
             });
 
-            //增加行程
+            //增加朋友
             myViewHolder.shadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
