@@ -6,8 +6,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:orientation="vertical" >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/shToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorbtnCreateAccount">
+
+
+            <Button
+                android:id="@+id/btCheckInShareFinishInsert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:onClick="onFinishInsertClick"
+                android:text="@string/CheckInShareInsert"
+                android:theme="@style/MyButton"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+
+            <Button
+                android:id="@+id/btCheckInShareCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="190dp"
+                android:onClick="onCancelClick"
+                android:text="@string/textCancel"
+                android:theme="@style/MyButton"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+
+
+        </android.support.v7.widget.Toolbar>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -22,25 +52,24 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/ic_launcher" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btCheckInSharePickPicture"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add_photo"
                 android:layout_alignTop="@+id/btCheckInShareTakePicture"
-                android:layout_alignEnd="@id/ivCheckInShare"
+                android:layout_toRightOf="@+id/btCheckInShareTakePicture"
                 android:onClick="onPickPictureClick"
                 android:text="@string/CheckInShareFormAlbum" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btCheckInShareTakePicture"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add_cam"
                 android:layout_below="@+id/ivCheckInShare"
                 android:layout_alignLeft="@id/ivCheckInShare"
-                android:onClick="onTakePictureClick"
-                android:text="@string/CheckInShareFormCamera" />
+                android:onClick="onTakePictureClick" />
         </RelativeLayout>
 
         <TextView
@@ -93,32 +122,7 @@
             android:inputType="text"
             android:textColor="#0000FF" />
 
-        <RelativeLayout
-            android:id="@+id/RelativeLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp">
 
-            <Button
-                android:id="@+id/btCheckInShareFinishInsert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/btCheckInShareCancel"
-                android:onClick="onFinishInsertClick"
-                android:text="@string/CheckInShareInsert" />
-
-            <Button
-                android:id="@+id/btCheckInShareCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btCheckInShareFinishInsert"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:onClick="onCancelClick"
-                android:text="@string/textCancel" />
-
-        </RelativeLayout>
     </LinearLayout>
 
 </ScrollView>

@@ -18,14 +18,17 @@
         android:layout_height="56dp"
         android:layout_gravity="bottom"
         app:itemIconTint="@color/bottom_navigation_item_color"
-        android:background="@color/colorbtnCreateAccount"
+        android:background="@color/colorbackgroundGray"
         app:menu="@menu/home_bottom_navigation_item">
 
     </android.support.design.widget.BottomNavigationView>
 </LinearLayout>
 
+
+
     <!--
 
+        android:background="@color/colorbtnCreateAccount"
 
         <android.support.design.widget.BottomNavigationView
             android:layout_width="match_parent"

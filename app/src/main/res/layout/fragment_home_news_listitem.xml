@@ -7,40 +7,44 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ci_profile＿picture"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
         android:src="@drawable/profile_picture_pinky"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_margin="8dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tv_news_userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
         android:text="Pinky"
-        android:textSize="30dp"
         android:textColor="#000"
-        app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="@id/ci_profile＿picture"
-        app:layout_constraintTop_toTopOf="@id/ci_profile＿picture"/>
+        app:layout_constraintStart_toEndOf="@id/ci_profile＿picture"
+        app:layout_constraintTop_toTopOf="@id/ci_profile＿picture" />
+
     <TextView
         android:id="@+id/tv_news_landmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:text="Taipei"
-        android:textColor="@color/colorbtnFB"
-        android:layout_marginStart="30dp"
-        app:layout_constraintStart_toEndOf="@id/tv_news_userName"
-        app:layout_constraintBottom_toBottomOf="@id/tv_news_userName" />
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="@id/tv_news_userName"
+        app:layout_constraintStart_toEndOf="@id/tv_news_userName" />
+
     <ImageView
         android:id="@+id/iv_news_picture"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/home_news_picture"
-        app:layout_constraintTop_toBottomOf="@id/ci_profile＿picture"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ci_profile＿picture" />
 
     <CheckBox
         android:id="@+id/ib_news_like"
