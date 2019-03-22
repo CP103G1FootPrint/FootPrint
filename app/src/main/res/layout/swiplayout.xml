@@ -4,21 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
-    android:padding="6dp"
+    android:layout_margin="10dp"
+    android:padding="10dp"
     card_view:cardBackgroundColor="#ffdddddd"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="6dp">
+    card_view:cardCornerRadius="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPlan"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/schedulePlanDayLandMarkName"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:gravity="center"
+            android:textColor="@color/colorBlack"
             tools:text="别看了，我就是一个Name" />
 
         <TextView
@@ -26,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:gravity="center"
+            android:textColor="@color/colorBlack"
             android:layout_below="@+id/schedulePlanDayLandMarkName"
             tools:text="别看了，我就是一个Address" />
 

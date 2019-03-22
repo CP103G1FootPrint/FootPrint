@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -73,7 +74,8 @@ public class CheckInShareFragment extends Fragment {
     private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private ImageView ivCheckInShare;
-    private Button btTakePicture, btPickPicture, btFinishInsert, btCancel, btChooseLandMark;
+    private Button  btFinishInsert, btCancel, btChooseLandMark;
+    private ImageButton btTakePicture, btPickPicture;
     private Spinner spSate;
     private TextView tvShowLandMark;
     private EditText etDescription;

@@ -15,4 +15,5 @@
     <color name="colorGray">#d6d6d6</color>
     <color name="colorWhite">#FFffffff</color>
     <color name="colorBlackGray">#8f8f8f</color>
+    <color name="colorPlan">#80abf4e5</color>
 </resources>

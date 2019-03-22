@@ -19,7 +19,7 @@
         android:id="@+id/chatMessage_picture"
         android:layout_width="50dp"
         android:layout_height="45dp"
-        android:layout_margin="4dp"
+        android:layout_margin="10dp"
         android:layout_marginTop="4dp"
         android:src="@drawable/profile_picture_pinky"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,11 +48,11 @@
         app:arrowLocation="left"
         app:arrowPosition="13dp"
         android:text="Test"
-        android:textColor="#990000"
+        android:textColor="#000000"
         app:layout_constraintStart_toEndOf="@id/chatMessage_picture"
         app:layout_constraintTop_toBottomOf="@id/textViewUserName"
         android:textSize="20sp"
-        app:bubbleColor="#FFDD55"/>
+        app:bubbleColor="#35D0B1"/>
 </android.support.constraint.ConstraintLayout>
 
 

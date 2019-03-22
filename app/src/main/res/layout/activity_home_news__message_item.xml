@@ -32,12 +32,14 @@
         android:id="@+id/message_tv_news_Comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
         android:text="讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去讓我們繼續看下去"
         android:textColor="#000"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/message_ci_profile＿picture"
-        app:layout_constraintTop_toBottomOf="@id/message_tv_news_userName"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/message_tv_news_userName" />
     <ImageView
         android:id="@+id/white_Line"
         android:layout_width="match_parent"

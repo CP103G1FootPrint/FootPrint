@@ -27,17 +27,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_margin="10dp"
+        android:padding="3dp"
         android:text="Test"
         android:textColor="#000000"
         android:textSize="20sp"
         app:angle="5.5dp"
-        android:padding="2dp"
-        app:arrowWidth="8dp"
         app:arrowLocation="right"
         app:arrowPosition="13dp"
+        app:arrowWidth="8dp"
+        app:bubbleColor="#d6d6d6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:bubbleColor="#7EC0EE"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
 
 

@@ -5,25 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.design.widget.TextInputEditText
         android:id="@+id/ti_Go_To_Comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="1"
+        android:background="@drawable/message_button"
+        android:hint=" Message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/bt_SendMessage"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="Message" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/bt_SendMessage"
         android:layout_width="48dp"
         android:layout_height="38dp"
         android:layout_margin="1dp"
         android:background="@color/colorWhite"
-        android:text="Send"
-        android:textSize="8sp"
+        android:src="@drawable/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -32,8 +35,7 @@
         android:id="@+id/rv_friendChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#35D0B1"
-        android:alpha="0.8"
+        android:background="#FFFFFF"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/ti_Go_To_Comment">
     </android.support.v7.widget.RecyclerView>
