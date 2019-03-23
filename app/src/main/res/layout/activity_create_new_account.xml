@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Account"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:textStyle="bold"/>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/createAccount"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Password"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="15dp"/>
     <android.support.design.widget.TextInputLayout
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nickName"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="15dp"/>
     <EditText
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Birthday"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="15dp"/>
     <EditText
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Constellation"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginTop="15dp"/>
     <Spinner

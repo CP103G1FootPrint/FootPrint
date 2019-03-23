@@ -19,17 +19,22 @@
                 android:id="@+id/selfePic"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@mipmap/ic_launcher_round" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@mipmap/ic_launcher_round"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_id"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
                 android:text="小強"
-                android:textSize="30dp"
-                app:layout_constraintStart_toEndOf="@id/selfePic"  />
+                android:textSize="24dp"
+                app:layout_constraintStart_toEndOf="@id/selfePic"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_point"
@@ -37,7 +42,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:text="633"
-                android:textSize="30dp"
+                android:textSize="24dp"
                 app:layout_constraintStart_toEndOf="@id/selfePic"
                 app:layout_constraintBottom_toBottomOf="@id/selfePic" />
 
@@ -45,19 +50,24 @@
                 android:id="@+id/piggy"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_margin="30dp"
-                app:layout_constraintEnd_toEndOf="@id/tv_point"
-                app:layout_constraintBottom_toBottomOf="@id/selfePic"
-                android:background="@drawable/ic_piggy_bank_with_dollar_coins"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/ic_piggy_bank_with_dollar_coins"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btSetting" />
 
             <ImageButton
                 android:id="@+id/btSetting"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
                 android:layout_margin="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
                 android:background="@color/colorWhite"
-                android:src="@drawable/groupnn"/>
+                android:src="@drawable/groupnn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
