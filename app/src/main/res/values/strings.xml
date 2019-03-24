@@ -25,16 +25,22 @@
     <string-array name="textCheckInShareState">
         <item>Public</item>
         <item>Private</item>
-        <item>Only Friends</item>
     </string-array>
 
     <string-array name="textMapSate">
         <item>All</item>
-        <item>餐廳</item>
-        <item>飯店</item>
-        <item>景點</item>
+        <item>Restaurant</item>
+        <item>Hotel</item>
+        <item>Spot</item>
+        <item>Recommended by Tourist</item>
     </string-array>
 
+    <string-array name="textInsertLandMark">
+        <item>Restaurant</item>
+        <item>Hotel</item>
+        <item>Spot</item>
+        <item>Recommended by Tourist</item>
+    </string-array>
 
     <string name="facebook_app_id">1637855299849357</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -142,4 +148,11 @@
     <string name="text_Exit">Exit</string>
     <string name="msg_WantToExit">Do you want to Exit</string>
     <string name="text_No">No</string>
+    <string name="CheckInShareLandMarkSelf">Create New LandMark</string>
+    <string name="textLandMarkName">LandMark Name</string>
+    <string name="textLandMarkAddress">LandMark Address</string>
+    <string name="textLandMarkDescription">LandMark Description</string>
+    <string name="textLandMarkOpeningHours">LandMark Opening Hours</string>
+    <string name="textLandMarkEvaluation">LandMark Evaluation 0 ~ 5</string>
+    <string name="ckLandMarkState">LandMark Type</string>
 </resources>

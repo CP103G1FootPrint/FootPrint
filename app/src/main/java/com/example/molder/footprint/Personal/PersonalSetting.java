@@ -26,6 +26,9 @@ import com.example.molder.footprint.Login.MainLoginIn;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 
 public class PersonalSetting extends AppCompatActivity {
 
@@ -37,11 +40,12 @@ public class PersonalSetting extends AppCompatActivity {
     private EditText starEdit;
     private EditText passwordEdit;
     private Button logout;
-    private CommonTask newsCommonTask, userIdTask, landMarkIdTask;
+    private CommonTask userIdTask;
     private HeadImageTask headImageTask;
     private static final String TAG = "PersonalSetting";
     private String userId;
     private int imageSize;
+    private Account account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,40 +68,49 @@ public class PersonalSetting extends AppCompatActivity {
         userId = preferences.getString("userId", ""); //抓userid
 
         imageSize = getResources().getDisplayMetrics().widthPixels;
-        String url = Common.URL + "/PicturesServlet";
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("action", "findUserNickName");
-        jsonObject.addProperty("id", userId);
+        // find Self Info
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/AccountServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findSelfInfo");
+            jsonObject.addProperty("id", userId);
+            userIdTask = new CommonTask(url, jsonObject.toString());
+            try {
+                String jsonIn = userIdTask.execute().get();
+                Type listType = new TypeToken<Account>() {
+                }.getType();
+                //解析 json to gson
+                account = new Gson().fromJson(jsonIn, listType);
 
-        //將內容轉成json字串
-        userIdTask = new CommonTask(url, jsonObject.toString());
-        try {
+                nameEdit.setText(account.getNickname());
+                birthEdit.setText(account.getBirthday());
+                starEdit.setText(account.getConstellation());
+                passwordEdit.setText(account.getPassword());
 
-            //使用者頭像
-
-            url = Common.URL + "/PicturesServlet";
-            headImageTask = new HeadImageTask(url, userId, imageSize, selfie);
-            headImageTask.execute();
-
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
         }
 
+        //使用者頭像
+        String url = Common.URL + "/PicturesServlet";
+        headImageTask = new HeadImageTask(url, userId, imageSize, selfie);
+        headImageTask.execute();
 
+        //設定大頭照
         selfie.setOnClickListener(new View.OnClickListener() {
 
 
 
             @Override
             public void onClick(View view) {
-
-
-
                 Intent intent = new Intent(PersonalSetting.this, choosePic.class);
                 startActivity(intent);
             }
         });
+
+        //返回上一頁
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +122,8 @@ public class PersonalSetting extends AppCompatActivity {
                 finish();
             }
         });
+
+        //登出
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,16 +139,16 @@ public class PersonalSetting extends AppCompatActivity {
 
     }
 
-    private void loadFragment(Fragment fragment) {
-
-// create a FragmentManager
-        FragmentManager fm = getSupportFragmentManager();
-// create a FragmentTransaction to begin the transaction and replace the Fragment
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-// replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.content, fragment);
-        fragmentTransaction.commit(); // save the changes
-    }
+//    private void loadFragment(Fragment fragment) {
+//
+//// create a FragmentManager
+//        FragmentManager fm = getSupportFragmentManager();
+//// create a FragmentTransaction to begin the transaction and replace the Fragment
+//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//// replace the FrameLayout with new Fragment
+//        fragmentTransaction.replace(R.id.content, fragment);
+//        fragmentTransaction.commit(); // save the changes
+//    }
 
 
     //檢查Password
@@ -202,7 +217,6 @@ public class PersonalSetting extends AppCompatActivity {
             String birthday = birthEdit.getText().toString().trim();
             String starEdits = starEdit.getText().toString().trim();
 
-
             if (Common.networkConnected(this)) {
                 String url = Common.URL + "/AccountServlet";
                 Account accounts = new Account(passwordInput, nickName, birthday, starEdits,userId);
@@ -223,14 +237,7 @@ public class PersonalSetting extends AppCompatActivity {
                 if (count == 0) {
                     Common.showToast(this, R.string.msg_InsertFail);
                 } else {
-                    // user ID and password will be saved in the preferences file
-                    // and starts UserActivity
-                    // while the user account is created successfully
-//                    SharedPreferences preferences = getSharedPreferences(
-//                            Common.PREF_FILE, MODE_PRIVATE);
-//                    preferences.edit().putBoolean("login", true)
-//                            .putString("password", passwordInput).apply();
-                    Common.showToast(this, R.string.msg_InsertSuccess);
+//                    Common.showToast(this, R.string.msg_InsertSuccess);
                     finish();
                 }
             } else {
@@ -251,5 +258,17 @@ public class PersonalSetting extends AppCompatActivity {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (userIdTask != null) {
+            userIdTask.cancel(true);
+            userIdTask = null;
+        }
+        if (headImageTask != null) {
+            headImageTask.cancel(true);
+            headImageTask = null;
+        }
+    }
 
 }

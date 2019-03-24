@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorbackgroundGray">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/ckToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorbtnCreateAccount">
+
+        <Button
+            android:id="@+id/ckBtCancel"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/textCancel"
+            android:onClick="onCancelCreateLandMarkClick"
+            android:theme="@style/MyButton"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        <Button
+            android:id="@+id/ckBtSave"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="190dp"
+            android:text="@string/textSave"
+            android:onClick="onSaveLandMarkClick"
+            android:theme="@style/MyButton"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <EditText
+            android:id="@+id/ckEtLandMarkName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/textLandMarkName"
+            android:background="@color/colortextWhite" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+        <EditText
+            android:id="@+id/ckEtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkAddress"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+        <EditText
+            android:id="@+id/ckEtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkDescription"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+        <EditText
+            android:id="@+id/ckEtOpeningHours"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkOpeningHours"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+        <EditText
+            android:id="@+id/ckEtEvaluation"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="numberDecimal"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkEvaluation"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ckLandMarkState"
+        android:layout_marginLeft="12dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
+
+    <Spinner
+        android:id="@+id/btnCkLandMarkType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:entries="@array/textInsertLandMark" />
+
+</LinearLayout>

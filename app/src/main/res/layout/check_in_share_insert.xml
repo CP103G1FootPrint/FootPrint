@@ -13,28 +13,25 @@
             android:layout_height="50dp"
             android:background="@color/colorbtnCreateAccount">
 
-
-            <Button
-                android:id="@+id/btCheckInShareFinishInsert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:onClick="onFinishInsertClick"
-                android:text="@string/CheckInShareInsert"
-                android:theme="@style/MyButton"
-                style="@style/Widget.AppCompat.Button.Borderless"/>
-
             <Button
                 android:id="@+id/btCheckInShareCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="190dp"
+                android:layout_marginLeft="10dp"
                 android:onClick="onCancelClick"
                 android:text="@string/textCancel"
                 android:theme="@style/MyButton"
                 style="@style/Widget.AppCompat.Button.Borderless"/>
 
+            <Button
+                android:id="@+id/btCheckInShareFinishInsert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="190dp"
+                android:onClick="onFinishInsertClick"
+                android:text="@string/CheckInShareInsert"
+                android:theme="@style/MyButton"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -86,20 +83,36 @@
             android:layout_marginLeft="5dp"
             android:entries="@array/textCheckInShareState" />
 
-        <Button
-            android:id="@+id/btnCheckInShareStateChooseLandMark"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:hint="@string/CheckInShareLandMark"
-            android:textColor="#0000FF"
-            android:layout_marginTop="10dp"/>
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCheckInShareStateChooseLandMark"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/CheckInShareLandMark"
+                android:textColor="#0000FF"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:id="@+id/btnCheckInShareStateChooseLandMarkSelf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/CheckInShareLandMarkSelf"
+                android:textColor="#0000FF"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvShowLandMark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/CheckInShareLandMark"
             android:layout_marginLeft="5dp"
             android:textSize="20sp" />
 

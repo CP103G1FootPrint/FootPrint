@@ -178,7 +178,7 @@ public class SchedulePlanDayFragment extends Fragment {
                                     int position, long id) {
                 for (int i = 0; i < listView.getChildCount(); i++) {
                     if (position == i) {
-                        listView.getChildAt(i).setBackgroundColor(Color.GREEN);
+                        listView.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.colorToolbar));
                         chooseMember = (LandMark) parent.getItemAtPosition(position);
                     } else {
                         listView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);

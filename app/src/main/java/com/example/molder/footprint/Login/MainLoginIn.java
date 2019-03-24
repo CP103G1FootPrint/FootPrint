@@ -34,6 +34,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -44,23 +45,18 @@ import java.util.Set;
 public class MainLoginIn extends AppCompatActivity {
 
     private static final String TAG = "MainLoginIn";
-    private static final int REQUEST_CODE = 1;
     private CallbackManager callbackManager;
     private AccessToken accessToken;
     private LoginButton loginButton;
     private static final int REQ_PERMISSIONS = 0;
-    private TextInputEditText tIETAccount,tIETPassword;
+    private TextInputEditText tIETAccount, tIETPassword;
     private CommonTask userValidTask;
-    private CheckBox mCheckBox;
-    private boolean result =false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_in);
-
-        mCheckBox = findViewById(R.id.loginCbTerms);
-
         setResult(RESULT_CANCELED);
         callbackManager = CallbackManager.Factory.create();
         loginButton = findViewById(R.id.login_button);
@@ -76,7 +72,7 @@ public class MainLoginIn extends AppCompatActivity {
 
                 accessToken = loginResult.getAccessToken();
 
-                Log.d("FB","access token got.");
+                Log.d("FB", "access token got.");
 
                 //send request and call graph api
 
@@ -91,16 +87,67 @@ public class MainLoginIn extends AppCompatActivity {
 
                                 //讀出姓名 ID FB個人頁面連結
 
-                                Log.d("FB","complete");
-                                Log.d("FB",object.optString("name"));
-                                Log.d("FB",object.optString("link"));
-                                Log.d("FB",object.optString("id"));
+                                Log.d("FB", "complete");
+                                Log.d("FB", object.optString("name"));
+                                Log.d("FB", object.optString("link"));
+                                Log.d("FB", object.optString("id"));
+                                Log.d("FB", object.optString("birthday"));
 
+                                String emailInput = object.optString("id");
+                                String nickName = object.optString("name");
+                                String passwordInput = "footPrint"; //預設
+                                int integral = 0;
+                                int fb = 1;
+                                String birthday = "1/1"; //預設
+                                String category = "Capricorn 12/21 - 1/20"; //預設
+                                SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+
+                                if(isUserValidFb(object.optString("id"),1)){
+                                    preferences.edit().putBoolean("login", true)
+                                            .putString("userId", emailInput)
+                                            .putString("password", passwordInput).apply();
+                                    setResult(RESULT_OK);
+                                    finish();
+                                    Intent intent = new Intent(MainLoginIn.this, Home.class);
+                                    startActivity(intent);
+                                }else {
+                                    //fb帳號 insert
+                                    if (Common.networkConnected(MainLoginIn.this)) {
+                                        String url = Common.URL + "/AccountServlet";
+                                        Account account = new Account(emailInput, passwordInput, nickName, birthday, integral,category,fb);
+                                        JsonObject jsonObject = new JsonObject();
+                                        jsonObject.addProperty("action", "accountInsert");
+                                        jsonObject.addProperty("account", new Gson().toJson(account));
+                                        int count = 0;
+                                        try {
+                                            String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                            count = Integer.valueOf(result);
+
+                                        } catch (Exception e) {
+                                            Log.e(TAG, e.toString());
+                                        }
+                                        if (count == 0) {
+                                            Common.showToast(MainLoginIn.this, R.string.msg_InsertFail);
+                                        } else {
+                                            // user ID and password will be saved in the preferences file
+                                            // and starts UserActivity
+                                            // while the user account is created successfully
+                                            preferences.edit().putBoolean("login", true)
+                                                    .putString("userId", emailInput)
+                                                    .putString("password", passwordInput).apply();
+                                            setResult(RESULT_OK);
+                                            finish();
+                                            Intent intent = new Intent(MainLoginIn.this, Home.class);
+                                            startActivity(intent);
+                                        }
+                                    } else {
+                                        Common.showToast(MainLoginIn.this, R.string.msg_NoNetwork);
+                                    }
+                                }
                             }
                         });
 
                 //包入你想要得到的資料 送出request
-
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,link");
                 request.setParameters(parameters);
@@ -114,7 +161,7 @@ public class MainLoginIn extends AppCompatActivity {
             public void onCancel() {
                 // App code
 
-                Log.d("FB","CANCEL");
+                Log.d("FB", "CANCEL");
             }
 
             //登入失敗
@@ -123,7 +170,7 @@ public class MainLoginIn extends AppCompatActivity {
             public void onError(FacebookException exception) {
                 // App code
 
-                Log.d("FB",exception.toString());
+                Log.d("FB", exception.toString());
             }
 
         });
@@ -134,20 +181,10 @@ public class MainLoginIn extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case REQUEST_CODE:
-                result = data.getBooleanExtra("checkBox",false);
-                if(result){
-                    mCheckBox.setChecked(true);
-                }
-                break;
-        }
     }
 
-
-
     //登入後進入 Home 頁面
-    public void onLoginInClick(View view){
+    public void onLoginInClick(View view) {
         LayoutInflater inflater = LayoutInflater.from(MainLoginIn.this);
         final View v = inflater.inflate(R.layout.fragment_login_in, null);
         tIETAccount = v.findViewById(R.id.inputAccount);
@@ -165,10 +202,7 @@ public class MainLoginIn extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), R.string.textNotValid, Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if(result == false){
-                            Toast.makeText(getApplicationContext(), R.string.textNotReadTerms, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+
                         if (isUserValid(user, password)) {
                             SharedPreferences preferences = getSharedPreferences(
                                     Common.PREF_FILE, MODE_PRIVATE);
@@ -195,13 +229,13 @@ public class MainLoginIn extends AppCompatActivity {
     }
 
     //進入創帳號頁面
-    public void onCreateNewAccountClick(View view){
+    public void onCreateNewAccountClick(View view) {
         Intent intent = new Intent(MainLoginIn.this, CreateNewAccount.class);
         startActivity(intent);
     }
 
     //忘記密碼dialog視窗
-    public void onForgotPasswordClick(View view){
+    public void onForgotPasswordClick(View view) {
         LayoutInflater inflater = LayoutInflater.from(MainLoginIn.this);
         final View v = inflater.inflate(R.layout.fragment_forgot_password, null);
         new AlertDialog.Builder(MainLoginIn.this)
@@ -221,16 +255,6 @@ public class MainLoginIn extends AppCompatActivity {
                     }
                 })
                 .show();
-    }
-
-    public void onTermsClick(View view){
-        Intent intent = new Intent(MainLoginIn.this, LoginTerms.class);
-        intent.putExtra("checkBox",false);
-        startActivityForResult(intent,REQUEST_CODE);
-    }
-
-    public void onImageViewClick(View view){
-        //do nothing. 遮蔽用
     }
 
     @Override
@@ -253,8 +277,6 @@ public class MainLoginIn extends AppCompatActivity {
             }
         }
     }
-
-
 
     // New Permission see Appendix A
     private void askPermissions() {
@@ -301,11 +323,34 @@ public class MainLoginIn extends AppCompatActivity {
         return isUser;
     }
 
-    //for debug test
-    public void gologinClick(View view){
-        Intent intent = new Intent(MainLoginIn.this, Home.class);
-        startActivity(intent);
+    private boolean isUserValidFb(final String userId, final int fbID) {
+        boolean isUser = false;
+        if (Common.networkConnected(this)) {
+            String url = Common.URL + "/AccountServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "accountValidFB");
+            jsonObject.addProperty("userId", userId);
+            jsonObject.addProperty("fbId", fbID);
+            String jsonOut = jsonObject.toString();
+            userValidTask = new CommonTask(url, jsonOut);
+            try {
+                String result = userValidTask.execute().get();
+                isUser = Boolean.valueOf(result);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+                isUser = false;
+            }
+        } else {
+            Common.showToast(this, R.string.msg_NoNetwork);
+        }
+        return isUser;
     }
+
+    //for debug test
+//    public void gologinClick(View view){
+//        Intent intent = new Intent(MainLoginIn.this, Home.class);
+//        startActivity(intent);
+//    }
 
     @Override
     public void onStop() {
