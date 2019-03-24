@@ -384,9 +384,19 @@ public class SchedulePlanDayFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-            LandMark landMark = mDatas.get(position);
-            holder.landMarkName.setText(landMark.getName());
-            holder.landMarkAddress.setText(landMark.getAddress());
+            final LandMark landMark = mDatas.get(position);
+//            holder.landMarkName.setText(landMark.getName());
+            holder.landMarkAddress.setText(landMark.getName()+"\n"+landMark.getAddress());
+
+            holder.landMarkAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent("ScheduleDay");
+                    intent.putExtra("lankMark",landMark);
+                    broadcastManager.sendBroadcast(intent);
+                }
+            });
+
         }
 
         @Override
@@ -399,7 +409,7 @@ public class SchedulePlanDayFragment extends Fragment {
 
             public MyViewHolder(View view) {
                 super(view);
-                landMarkName = itemView.findViewById(R.id.schedulePlanDayLandMarkName);
+//                landMarkName = itemView.findViewById(R.id.schedulePlanDayLandMarkName);
                 landMarkAddress = itemView.findViewById(R.id.schedulePlanDayLandMarkAddress);
             }
         }

@@ -3,7 +3,10 @@ package com.example.molder.footprint.HomeStroke;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -60,7 +64,7 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
     private TabLayout mTabLayout;
     private int page ;
     private int tripId ;
-    private int yFrom,yStop,mapFrom = 0,mapStop = -600;
+    private int yFrom,yStop,mapFrom = 0,mapStop = -450;
     private Boolean orientation = false;
     private LinearLayout linearLayout,linearImage;
     private Animator animator,animator2;
@@ -69,6 +73,10 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
     private List<LandMark> mDatas = new ArrayList<>();
     private SupportMapFragment mapFragment;
     private Button homeStrokeMoveDays;
+    private MyReceiver myReceiver;
+    private LocalBroadcastManager localBroadcastManager;
+    private HashSet<Marker> hset = new HashSet<>();
+    private List<Marker> markerList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,10 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
         //地圖初始往上移動
         animator2 = getTranslateAnimImage();
         animator2.start();
+        //建立接收器權限
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        //啟動接收器
+        registerMyReceiver();
     }
 
 
@@ -105,15 +117,15 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
             public void onClick(View view) {
                 if(orientation == false){
                     yFrom = 0;
-                    yStop = 1300;
+                    yStop = 1130;
                     mapFrom = 0;
                     mapStop = 0;
                     orientation = true;
                 }else {
-                    yFrom = 1300;
+                    yFrom = 1130;
                     yStop = 0;
                     mapFrom = 0;
-                    mapStop = -600;
+                    mapStop = -450;
                     orientation = false;
                 }
                 animator = getTranslateAnim();
@@ -397,6 +409,8 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
 
         @Override
         public View getInfoWindow(Marker marker) {
+//            hset.add(marker);
+//            markerList = new ArrayList<>(hset);
             //用title＝landMark name 比對找出landMarkID 就可以知道imageID
             if (Common.networkConnected(HomeStrokeActivity.this)) {
                 String url = Common.URL + "/LocationServlet";
@@ -462,6 +476,66 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
         if (friendsCommonTask != null) {
             friendsCommonTask.cancel(true);
             friendsCommonTask = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //關閉接收器
+        unRegisterMyReceiver();
+    }
+
+    //接收器反應器接到訊息要 接下來想要怎麼處理寫在這
+    private class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            LandMark landMark = (LandMark) intent.getSerializableExtra("lankMark");
+            LatLng latLng = new LatLng(landMark.getLatitude(),landMark.getLongitude());
+//            Marker marker = homeStrokeGoogleMap.addMarker(new MarkerOptions()
+//                    .position(latLng)
+//                    .title(landMark.getName()));
+//            marker.showInfoWindow();
+//            cameraPosition(latLng);
+
+            if(markerList != null){
+                for(int k = 0; k < markerList.size(); k++){
+                    Marker marker = markerList.get(k);
+                    if(marker.getTitle().equals(landMark.getName())){
+                        marker.showInfoWindow();
+                        cameraPosition(latLng);
+                    }
+                }
+            }else {
+                Marker marker = homeStrokeGoogleMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(landMark.getName()));
+                marker.showInfoWindow();
+                cameraPosition(latLng);
+                hset.add(marker);
+                markerList = new ArrayList<>(hset);
+            }
+        }
+    }
+
+    //接收器
+    private void registerMyReceiver() {
+        //此接收器攔截的key word
+        IntentFilter filter = new IntentFilter("StrokeMapShowInfoWindow");
+        //檢查接收器反應器是否存在
+        if (myReceiver == null) {
+            myReceiver = new MyReceiver();
+        }
+        localBroadcastManager.registerReceiver(myReceiver, filter);
+
+    }
+
+    //關閉接收器
+    private void unRegisterMyReceiver() {
+        //檢查接收器反應器是否存在
+        if (myReceiver != null) {
+            localBroadcastManager.unregisterReceiver(myReceiver);
+            myReceiver = null;
         }
     }
 }
