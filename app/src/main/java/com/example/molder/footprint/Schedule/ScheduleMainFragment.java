@@ -51,16 +51,17 @@ public class ScheduleMainFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private FragmentActivity activity;
     private CommonTask tripGetAllTask;
-    private CommonTask tripDeleteTask,retrieveTripTask,tripShareTask;
+    private CommonTask tripDeleteTask, retrieveTripTask, tripShareTask;
     private ImageTask tripImageTask;
-    private RecyclerView recyclerView ;
-    private Spinner shSpinner ;
+    private RecyclerView recyclerView;
+    private Spinner shSpinner;
 
     private String[] list_items;
-    private boolean[] checked_items ;
+    private List<String> friends = new ArrayList<>();
+    private List<String> friendship_Friends = new ArrayList<>();
+    private boolean[] checked_items;
     private ArrayList<Integer> items_selected = new ArrayList<>();
-    private String createID ;
-
+    private String createID;
 
 
     @Override
@@ -86,7 +87,7 @@ public class ScheduleMainFragment extends Fragment {
 
         handleViews(view);
         ArrayAdapter<CharSequence> nAdapter = ArrayAdapter.createFromResource
-                (activity,R.array.notify_array,R.layout.support_simple_spinner_dropdown_item);
+                (activity, R.array.notify_array, R.layout.support_simple_spinner_dropdown_item);
         shSpinner.setAdapter(nAdapter);
 
         return view;
@@ -130,14 +131,13 @@ public class ScheduleMainFragment extends Fragment {
     }
 
 
-
-    private class TripAdapter extends RecyclerSwipeAdapter<TripAdapter.MyViewHolder>{
+    private class TripAdapter extends RecyclerSwipeAdapter<TripAdapter.MyViewHolder> {
         private LayoutInflater layoutInflater;
-//        private Context context;
+        //        private Context context;
         private List<Trip> trips;
         private int imageSize;
 
-        public TripAdapter(Context context,List<Trip>trips){
+        public TripAdapter(Context context, List<Trip> trips) {
             layoutInflater = LayoutInflater.from(context);
 //            this.context = context;
             this.trips = trips;
@@ -155,20 +155,20 @@ public class ScheduleMainFragment extends Fragment {
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            private ImageView imageView ;
-            private TextView shTvTitle ;
-            private TextView shTvDate ;
-            private ImageButton shadd,shBtPhoto,shBtChat;
+            private ImageView imageView;
+            private TextView shTvTitle;
+            private TextView shTvDate;
+            private ImageButton shadd, shBtPhoto, shBtChat;
             private SwipeLayout scheduleSwipLayout;
-            private Button scheduleButton,scheduleShare;
+            private Button scheduleButton, scheduleShare;
 
-            public MyViewHolder(View itemView){
+            public MyViewHolder(View itemView) {
                 super(itemView);
                 imageView = itemView.findViewById(R.id.shImgView);
                 shTvTitle = itemView.findViewById(R.id.shTvTitle);
-                shTvDate =itemView.findViewById(R.id.shTvDate);
+                shTvDate = itemView.findViewById(R.id.shTvDate);
                 shadd = itemView.findViewById(R.id.shBtAdd);
-                shBtPhoto =itemView.findViewById(R.id.shBtPhoto);
+                shBtPhoto = itemView.findViewById(R.id.shBtPhoto);
                 shBtChat = itemView.findViewById(R.id.shBtChat);
                 scheduleSwipLayout = itemView.findViewById(R.id.schedule_swipe_layout);
                 scheduleButton = itemView.findViewById(R.id.schedule_bottom);
@@ -185,7 +185,7 @@ public class ScheduleMainFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder myViewHolder,final int i) {
+        public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
             myViewHolder.scheduleSwipLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
 //            LayoutInflater inflater = LayoutInflater.from(activity);
 //            final View v = inflater.inflate(R.layout.fragment_forgot_password, null);
@@ -194,54 +194,44 @@ public class ScheduleMainFragment extends Fragment {
             final int id = trip.getTripID();
 
 
-                //目前登入的使用者
-                SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-                String userId = preferences.getString("userId", "");
+            //目前登入的使用者
+            SharedPreferences preferences = activity.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+            final String userId = preferences.getString("userId", "");
 
-                //抓取所有與使用者關係為好友的資料
-                if (Common.networkConnected(activity)) {
-                    String urls = Common.URL + "/FriendsServlet";
-                    List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends = null;
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", "getAllFriends");
-                    jsonObject.addProperty("userId", userId);
-                    String jsonOut = jsonObject.toString();
-                    CommonTask friendsCommonTask = new CommonTask(urls, jsonOut);
-                    try {
-                        //取得所有好友array (array內包含自己)
-                        String jsonIn = friendsCommonTask.execute().get();
-                        Type listType = new TypeToken<List<HomeNewsActivity_Personal_Friendship_Friends>>() {
-                        }.getType();
-                        friendship_Friends = new Gson().fromJson(jsonIn, listType);
-                        int count = friendship_Friends.size();
-                        list_items = new String[count];
-                    } catch (Exception e) {
-                        Log.e(TAG, e.toString());
-                    }
-                    if (friendship_Friends == null || friendship_Friends.isEmpty()) {
-                        Common.showToast(activity, R.string.msg_NoNewsFound);
-                    } else {
-                        //好友array篩選把自己
-                        for (int position = 0;position < friendship_Friends.size();position++){
-                            HomeNewsActivity_Personal_Friendship_Friends friendship = friendship_Friends.get(position);
-                            String friendsId = friendship.getInvitee();
-                            if(friendsId.equals(userId)){
-                                friendsId = friendship.getInviter();
-                            }
-                            list_items[position] = friendsId;
+            //抓取所有與使用者關係為好友的資料
+            if (Common.networkConnected(activity)) {
+                String urls = Common.URL + "/FriendsServlet";
+
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "getTripFriends");
+                jsonObject.addProperty("userId", userId);
+                String jsonOut = jsonObject.toString();
+                CommonTask friendsCommonTask = new CommonTask(urls, jsonOut);
+                try {
+                    //取得所有好友array (array內包含自己)
+                    String jsonIn = friendsCommonTask.execute().get();
+                    Type listType = new TypeToken<List<String>>() {
+                    }.getType();
+                    friendship_Friends = new Gson().fromJson(jsonIn, listType);
+                    for(int j =0;j<friendship_Friends.size();j++){
+                        if(friendship_Friends.get(j).equals(userId)){
+                            friendship_Friends.remove(j);
                         }
-
                     }
-                } else {
-                    Common.showToast(activity, R.string.msg_NoNetwork);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
                 }
+                if (friendship_Friends == null || friendship_Friends.isEmpty()) {
+                    Common.showToast(activity, R.string.msg_NoNewsFound);
+                } else {
+
+                }
+            } else {
+                Common.showToast(activity, R.string.msg_NoNetwork);
+            }
 
 
 
-
-
-
-            checked_items = new boolean[list_items.length];
             //trip圖片
             tripImageTask = new ImageTask(url, id, imageSize, myViewHolder.imageView);
             //主執行緒繼續執行 新開的執行緒去抓圖，抓圖需要網址、id ，抓到圖後show在imageView上
@@ -252,9 +242,9 @@ public class ScheduleMainFragment extends Fragment {
             myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(activity,SchedulePlanActivity.class);
+                    Intent intent = new Intent(activity, SchedulePlanActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("trip", trip );
+                    bundle.putSerializable("trip", trip);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -354,28 +344,83 @@ public class ScheduleMainFragment extends Fragment {
             myViewHolder.shadd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //抓取行程好友
+                    if (Common.networkConnected(activity)) {
+                        String url = Common.URL + "/TripServlet";
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("action", "getTripFriends");
+                        jsonObject.addProperty("tripId", id);
+                        CommonTask friendsCommonTask = new CommonTask(url, jsonObject.toString());
+                        try {
+                            String jsonIn = friendsCommonTask.execute().get();
+                            Type listType = new TypeToken<List<String>>() {
+                            }.getType();
+                            friends = new Gson().fromJson(jsonIn, listType);
+                            if(friends.isEmpty()){
+                                int count = friendship_Friends.size();
+                                list_items = null;
+                                list_items = new String[count];
+                                for(int k = 0; k < count ; k++){
+                                    list_items[k] = friendship_Friends.get(k);
+                                }
+                            }else {
+                                List<String> friendsAll = new ArrayList<>();
+                                friendsAll.addAll(friendship_Friends);
+                                friendsAll.removeAll(friends);
+                                int count = friendsAll.size();
+                                list_items = null;
+                                list_items = new String[count];
+                                for(int k = 0; k < count ; k++){
+                                    list_items[k] = friendsAll.get(k);
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e(TAG, e.toString());
+                        }
+                    }
+                    checked_items = new boolean[list_items.length];
                     AlertDialog.Builder myBuilder = new AlertDialog.Builder(getActivity());
                     myBuilder.setTitle(R.string.textAddtoGroup);
                     myBuilder.setMultiChoiceItems(list_items, checked_items, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            if (!items_selected.contains(which)){
+                            if (!items_selected.contains(which)) {
                                 items_selected.add(which);
-                            }else {
+                            } else {
                                 items_selected.remove(which);
                             }
                         }
-                    }) ;
+                    });
                     myBuilder.setCancelable(false);
                     myBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String items = "" ;
-                            for (int i=0;i<items_selected.size();i++){
-                                items = items + list_items[items_selected.get(i)];
-                                if (i!= items_selected.size()-1){
-                                    items = items+ "";
+                            List<TripPlanFriend> tripPlanFriends = new ArrayList<>();
+                            String items;
+                            for (int i = 0; i < items_selected.size(); i++) {
+                                items = list_items[items_selected.get(i)];
+                                TripPlanFriend tripPlanFriend = new TripPlanFriend(userId,items,id);
+                                tripPlanFriends.add(tripPlanFriend);
+                            }
+                            if (Common.networkConnected(activity)) {
+                                String url = Common.URL + "/TripServlet";
+                                JsonObject jsonObject = new JsonObject();
+                                jsonObject.addProperty("action", "tripPlanFriendInsert");
+                                jsonObject.addProperty("tripPlanFriends", new Gson().toJson(tripPlanFriends));
+                                int count = 0;
+                                try {
+                                    String result = new CommonTask(url, jsonObject.toString()).execute().get();
+                                    count = Integer.valueOf(result);
+                                } catch (Exception e) {
+                                    Log.e(TAG, e.toString());
                                 }
+                                if (count == 0) {
+                                    Common.showToast(activity, R.string.msg_InsertFail);
+                                } else {
+                                    Common.showToast(activity, R.string.msg_InsertSuccess);
+                                }
+                            } else {
+                                Common.showToast(activity, R.string.msg_NoNetwork);
                             }
 
                         }
@@ -386,17 +431,8 @@ public class ScheduleMainFragment extends Fragment {
                             dialog.cancel();
                         }
                     });
-                    AlertDialog dialog = myBuilder.create() ;
+                    AlertDialog dialog = myBuilder.create();
                     dialog.show();
-
-
-
-
-
-
-
-
-
 
 
 //                    Fragment fragment = new ScheduleFriendListFragment();
@@ -455,9 +491,9 @@ public class ScheduleMainFragment extends Fragment {
             myViewHolder.shBtChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(activity,ScheduleChatActivity.class);
+                    Intent intent = new Intent(activity, ScheduleChatActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("trip", trip );
+                    bundle.putSerializable("trip", trip);
                     /* 將Bundle儲存在Intent內方便帶至下一頁 */
                     intent.putExtras(bundle);
                     startActivity(intent);
@@ -465,32 +501,25 @@ public class ScheduleMainFragment extends Fragment {
             });
 
 
-
-
-
         }
-
 
 
     }
 
 
-
-
-
-    private void handleViews(View view){
+    private void handleViews(View view) {
         //取得目前登入使用者id
         SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         createID = preferences.getString("userId", "");
-        shSpinner =view.findViewById(R.id.shSpinner);
-        shSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+        shSpinner = view.findViewById(R.id.shSpinner);
+        shSpinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
 
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
-                if (Common.networkConnected((activity) )) {
+                if (Common.networkConnected((activity))) {
                     String url = Common.URL + "/TripServlet";
                     List<Trip> trips = null;
                     JsonObject jsonObject = new JsonObject();
@@ -529,7 +558,7 @@ public class ScheduleMainFragment extends Fragment {
         shBtAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(),ScheduleCreateActivity.class);
+                Intent intent = new Intent(getActivity(), ScheduleCreateActivity.class);
                 startActivity(intent);
 //                Fragment fragment = new ScheduleCreateFragment();
 //                changeFragment(fragment);

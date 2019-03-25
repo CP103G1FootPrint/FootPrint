@@ -169,7 +169,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
                   showToast(R.string.text_MessageEmpty);
                   return;
                 }
-                
+
                 //新增聊天記錄
                 if (Common.networkConnected(FriendsMessageActivity.this)) {
                     String url = Common.URL + "/FriendsMessageServlet";

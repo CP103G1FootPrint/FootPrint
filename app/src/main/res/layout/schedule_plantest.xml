@@ -23,7 +23,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="180dp"
             android:background="@color/colorbtnCreateAccount"
             android:id="@+id/linearMove"
             android:layout_width="match_parent"

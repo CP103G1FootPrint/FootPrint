@@ -103,19 +103,21 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
     private final static String TAG = "HomeMapFragment";
     private static final int REQ_PERMISSIONS = 0;
     private GoogleMap googleMap;
-    private Geocoder geocoder;
+//    private Geocoder geocoder;
     private Context mContext;
     private SupportMapFragment supportMapFragment;
     private CommonTask retrieveLocationTask;
     private Spinner spinner;
     private View view;
     private Button btnMySelf;
-    private LatLng initLocation,updateLocation;
+    private LatLng updateLocation;
     private Boolean checkInitLocation = false;
     private HeadImageTask headImageTask;
     private Bitmap bitMapHeadImage = null;
     private Bitmap bitHeadImage = null;
     private List<LandMark> locations = null;
+    private Boolean init = true;
+    private int mapDelay = 0, initLocation = 0;
 
     public HomeMapFragment() {
         // Required empty public constructor
@@ -128,7 +130,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home_map, container, false);
         //地理編碼服務 ( 地址定位 )
-        geocoder = new Geocoder(mContext);
+//        geocoder = new Geocoder(mContext);
         //取得管理器
         FragmentManager fm = getChildFragmentManager();/// getChildFragmentManager()//getActivity().getSupportFragmentManager();
         //layout連結
@@ -137,7 +139,6 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
             supportMapFragment = SupportMapFragment.newInstance();
             fm.beginTransaction().replace(R.id.googleMap, supportMapFragment).commit();
         }
-//        supportMapFragment.getMapAsync(this);
 
         //we add permissions we need to request location of the users
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -149,9 +150,11 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                 requestPermissions(permissionToRequest.toArray(new String[permissionToRequest.size()]),ALL_PERMISSIONS_RESULT);
             }
         }
-
         //we build google api client
         googleApiClient = new GoogleApiClient.Builder(mContext).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
+
+        spinner = view.findViewById(R.id.btnMapState);
+//        spinner.setSelection(0, true);
         setMap();
         btnMySelf = view.findViewById(R.id.btnMySelf);
         btnMySelf.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +205,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
         if(googleApiClient != null){
             googleApiClient.connect();
         }
+
     }
 
     @Override
@@ -251,12 +255,13 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                 Manifest.permission.ACCESS_COARSE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
 //            googleMap.setMyLocationEnabled(true);
-            googleMap.getUiSettings().setZoomControlsEnabled(true);
+//            googleMap.getUiSettings().setZoomControlsEnabled(true);
         }
     }
 
     private void setMap(){
-        spinner = view.findViewById(R.id.btnMapState);
+
+//        spinner.setSelection(0, true);
         //下拉選單
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
@@ -265,8 +270,14 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                     String url = Common.URL + "/LocationServlet";
 
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("action", adapterView.getSelectedItem().toString());
-                    jsonObject.addProperty("type", adapterView.getSelectedItem().toString());
+                    if(mapDelay ==0){
+                        jsonObject.addProperty("action", "");
+                        jsonObject.addProperty("type", "");
+                    }else {
+                        jsonObject.addProperty("action", adapterView.getSelectedItem().toString());
+                        jsonObject.addProperty("type", adapterView.getSelectedItem().toString());
+                    }
+                    mapDelay = 1;
                     //將內容轉成json字串
                     retrieveLocationTask = new CommonTask(url, jsonObject.toString());
                     try {
@@ -279,14 +290,12 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                         Log.e(TAG, e.toString());
                     }
                     if (locations == null || locations.isEmpty()) {
-                        Toast.makeText(mContext, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                     } else {
-//                        showMap(locations);
-//                        showInit();
                         supportMapFragment.getMapAsync(HomeMapFragment.this);
                     }
                 } else {
-                    Toast.makeText(mContext, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
                 }
             }
             public void onNothingSelected(AdapterView arg0) {
@@ -317,18 +326,17 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
 
     //自己位置
     private void showInit(){
-        if(location == null) {
-            initLocation = new LatLng(24.967781, 121.191881);
-            googleMap.addMarker(new MarkerOptions()
-                    .position(initLocation)
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitHeadImage)));
-            // focus on the spot
-            cameraPosition(initLocation);
+        if(location == null){
+
         }else {
             updateLocation = new LatLng(location.getLatitude(), location.getLongitude());
             googleMap.addMarker(new MarkerOptions()
                     .position(updateLocation)
                     .icon(BitmapDescriptorFactory.fromBitmap(bitHeadImage)));
+            if (initLocation == 0) {
+                cameraPosition(updateLocation);
+                initLocation = 1;
+            }
             checkInitLocation = true;
         }
     }
@@ -426,6 +434,35 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
         }
 
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest, (com.google.android.gms.location.LocationListener) this);
+
+        if(location != null){
+            if(init){
+                if (Common.networkConnected((Activity) mContext)) {
+                    String url = Common.URL + "/LocationServlet";
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("action", "All");
+                    jsonObject.addProperty("type","All");
+                    //將內容轉成json字串
+                    retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+                    try {
+                        String jsonIn = retrieveLocationTask.execute().get();
+                        Type listType = new TypeToken<List<LandMark>>() {
+                        }.getType();
+                        //解析 json to gson
+                        locations = new Gson().fromJson(jsonIn, listType);
+                    } catch (Exception e) {
+                        Log.e(TAG, e.toString());
+                    }
+                    if (locations == null || locations.isEmpty()) {
+//                        Toast.makeText(mContext, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+                    } else {
+                        supportMapFragment.getMapAsync(HomeMapFragment.this);
+                    }
+                }
+                init = false;
+            }
+        }
+
     }
 
     @Override
