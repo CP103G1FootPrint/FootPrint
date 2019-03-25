@@ -492,24 +492,35 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
         public void onReceive(Context context, Intent intent) {
             LandMark landMark = (LandMark) intent.getSerializableExtra("lankMark");
             LatLng latLng = new LatLng(landMark.getLatitude(),landMark.getLongitude());
-//            Marker marker = homeStrokeGoogleMap.addMarker(new MarkerOptions()
-//                    .position(latLng)
-//                    .title(landMark.getName()));
-//            marker.showInfoWindow();
-//            cameraPosition(latLng);
 
+            Marker marker = null;
+            Boolean check = false;
             if(markerList != null){
                 for(int k = 0; k < markerList.size(); k++){
-                    Marker marker = markerList.get(k);
+                    marker = markerList.get(k);
                     if(marker.getTitle().equals(landMark.getName())){
-                        marker.showInfoWindow();
-                        cameraPosition(latLng);
+                        check = true;
+                        break;
+                    }else{
+                        check = false;
                     }
                 }
             }else {
-                Marker marker = homeStrokeGoogleMap.addMarker(new MarkerOptions()
+                check = false;
+            }
+
+            if(check){
+                marker.showInfoWindow();
+                cameraPosition(latLng);
+                check = false;
+            }else {
+                String textAddress = getResources().getString(R.string.textLandMarkAddress);
+                String textName = getResources().getString(R.string.textLandMarkName);
+                String textType = getResources().getString(R.string.ckLandMarkState);
+                marker = homeStrokeGoogleMap.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title(landMark.getName()));
+                        .title(landMark.getName())
+                        .snippet(textName+" : "+landMark.getName()+"\n"+textType+" : "+landMark.getType()+"\n"+textAddress+" : "+landMark.getAddress()));
                 marker.showInfoWindow();
                 cameraPosition(latLng);
                 hset.add(marker);

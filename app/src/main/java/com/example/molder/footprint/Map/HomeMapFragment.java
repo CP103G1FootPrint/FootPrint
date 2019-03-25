@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -330,9 +331,16 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
 
         }else {
             updateLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            googleMap.addMarker(new MarkerOptions()
-                    .position(updateLocation)
-                    .icon(BitmapDescriptorFactory.fromBitmap(bitHeadImage)));
+            if(bitHeadImage != null){
+                googleMap.addMarker(new MarkerOptions()
+                        .position(updateLocation)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bitHeadImage)));
+            }else {
+                googleMap.addMarker(new MarkerOptions()
+                        .position(updateLocation)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
+            }
+
             if (initLocation == 0) {
                 cameraPosition(updateLocation);
                 initLocation = 1;

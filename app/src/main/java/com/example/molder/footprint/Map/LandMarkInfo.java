@@ -175,14 +175,17 @@ public class LandMarkInfo extends AppCompatActivity {
                 Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
             } else {
                 LandMark location = locations.get(0);
+                String textAddress = getResources().getString(R.string.textLandMarkAddress);
+                String textDescription = getResources().getString(R.string.textLandMarkDescription);
+                String textOpenHours = getResources().getString(R.string.textLandMarkOpeningHours);
                 //顯示地標名稱
                 mapInfoDetailTitle.setText(location.getName());
                 //顯示地標地址
-                mapInfoDetailAddress.setText("Address : " + location.getAddress());
+                mapInfoDetailAddress.setText(textAddress + " : " + location.getAddress());
                 //顯示地標描述
-                mapInfoDetailDescription.setText("Description : " + location.getDescription());
+                mapInfoDetailDescription.setText(textDescription + " : " + location.getDescription());
                 //顯示地標開放時間
-                mapInfoDetailOpenHours.setText("Open Hours : " + location.getOpeningHours());
+                mapInfoDetailOpenHours.setText(textOpenHours + " : " + location.getOpeningHours());
                 //顯示地標星星數
                 mapInfoDetailRatingBar.setRating((float) location.getStar());
 
@@ -207,7 +210,7 @@ public class LandMarkInfo extends AppCompatActivity {
                     } else {
                         //recycleView
                         mapInfoDetailRecyclerView.setLayoutManager(
-                                new StaggeredGridLayoutManager(3,
+                                new StaggeredGridLayoutManager(2,
                                         StaggeredGridLayoutManager.VERTICAL));
                         mapInfoDetailRecyclerView.setAdapter(new PictureAdapter(this, pictures));
                     }
