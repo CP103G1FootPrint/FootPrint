@@ -18,6 +18,8 @@ public class ChatMessage implements Serializable {
     public ChatMessage(){
     }
 
+
+
     public ChatMessage(int chatId, String sender, String receiver, String content, String timeStamp) {
         this.chatId = chatId;
         this.sender = sender;

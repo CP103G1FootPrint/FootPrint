@@ -1,6 +1,7 @@
 package com.example.molder.footprint.HomeNews;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,12 +17,11 @@ import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
+import static com.example.molder.footprint.HomeNews.FriendshipNotifyServer.connectServer;
+import static com.example.molder.footprint.HomeNews.FriendshipNotifyServer.friendshipNotifyWebSocketClient;
 
 public class HomeNewsActivity_Personal_Friendship extends Activity {
     private static String TAG = "HomeNewsActivity_Personal_Friendship";
@@ -33,29 +33,43 @@ public class HomeNewsActivity_Personal_Friendship extends Activity {
     private HeadImageTask headImageTask;
     private Button button;
     private int imageSize;
-    List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        Intent intent = getIntent();
+        inviteeUserId = intent.getStringExtra("userId");
         setContentView(R.layout.activity_home_news__personal__friendship);
+
+        connectServer(userId, this);
         handleView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // 設定目前聊天對象
+        FriendshipNotifyWebSocketClient.friendInChat = inviteeUserId;
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        // user有可能直接開啟此頁而非經過Notification，應將對應發訊者的Notification刪除
+        if (notificationManager != null) {
+            notificationManager.cancel(inviteeUserId.hashCode());
+        }
+    }
+
     public void handleView(){
-        Intent intent = getIntent();
-        inviteeUserId = intent.getStringExtra("userId");
+//        Intent intent = getIntent();
+//        inviteeUserId = intent.getStringExtra("userId");
 
         ci_ProfilePicture = findViewById(R.id.friendship_cvProfilePicture);
         tv_userNickName = findViewById(R.id.tvFriendship_UserName);
         et_message = findViewById(R.id.etFriendship);
         button = findViewById(R.id.button);
         imageSize = getResources().getDisplayMetrics().widthPixels/5;
-
-        //目前登入的使用者
-        SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
-        userId = preferences.getString("userId", "");
 
         //找想加入好友的使用者暱稱和頭像
         if (Common.networkConnected(this)) {
@@ -111,10 +125,18 @@ public class HomeNewsActivity_Personal_Friendship extends Activity {
                     } else {
                         Common.showToast(HomeNewsActivity_Personal_Friendship.this, R.string.msg_NoNetwork);
                     }
+//                    HomeNewsActivity_Personal_Friendship_Friends friendsMessage = new HomeNewsActivity_Personal_Friendship_Friends("chat", userId, inviteeUserId, message, "text");
+//                    String chatMessageJson = new Gson().toJson(friendsMessage);
+//                    friendshipNotifyWebSocketClient.send(chatMessageJson);
+//                    Log.d(TAG, "output: " + chatMessageJson);
                 }
 //                Intent intent = new Intent(HomeNewsActivity_Personal_Friendship.this, HomeNewsActivity_Personal.class);
 //                intent.putExtra("userId", inviteeUserId);
 //                startActivity(intent);
+                HomeNewsActivity_Personal_Friendship_Friends friendsMessage = new HomeNewsActivity_Personal_Friendship_Friends("notify", userId, inviteeUserId, message, "text");
+                String chatMessageJson = new Gson().toJson(friendsMessage);
+                friendshipNotifyWebSocketClient.send(chatMessageJson);
+                Log.d(TAG, "output: " + chatMessageJson);
                 finish();
             }
         });
