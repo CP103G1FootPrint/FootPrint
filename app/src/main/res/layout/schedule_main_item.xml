@@ -25,73 +25,93 @@
     </LinearLayout>
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="15dp">
-
-    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
 
-            <ImageView
-                android:id="@+id/shImgView"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/sh_mountaine"/>
-
-            <TextView
-                android:id="@+id/shTvTitle"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/shTvDate"
-                android:layout_marginLeft="10dp"
-                android:text="@string/textTripName"
-                android:textColor="@color/colortextWhite"
-                android:textSize="18sp" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/shTvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/shImgView"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/textDate"
-                android:textColor="@color/colortextWhite"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/shTvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="45dp"
+                    android:text="@string/textTripName"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
-            <ImageButton
-                android:id="@+id/shBtPhoto"
-                android:layout_width="121dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/shImgView"
-                android:src="@drawable/sh_add_photo" />
+                <TextView
+                    android:id="@+id/shTvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/shImgView"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="12dp"
+                    android:text="@string/textDate"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp" />
 
-            <ImageButton
-                android:id="@+id/shBtChat"
-                android:layout_width="121dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/shImgView"
-                android:layout_toRightOf="@id/shBtPhoto"
-                android:src="@drawable/sh_chatbox" />
-            <ImageButton
-                android:id="@+id/shBtAdd"
-                android:layout_width="121dp"
-                android:layout_height="30dp"
-                android:onClick="onAddClick"
-                android:layout_toRightOf="@id/shBtChat"
-                android:layout_below="@id/shImgView"
-                android:src="@drawable/sh_group_add"/>
+                <ImageView
+                    android:id="@+id/shImgView"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sh_mountaine" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="bottom">
+
+                    <ImageButton
+                        android:id="@+id/shBtPhoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/shImgView"
+                        android:layout_weight="1"
+                        android:src="@drawable/sh_add_photo" />
+
+                    <ImageButton
+                        android:id="@+id/shBtChat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/shImgView"
+
+                        android:layout_toRightOf="@id/shBtPhoto"
+                        android:layout_weight="1"
+                        android:src="@drawable/sh_chatbox" />
+
+                    <ImageButton
+                        android:id="@+id/shBtAdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/shImgView"
+
+                        android:layout_toRightOf="@id/shBtChat"
+                        android:layout_weight="1"
+                        android:onClick="onAddClick"
+                        android:src="@drawable/sh_group_add" />
+                </LinearLayout>
 
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

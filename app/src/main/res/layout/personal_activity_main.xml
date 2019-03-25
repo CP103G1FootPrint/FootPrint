@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/selfePic"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
@@ -60,8 +60,9 @@
 
             <ImageButton
                 android:id="@+id/btSetting"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:scaleType="fitXY"
                 android:layout_margin="10dp"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorWhite"

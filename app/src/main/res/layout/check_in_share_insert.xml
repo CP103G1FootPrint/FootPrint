@@ -45,11 +45,11 @@
 
             <ImageView
                 android:id="@+id/ivCheckInShare"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:scaleType="fitXY"
+                android:scaleType="fitStart"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/upload" />
 
             <ImageButton
                 android:id="@+id/btCheckInSharePickPicture"
