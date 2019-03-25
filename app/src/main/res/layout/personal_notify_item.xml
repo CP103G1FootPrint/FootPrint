@@ -5,6 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginTop="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,33 +15,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/productId"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="10dp"
-            app:srcCompat="@mipmap/ic_launcher_round" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ci_ProfilePicture"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/addfriend" />
 
         <TextView
-            android:id="@+id/id"
+            android:id="@+id/tv_NickName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="小強"
             android:textSize="25dp"
-            app:layout_constraintStart_toEndOf="@id/productId"
-            app:layout_constraintTop_toTopOf="@+id/persona_pic" />
+            app:layout_constraintStart_toEndOf="@id/ci_ProfilePicture"/>
 
         <TextView
-            android:id="@+id/notify"
+            android:id="@+id/tv_Notify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginStart="8dp"
-            android:text="按了你相片讚。"
-            android:textSize="25dp"
-            app:layout_constraintStart_toEndOf="@id/productId"
-            app:layout_constraintTop_toBottomOf="@+id/id" />
+            android:layout_marginStart="5dp"
+            android:text="想加你為好友"
+            android:textSize="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ci_ProfilePicture" />
+
+        <Button
+            android:id="@+id/bt_Agree"
+            android:layout_width="63dp"
+            android:layout_height="27dp"
+            android:background="@color/colorToolbar"
+            android:text="同意"
+            android:alpha="0.85"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="317dp"
+            tools:layout_editor_absoluteY="8dp" />
+        <Button
+            android:id="@+id/bt_DisAgree"
+            android:layout_width="63dp"
+            android:layout_height="27dp"
+            android:background="@color/colorAccent"
+            android:alpha="0.85"
+            android:text="婉拒"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bt_Agree"
+            tools:layout_editor_absoluteX="317dp"
+            tools:layout_editor_absoluteY="8dp" />
 
 
     </android.support.constraint.ConstraintLayout>

@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class HomeNewsActivity_Personal extends AppCompatActivity {
     private static String TAG = "TAG_HomeNewsFragmentPersonal";
     private CircleImageView profile＿picture;
-    private TextView nickName, userName;
+    private TextView nickName, userName, userBirthday;
     private RecyclerView recyclerView;
     private CheckBox home_news_personal_addFriend;
     private AppCompatActivity HomeNewsActivity_Personal;
@@ -66,6 +66,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         nickName = findViewById(R.id.tv_home_news_personal_NickName_);
         userName = findViewById(R.id.tv_home_news_personal_ID_);
         home_news_personal_addFriend = findViewById(R.id.home_news_personal_addFriend);
+        userBirthday = findViewById(R.id.tv_home_news_personal_Birthday_) ;
         recyclerView = findViewById(R.id.rv_home_news_personal_pictures);
 
 
@@ -160,7 +161,26 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                 Log.e(TAG, e.toString());
             }
             if (friendship_Friends == null || friendship_Friends.isEmpty()) {
-                home_news_personal_addFriend.setChecked(false);
+
+                url = Common.URL + "/FriendsServlet";
+                jsonObject.addProperty("action", "findFriendIdCheckFriendShip");
+                jsonObject.addProperty("userId", userNowId);
+                jsonObject.addProperty("inviteeId", userId);
+                jsonOut = jsonObject.toString();
+                userTask = new CommonTask(url, jsonOut);
+                try {
+                    String jsonIn = userTask.execute().get();
+                    Type listType = new TypeToken<List<HomeNewsActivity_Personal_Friendship_Friends>>() {
+                    }.getType();
+                    friendship_Friends = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if (friendship_Friends == null || friendship_Friends.isEmpty()) {
+                    home_news_personal_addFriend.setChecked(false);
+                }else{
+                    home_news_personal_addFriend.setBackground(this.getResources().getDrawable(R.drawable.friendshipcheck));
+                }
             } else {
                 home_news_personal_addFriend.setChecked(true);
             }

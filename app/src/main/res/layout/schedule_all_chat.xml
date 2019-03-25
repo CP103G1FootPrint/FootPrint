@@ -46,12 +46,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:hint="Comment"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/message_button"
+        android:hint="   Comment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sh_bt_Comment"
         app:layout_constraintStart_toEndOf="@id/sh_ci_Comment_user" />
 
-    <Button
+    <ImageButton
         android:id="@+id/sh_bt_Comment"
         android:layout_width="50dp"
         android:layout_height="20dp"
@@ -59,6 +61,7 @@
         android:background="@color/colorWhite"
         android:text="Send"
         android:textSize="8sp"
+        android:src="@drawable/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>

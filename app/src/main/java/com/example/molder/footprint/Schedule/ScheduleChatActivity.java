@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
     private CircleImageView profile＿picture, personalUserHeadPicture;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView nickName;
-    private Button sendButton;
+    private ImageButton sendButton;
     private EditText commentMessage;
     private RecyclerView recyclerView;
     private String userId, userNickName, description, personalUserId, message,guestId,createID;

@@ -6,6 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorbtnCreateAccount"/>
+
     <Button
         android:id="@+id/yes"
         android:layout_width="wrap_content"
@@ -34,14 +39,15 @@
         android:layout_marginTop="128dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
     <ImageButton
         android:id="@+id/cancle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/back" />
+        app:srcCompat="@drawable/back"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
 
     <Button
         android:id="@+id/ok"
@@ -50,6 +56,7 @@
         android:layout_marginStart="296dp"
         android:text="儲存"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.AppCompat.Button.Borderless"/>
 
 </android.support.constraint.ConstraintLayout>

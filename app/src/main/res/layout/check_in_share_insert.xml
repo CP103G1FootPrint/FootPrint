@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="190dp"
                 android:onClick="onFinishInsertClick"
-                android:text="@string/CheckInShareInsert"
+                android:text="@string/textSave"
                 android:theme="@style/MyButton"
                 style="@style/Widget.AppCompat.Button.Borderless"/>
 
@@ -42,15 +42,16 @@
 
             <ImageView
                 android:id="@+id/ivCheckInShare"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:scaleType="fitXY"
+                android:scaleType="fitStart"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/upload" />
+
 
             <ImageButton
                 android:id="@+id/btCheckInSharePickPicture"
-                android:layout_width="60dp"
+                android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:src="@drawable/add_photo"
                 android:layout_alignTop="@+id/btCheckInShareTakePicture"
@@ -60,11 +61,11 @@
 
             <ImageButton
                 android:id="@+id/btCheckInShareTakePicture"
-                android:layout_width="60dp"
+                android:layout_width="180dp"
                 android:layout_height="40dp"
                 android:src="@drawable/add_cam"
                 android:layout_below="@+id/ivCheckInShare"
-                android:layout_alignLeft="@id/ivCheckInShare"
+
                 android:onClick="onTakePictureClick" />
         </RelativeLayout>
 

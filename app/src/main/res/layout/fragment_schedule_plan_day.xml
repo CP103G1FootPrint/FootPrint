@@ -27,8 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="24dp"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/location"
             app:elevation="6dp"
+            android:backgroundTint="@color/colorToolbar"
             app:rippleColor="#FFFFFF" /> //elevation高度陰影
     </android.support.design.widget.CoordinatorLayout>
 
