@@ -453,7 +453,6 @@ public class FriendsMessageActivity extends AppCompatActivity {
                         }
                             friendsMessageActivityAdapter.add(chatMessage);
                             recyclerView.smoothScrollToPosition(friendsMessageActivityAdapter.getItemCount() - 1);
-
 //                        friendsMessageActivityAdapter.notifyDataSetChanged();
 //                        showMessage(sender,chatMessage.getContent(), true);
 //                        recyclerView.setAdapter(new FriendsMessageActivityAdapter(FriendsMessageActivity.this, chatMessages));
