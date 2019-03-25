@@ -13,9 +13,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -25,6 +26,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Base64;
@@ -41,12 +43,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Home;
+import com.example.molder.footprint.HomeFragment;
 import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
+import com.facebook.CallbackManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -57,6 +69,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -64,17 +77,18 @@ import java.util.Set;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CheckInShareFragment extends Fragment {
+public class CheckInShareFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private final static String TAG = "CheckInShareInsert";
     private FragmentActivity activity;
     private FragmentManager fragmentManager;
     private ImageView ivCheckInShare;
-    private Button  btFinishInsert, btCancel, btChooseLandMark;
+    private Button  btFinishInsert, btCancel, btChooseLandMark,btnCheckInShareStateChooseLandMarkSelf;
     private ImageButton btTakePicture, btPickPicture;
     private Spinner spSate;
     private TextView tvShowLandMark;
@@ -84,6 +98,7 @@ public class CheckInShareFragment extends Fragment {
     private static final int REQ_PICK_IMAGE = 1;
     private static final int REQ_CROP_PICTURE = 2;
     public static final int REQ_EXTERNAL_STORAGE = 3;
+    private static final int REQ_Location = 4;
     private Uri contentUri, croppedImageUri;
     private View v, rootView;
     private ListView listView;
@@ -92,6 +107,20 @@ public class CheckInShareFragment extends Fragment {
     private int intLandMarkID;
     private String mCurrentPhotoPath;
     private File photoFile;
+
+    //GPS
+    public static Location locationGPS;
+    private GoogleApiClient googleApiClient;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private LocationRequest locationRequest;
+    private static final long UPDATE_INTERVAL = 5000, FASTEST_INTERVAL = 5000; // = 5 seconds
+    //lists for permissions
+    private ArrayList<String> permissionToRequest;
+//    private ArrayList<String> permissionRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+    //integer for permissions results request
+    private static final int ALL_PERMISSIONS_RESULT = 1011;
+
 
     public CheckInShareFragment() {
         // Required empty public constructor
@@ -102,6 +131,7 @@ public class CheckInShareFragment extends Fragment {
         super.onCreate(savedInstanceState);
         activity = getActivity();
         fragmentManager = getFragmentManager();
+
     }
 
     private File createImageFile() throws IOException {
@@ -131,9 +161,22 @@ public class CheckInShareFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.check_in_share_insert, container, false);
+
+
+        //GPS
+        //we add permissions we need to request location of the users
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        permissionToRequest = permissionToRequest(permissions);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(permissionToRequest.size() > 0) {
+                requestPermissions(permissionToRequest.toArray(new String[permissionToRequest.size()]),ALL_PERMISSIONS_RESULT);
+            }
+        }
+        //we build google api client
+        googleApiClient = new GoogleApiClient.Builder(getActivity()).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
+        //////////////////
         findViews(rootView);
-
-
         //拍照片
         btTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,8 +266,13 @@ public class CheckInShareFragment extends Fragment {
         btCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Home.class);
-                startActivity(intent);
+
+                Fragment fragment = new HomeFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content, fragment);
+                fragmentTransaction.commit();
+
             }
         });
 
@@ -239,13 +287,29 @@ public class CheckInShareFragment extends Fragment {
                 //新建choose Land Mark AlertDialog
                 new AlertDialog.Builder(activity)
                         .setView(v)
-                        .setNegativeButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
                         })
                         .show();
+            }
+        });
+
+        //創地標
+        btnCheckInShareStateChooseLandMarkSelf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CreateLandMark.class);
+                intent.putExtra("textLandMark",textLandMark);
+                startActivityForResult(intent,REQ_Location);
             }
         });
 
@@ -262,6 +326,7 @@ public class CheckInShareFragment extends Fragment {
         tvShowLandMark = rootView.findViewById(R.id.tvShowLandMark);
         etDescription = rootView.findViewById(R.id.etCheckInShareDescription);
         btChooseLandMark = rootView.findViewById(R.id.btnCheckInShareStateChooseLandMark);
+        btnCheckInShareStateChooseLandMarkSelf = rootView.findViewById(R.id.btnCheckInShareStateChooseLandMarkSelf);
 
         LayoutInflater inflater = LayoutInflater.from(activity);
         v = inflater.inflate(R.layout.check_in_share_choose_land_mark, null);
@@ -272,7 +337,7 @@ public class CheckInShareFragment extends Fragment {
                                     int position, long id) {
                 for (int i = 0; i < listView.getChildCount(); i++) {
                     if (position == i) {
-                        listView.getChildAt(i).setBackgroundColor(Color.GREEN);
+                        listView.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.colorToolbar));
                         LandMark member = (LandMark) parent.getItemAtPosition(position);
                         textLandMark = member.getName();
                         intLandMarkID = member.getId();
@@ -285,30 +350,7 @@ public class CheckInShareFragment extends Fragment {
             }
         });
 
-        if (Common.networkConnected(activity)) {
-            String url = Common.URL + "/LocationServlet";
-            List<LandMark> locations = null;
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "All");
-            //將內容轉成json字串
-            retrieveLocationTask = new CommonTask(url, jsonObject.toString());
-            try {
-                String jsonIn = retrieveLocationTask.execute().get();
-                Type listType = new TypeToken<List<LandMark>>() {
-                }.getType();
-                //解析 json to gson
-                locations = new Gson().fromJson(jsonIn, listType);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            if (locations == null || locations.isEmpty()) {
-                Common.showToast(activity, R.string.msg_NoFoundLandMark);
-            } else {
-                showResult(locations);
-            }
-        } else {
-            Common.showToast(activity, R.string.msg_NoNetwork);
-        }
+
     }
 
     private boolean isIntentAvailable(Context context, Intent intent) {
@@ -343,6 +385,12 @@ public class CheckInShareFragment extends Fragment {
                     } catch (FileNotFoundException e) {
                         Log.e(TAG, e.toString());
                     }
+                    break;
+                case REQ_Location:
+                    tvShowLandMark.setText("");
+                    String result = intent.getStringExtra("textLandMark");
+                    intLandMarkID = intent.getIntExtra("landMarkID",0);
+                    tvShowLandMark.setText(result);
                     break;
             }
         }
@@ -387,6 +435,111 @@ public class CheckInShareFragment extends Fragment {
         listView.setAdapter(new LandMarkAdapter(activity, locations));
 
     }
+
+    //////////////////////////
+    private ArrayList<String> permissionToRequest(ArrayList<String> wantedPermissions) {
+        ArrayList<String> result = new ArrayList<>();
+        for (String perm:wantedPermissions){
+            if (!hasPermission(perm)){
+                result.add(perm);
+            }
+        }
+        return result;
+    }
+
+    private boolean hasPermission(String permission){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            return checkSelfPermission(getActivity(),permission) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true;
+    }
+
+    private boolean checkPlayServices(){
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(getActivity());
+
+        if(resultCode != ConnectionResult.SUCCESS){
+            if(apiAvailability.isUserResolvableError(resultCode)){
+                apiAvailability.getErrorDialog(getActivity(),resultCode,PLAY_SERVICES_RESOLUTION_REQUEST);
+            }else {
+//                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void startLocationUpdates(){
+        locationRequest = new LocationRequest();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        if(ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(getActivity(),R.string.msg_permission,Toast.LENGTH_SHORT).show();
+        }
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest, (com.google.android.gms.location.LocationListener) this);
+
+        if(locationGPS != null){
+            if (Common.networkConnected(activity)) {
+                String url = Common.URL + "/LocationServlet";
+                List<LandMark> locations = null;
+                Double latitude = locationGPS.getLatitude();
+                Double longitude = locationGPS.getLongitude();
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("action", "nearByMySelf");
+                jsonObject.addProperty("latitude", latitude);
+                jsonObject.addProperty("longitude", longitude);
+                //將內容轉成json字串
+                retrieveLocationTask = new CommonTask(url, jsonObject.toString());
+                try {
+                    String jsonIn = retrieveLocationTask.execute().get();
+                    Type listType = new TypeToken<List<LandMark>>() {
+                    }.getType();
+                    //解析 json to gson
+                    locations = new Gson().fromJson(jsonIn, listType);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+                if (locations == null || locations.isEmpty()) {
+                    Common.showToast(activity, R.string.msg_NoFoundLandMark);
+                } else {
+                    showResult(locations);
+                }
+            } else {
+                Common.showToast(activity, R.string.msg_NoNetwork);
+            }
+        }
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if(ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            return;
+        }
+        //Permission ok, we get last location
+        locationGPS = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+    /////////////////////////////
+
 
     private class LandMarkAdapter extends BaseAdapter {
         Context context;
@@ -433,6 +586,29 @@ public class CheckInShareFragment extends Fragment {
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
 //        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         askPermissions(activity, permissions, REQ_EXTERNAL_STORAGE);
+        if(googleApiClient != null){
+            googleApiClient.connect();
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!checkPlayServices()) {
+            Toast.makeText(getActivity(), R.string.install, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        //stop location updates
+        if(googleApiClient != null && googleApiClient.isConnected()){
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, (com.google.android.gms.location.LocationListener) this);
+            googleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -478,5 +654,6 @@ public class CheckInShareFragment extends Fragment {
                     requestCode);
         }
     }
+
 
 }

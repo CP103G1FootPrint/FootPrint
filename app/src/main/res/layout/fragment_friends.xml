@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/friendsToolbar"
@@ -11,10 +10,16 @@
         android:layout_height="56dp"
         android:background="@color/colorbtnCreateAccount">
 
-        <SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        </SearchView>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:src="@drawable/search" />
+
+        <AutoCompleteTextView
+            android:id="@+id/friendAutoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:completionThreshold="1" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.TabLayout
@@ -27,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Friends" />
+
         <android.support.design.widget.TabItem
             android:id="@+id/friendsTabNews"
             android:layout_width="wrap_content"
@@ -43,5 +49,11 @@
     </android.support.v4.view.ViewPager>
 
 
-
 </LinearLayout>
+
+    <!--
+    <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            </SearchView>
+            -->

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorbackgroundGray"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/colorbackgroundGray">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Account"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/createAccount"
         android:layout_width="match_parent"
@@ -31,21 +32,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="@string/Password"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"/>
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/createPassword"
-        android:background="@color/colortextWhite"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        app:passwordToggleEnabled="true"
-        app:errorEnabled="true">
+        android:layout_height="50dp"
+        android:background="@color/colortextWhite"
+        app:errorEnabled="true"
+        app:passwordToggleEnabled="true">
 
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:hint="@string/Password"
             android:inputType="textPassword" />
 
@@ -54,60 +56,113 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="@string/nickName"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"/>
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/createNickName"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@color/colortextWhite"
-        android:inputType="textPersonName"/>
+        android:inputType="textPersonName" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="@string/Birthday"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"/>
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/createBirthday"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:inputType="date"
         android:background="@color/colortextWhite"
-        android:hint="@string/BirthdayDate"/>
+        android:hint="@string/BirthdayDate"
+        android:inputType="date" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="@string/Constellation"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"/>
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
     <Spinner
         android:id="@+id/createSpConstellation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/textConstellation" />
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:text="@string/confirm"
-        android:layout_margin="5dp"
-        android:background="@drawable/style_button"
-        android:textColor="@color/colortextWhite"
-        android:onClick="createAccountConfirm"/>
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <Button
+        <FrameLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp">
+
+            <CheckBox
+                android:id="@+id/loginCbTerms"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+
+            <!--  android:checked="true"
+                android:enabled="false"-->
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/colorNull"
+                android:onClick="onImageViewClick" />
+
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/loginTextTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:onClick="onTermsClick"
+            android:textSize="12sp"
+            android:text="@string/textTerms" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:background="@drawable/style_button"
-        android:text="@string/textCancel"
+        android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:textColor="@color/colortextWhite"
-        android:onClick="createAccountCancel" />
+        android:orientation="vertical">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_button"
+            android:onClick="createAccountConfirm"
+            android:text="@string/confirm"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colortextWhite" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/style_button"
+            android:onClick="createAccountCancel"
+            android:text="@string/textCancel"
+            android:textAllCaps="false"
+            android:textColor="@color/colortextWhite" />
+    </LinearLayout>
+
 </LinearLayout>

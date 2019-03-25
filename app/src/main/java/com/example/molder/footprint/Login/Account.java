@@ -7,22 +7,21 @@ public class Account {
     private String birthday;
     private String constellation;
     private int integral;
-
+    private int fb;
 
     public Account() {
 
     }
 
 
-    public Account(String account, String password, String nickname, String birthday, int integral,String constellation) {
+    public Account(String account, String password, String nickname, String birthday, int integral, String constellation, int fb) {
         this.account = account;
         this.password = password;
         this.nickname = nickname;
         this.birthday = birthday;
         this.constellation = constellation;
         this.integral = integral;
-
-
+        this.fb = fb;
     }
 
     public Account(String password, String nickname, String birthday, String constellation,String account) {
@@ -31,7 +30,6 @@ public class Account {
         this.birthday = birthday;
         this.constellation = constellation;
         this.account = account;
-
 
     }
 
@@ -87,5 +85,13 @@ public class Account {
 
     public void setIntegral(int integral) {
         this.integral = integral;
+    }
+
+    public int getFb() {
+        return fb;
+    }
+
+    public void setFb(int fb) {
+        this.fb = fb;
     }
 }

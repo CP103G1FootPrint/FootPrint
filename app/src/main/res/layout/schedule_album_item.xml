@@ -16,6 +16,7 @@
                     android:id="@+id/shAlbumImg"
                     android:layout_width="125dp"
                     android:layout_height="120dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/paris"/>
 
 

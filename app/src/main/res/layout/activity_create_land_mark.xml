@@ -8,31 +8,30 @@
     android:background="@color/colorbackgroundGray">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/shToolbar"
+        android:id="@+id/ckToolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorbtnCreateAccount">
 
         <Button
-            android:id="@+id/shBtCancel"
+            android:id="@+id/ckBtCancel"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:text="@string/textCancel"
-            android:onClick="onCancelCreateTripClick"
+            android:onClick="onCancelCreateLandMarkClick"
             android:theme="@style/MyButton"
             style="@style/Widget.AppCompat.Button.Borderless"/>
 
         <Button
-            android:id="@+id/shBtSave"
+            android:id="@+id/ckBtSave"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginLeft="190dp"
             android:text="@string/textSave"
-            android:onClick="onSaveTripClick"
+            android:onClick="onSaveLandMarkClick"
             android:theme="@style/MyButton"
             style="@style/Widget.AppCompat.Button.Borderless"/>
-
 
     </android.support.v7.widget.Toolbar>
 
@@ -43,107 +42,78 @@
         android:padding="12dp">
 
         <EditText
-            android:id="@+id/shEtTripName"
+            android:id="@+id/ckEtLandMarkName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:hint="@string/textTripName"
+            android:hint="@string/textLandMarkName"
             android:background="@color/colortextWhite" />
 
-
     </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
-        <TextView
-            android:id="@+id/shTvDatePicker"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/colortextWhite"
-            android:ems="10"
-            android:onClick="onDateClick"
-            android:hint="@string/textDate"
-            android:textSize="12sp"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp">
         <EditText
-            android:id="@+id/shEtDay"
+            android:id="@+id/ckEtAddress"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/colortextWhite"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            android:hint="@string/textDay"/>
+            android:hint="@string/textLandMarkAddress"/>
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:padding="12dp">
+        <EditText
+            android:id="@+id/ckEtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkDescription"/>
+    </android.support.design.widget.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/shBtAddFriend"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:onClick="onAddFriendClick"
-            android:src="@drawable/sh_group_add" />
-
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Invite Friends (Optional)"
-            android:textSize="18sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:padding="12dp">
-
-        <TextView
-            android:id="@+id/shTvGroupM"
+        <EditText
+            android:id="@+id/ckEtOpeningHours"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/colortextWhite"/>
-        <LinearLayout
-            android:padding="12dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/shBtPickPicture"
-                android:layout_width="120dp"
-                android:layout_height="50dp"
-                android:text="@string/textPickPicture"/>
-            <ImageView
-                android:id="@+id/shImgPhoto"
-                android:layout_width="200dp"
-                android:layout_height="120dp"
-                android:layout_marginLeft="20dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/sh_mountaine"/>
-        </LinearLayout>
+            android:layout_height="40dp"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkOpeningHours"/>
+    </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
-    <FrameLayout
-        android:id="@+id/shFriendBody"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+        <EditText
+            android:id="@+id/ckEtEvaluation"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:inputType="numberDecimal"
+            android:background="@color/colortextWhite"
+            android:hint="@string/textLandMarkEvaluation"/>
+    </android.support.design.widget.TextInputLayout>
 
-    </FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ckLandMarkState"
+        android:layout_marginLeft="12dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
 
+    <Spinner
+        android:id="@+id/btnCkLandMarkType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:entries="@array/textInsertLandMark" />
 
 </LinearLayout>

@@ -76,7 +76,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
     private TabLayout mTabLayout;
     private int page = 0;
     private int tripId ;
-    private int yFrom,yStop,mapFrom = 0,mapStop = -600;
+    private int yFrom,yStop,mapFrom = 0,mapStop = -450;
     private Boolean orientation = false;
 
     private Button scheduleAddDays, scheduleMoveDays,scheduleMinusDays,scheduleEditSave,scheduleEditCancel;
@@ -90,6 +90,8 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
     private LocalBroadcastManager broadcastManager;
     private String userId;
     private List<String> friends = null;
+    private HashSet<Marker> hset = new HashSet<>();
+    private List<Marker> markerList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,16 +254,16 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
             public void onClick(View view) {
                 if(orientation == false){
                     yFrom = 0;
-                    yStop = 1300;
+                    yStop = 1130;
                     mapFrom = 0;
                     mapStop = 0;
                     orientation = true;
 //                    setViewSize(imageView,orientation);
                 }else {
-                    yFrom = 1300;
+                    yFrom = 1130;
                     yStop = 0;
                     mapFrom = 0;
-                    mapStop = -600;
+                    mapStop = -450;
                     orientation = false;
 //                    setViewSize(imageView,orientation);
                 }
@@ -564,58 +566,77 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
         broadcastManager.registerReceiver(scheduleDayReceiver, scheduleDayFilter);
     }
 
-    // 接收到聊天訊息會在TextView呈現
+    // 接收到訊息會在TextView呈現
     private class ScheduleDayReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // 取得聊天訊息
+            // 取得訊息
             String message = intent.getStringExtra("message");
-            ScheduleDay dayMessage = new Gson().fromJson(message, ScheduleDay.class);
-            String dayType = dayMessage.getMessageType();
-            int scheduleOfDay = dayMessage.getNumberOfDay();
-            int tabCount = dayMessage.getTabCount();
-            int tripId = dayMessage.getTripId();
-            switch (dayType){
-                case "updateMap":
-                    if(judgmentDay == scheduleOfDay) {
-                        changeData(scheduleOfDay, tripId);
-                    }
-                    break;
-                case "dayChangeAdd":
-                    String textDay = "第 "+ String.valueOf(tabCount+1) + " 天";
-                    mTabLayout.addTab(mTabLayout.newTab().setText(textDay));
-                    //刷新 Fragment 頁面
-                    mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-                    //取得FragmentManager權限 並取得目前分頁所在的頁數
-                    schedulePlanPagerAdapter = new SchedulePlanPageAdapter(getSupportFragmentManager(), tabCount);
-                    //將剛剛取到的分頁所在的頁數 顯示在Fragment上
-                    mViewPager.setAdapter(schedulePlanPagerAdapter);
-                    schedulePlanPagerAdapter.notifyDataSetChanged();
-                    break;
-                case "dayChangeLess":
-                if (tabCount > 1) {
-                    mTabLayout.removeTab(mTabLayout.getTabAt(tabCount - 1));
-                    //刷新 Fragment 頁面
-                    mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-                    //取得FragmentManager權限 並取得目前分頁所在的頁數
-                    schedulePlanPagerAdapter = new SchedulePlanPageAdapter(getSupportFragmentManager(), tabCount);
-                    //將剛剛取到的分頁所在的頁數 顯示在Fragment上
-                    mViewPager.setAdapter(schedulePlanPagerAdapter);
-                    schedulePlanPagerAdapter.notifyDataSetChanged();
-                }
-                    break;
-//                case "judgmentDay":
-//                    if(judgmentDay == scheduleOfDay){
-//                        dayMessage.setType("ScheduleDayRecycle");
-//                        dayMessage.setMessageType("changeDateRecycle");
-//                        dayMessage.setReceiver(userId);
-//                        String scheduleMessageJson = new Gson().toJson(dayMessage);
-//                        scheduleDayWebSocketClient.send(scheduleMessageJson);
-//                    }
-//                    break;
+            if(message!=null){
+                ScheduleDay dayMessage = new Gson().fromJson(message, ScheduleDay.class);
+                String dayType = dayMessage.getMessageType();
+                int scheduleOfDay = dayMessage.getNumberOfDay();
+                int tabCount = dayMessage.getTabCount();
+                int tripId = dayMessage.getTripId();
+
+                switch (dayType){
+                    case "updateMap":
+                        if(judgmentDay == scheduleOfDay) {
+                            changeData(scheduleOfDay, tripId);
+                        }
+                        break;
+                    case "dayChangeAdd":
+                        String textDay = "第 "+ String.valueOf(tabCount+1) + " 天";
+                        mTabLayout.addTab(mTabLayout.newTab().setText(textDay));
+                        //刷新 Fragment 頁面
+                        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+                        //取得FragmentManager權限 並取得目前分頁所在的頁數
+                        schedulePlanPagerAdapter = new SchedulePlanPageAdapter(getSupportFragmentManager(), tabCount);
+                        //將剛剛取到的分頁所在的頁數 顯示在Fragment上
+                        mViewPager.setAdapter(schedulePlanPagerAdapter);
+                        schedulePlanPagerAdapter.notifyDataSetChanged();
+                        break;
+                    case "dayChangeLess":
+                        if (tabCount > 1) {
+                            mTabLayout.removeTab(mTabLayout.getTabAt(tabCount - 1));
+                            //刷新 Fragment 頁面
+                            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+                            //取得FragmentManager權限 並取得目前分頁所在的頁數
+                            schedulePlanPagerAdapter = new SchedulePlanPageAdapter(getSupportFragmentManager(), tabCount);
+                            //將剛剛取到的分頁所在的頁數 顯示在Fragment上
+                            mViewPager.setAdapter(schedulePlanPagerAdapter);
+                            schedulePlanPagerAdapter.notifyDataSetChanged();
+                        }
+                        break;
                     default: break;
+                }
+
             }
-            Log.d(TAG, message);
+
+            // 顯示點擊地標秀在地圖
+            LandMark landMark = (LandMark) intent.getSerializableExtra("lankMark");
+            if(landMark != null){
+                LatLng latLng = new LatLng(landMark.getLatitude(),landMark.getLongitude());
+                if(markerList != null){
+                    for(int k = 0; k < markerList.size(); k++){
+                        Marker marker = markerList.get(k);
+                        if(marker.getTitle().equals(landMark.getName())){
+                            marker.showInfoWindow();
+                            cameraPosition(latLng);
+                        }
+                    }
+                }else {
+                    Marker marker = scheduleGoogleMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title(landMark.getName()));
+                    marker.showInfoWindow();
+                    cameraPosition(latLng);
+                    hset.add(marker);
+                    markerList = new ArrayList<>(hset);
+                }
+            }
+
+//            Log.d(TAG, message);
         }
     }
 

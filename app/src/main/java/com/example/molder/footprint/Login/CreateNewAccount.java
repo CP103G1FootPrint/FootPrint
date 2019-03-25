@@ -1,20 +1,25 @@
 package com.example.molder.footprint.Login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.R;
+import com.facebook.CallbackManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -23,6 +28,7 @@ import com.google.gson.JsonObject;
 public class CreateNewAccount extends AppCompatActivity {
 
     private static final String TAG = "CreateNewAccount";
+    private static final int REQUEST_CODE = 1;
     private TextInputLayout createAccount;
     private TextInputLayout createPassword;
     private EditText createNickName;
@@ -30,12 +36,16 @@ public class CreateNewAccount extends AppCompatActivity {
     private Spinner createSpConstellation;
     private boolean accountExist = false;
     private CommonTask accountExistTask;
-    private String text;
+    private CheckBox mCheckBox;
+    private boolean result = false;
+    private CallbackManager callbackManager;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_account);
+        callbackManager = CallbackManager.Factory.create();
         handleView();
     }
 
@@ -45,6 +55,10 @@ public class CreateNewAccount extends AppCompatActivity {
         createNickName = findViewById(R.id.createNickName);
         createBirthday = findViewById(R.id.createBirthday);
         createSpConstellation = findViewById(R.id.createSpConstellation);
+        mCheckBox = findViewById(R.id.loginCbTerms);
+        textView = findViewById(R.id.loginTextTerms);
+
+        textView.setText(Html.fromHtml("I Agree to <font color='#ff0000'><big>Terms of Service</big></font> and <font color='#ff0000'><big>Privacy Policy</big></font>"));
 
         createSpConstellation.setSelection(0, true);
         createSpConstellation.setOnItemSelectedListener(listener);
@@ -55,9 +69,9 @@ public class CreateNewAccount extends AppCompatActivity {
         @Override
         public void onItemSelected(
                 AdapterView<?> parent, View view, int pos, long id) {
-            Object item = createSpConstellation.getSelectedItem();
-            String category = item.toString().trim();
-            showToast(CreateNewAccount.this,category);
+//            Object item = createSpConstellation.getSelectedItem();
+//            String category = item.toString().trim();
+//            showToast(CreateNewAccount.this,category);
 
         }
 
@@ -162,10 +176,16 @@ public class CreateNewAccount extends AppCompatActivity {
             Object item = createSpConstellation.getSelectedItem();
             String category = item.toString().trim();
             int integral = 0;
+            int fb = 0;
+
+            if (result == false) {
+                Toast.makeText(CreateNewAccount.this, R.string.textNotReadTerms, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (Common.networkConnected(this)) {
                 String url = Common.URL + "/AccountServlet";
-                Account account = new Account(emailInput, passwordInput, nickName, birthday, integral,category);
+                Account account = new Account(emailInput, passwordInput, nickName, birthday, integral,category,fb);
                 JsonObject jsonObject = new JsonObject();
                 //新增
                 jsonObject.addProperty("action", "accountInsert");
@@ -190,7 +210,7 @@ public class CreateNewAccount extends AppCompatActivity {
                     preferences.edit().putBoolean("login", true)
                             .putString("userId", emailInput)
                             .putString("password", passwordInput).apply();
-                    Common.showToast(this, R.string.msg_InsertSuccess);
+//                    Common.showToast(this, R.string.msg_InsertSuccess);
                     finish();
                 }
             } else {
@@ -209,6 +229,30 @@ public class CreateNewAccount extends AppCompatActivity {
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onTermsClick(View view){
+        Intent intent = new Intent(CreateNewAccount.this, LoginTerms.class);
+        intent.putExtra("checkBox",false);
+        startActivityForResult(intent,REQUEST_CODE);
+    }
+
+    public void onImageViewClick(View view){
+        //do nothing. 遮蔽用
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case REQUEST_CODE:
+                result = data.getBooleanExtra("checkBox",false);
+                if(result){
+                    mCheckBox.setChecked(true);
+                }
+                break;
+        }
     }
 
     @Override

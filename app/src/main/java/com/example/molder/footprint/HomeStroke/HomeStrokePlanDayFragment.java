@@ -1,6 +1,7 @@
 package com.example.molder.footprint.HomeStroke;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
@@ -42,6 +44,7 @@ public class HomeStrokePlanDayFragment extends Fragment {
     private CommonTask retrieveLocationTask2;
     private int day, tripId;
     private View view;
+    private LocalBroadcastManager localBroadcastManager;
 
     public HomeStrokePlanDayFragment() {
         // Required empty public constructor
@@ -78,6 +81,8 @@ public class HomeStrokePlanDayFragment extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mAdapter = new HomeStrokePlanDayFragment.MainAdapter(mContext, mDatas);
         mRecyclerView.setAdapter(mAdapter);
+        //建立接收器權限
+        localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
 
         return view;
     }
@@ -121,9 +126,18 @@ public class HomeStrokePlanDayFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(HomeStrokePlanDayFragment.MainAdapter.MyViewHolder holder, final int position) {
-            LandMark landMark = mDatas.get(position);
-            holder.landMarkName.setText(landMark.getName());
-            holder.landMarkAddress.setText(landMark.getAddress());
+            final LandMark landMark = mDatas.get(position);
+//            holder.landMarkName.setText(landMark.getName()+"\n"+landMark.getAddress());
+            holder.landMarkAddress.setText(landMark.getName()+"\n"+landMark.getAddress());
+            holder.landMarkAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent("StrokeMapShowInfoWindow");
+                    intent.putExtra("lankMark",landMark);
+                    localBroadcastManager.sendBroadcast(intent);
+                }
+            });
+
         }
 
         @Override
@@ -136,7 +150,7 @@ public class HomeStrokePlanDayFragment extends Fragment {
 
             public MyViewHolder(View view) {
                 super(view);
-                landMarkName = itemView.findViewById(R.id.schedulePlanDayLandMarkName);
+//                landMarkName = itemView.findViewById(R.id.schedulePlanDayLandMarkName);
                 landMarkAddress = itemView.findViewById(R.id.schedulePlanDayLandMarkAddress);
             }
         }
