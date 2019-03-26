@@ -380,7 +380,7 @@ public class ScheduleMainFragment extends Fragment {
                     }
                     checked_items = new boolean[list_items.length];
                     AlertDialog.Builder myBuilder = new AlertDialog.Builder(getActivity());
-                    myBuilder.setTitle(R.string.textAddtoGroup);
+                    myBuilder.setTitle(R.string.textAddFriendtoGroup);
                     myBuilder.setMultiChoiceItems(list_items, checked_items, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -392,7 +392,7 @@ public class ScheduleMainFragment extends Fragment {
                         }
                     });
                     myBuilder.setCancelable(false);
-                    myBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    myBuilder.setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             List<TripPlanFriend> tripPlanFriends = new ArrayList<>();
@@ -425,7 +425,7 @@ public class ScheduleMainFragment extends Fragment {
 
                         }
                     });
-                    myBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    myBuilder.setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();

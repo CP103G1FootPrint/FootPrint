@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FootPrint</string>
+    <string name="textTitle">FootPrint</string>
+    <string name="btnCreateAccount">登入</string>
+    <string name="btnFBAccount">臉書</string>
+    <string name="textTerms">我同意服務條款和隱私政策</string>
+    <string name="EmailAccount">Google 信箱</string>
+    <string name="Password">密碼</string>
+    <string name="confirm">確認</string>
+    <string-array name="textConstellation">
+        <item>水瓶座</item>
+        <item>雙魚座</item>
+        <item>牡羊座</item>
+        <item>金牛座</item>
+        <item>雙子座</item>
+        <item>巨蟹座</item>
+        <item>獅子座</item>
+        <item>處女座</item>
+        <item>天秤座</item>
+        <item>天蠍座</item>
+        <item>射手座</item>
+        <item>摩羯座</item>
+    </string-array>
+
+    <string-array name="textCheckInShareState">
+        <item>Public</item>
+        <item>Private</item>
+    </string-array>
+
+    <string-array name="textMapSate">
+        <item>All</item>
+        <item>Restaurant</item>
+        <item>Hotel</item>
+        <item>Spot</item>
+        <item>Recommended by Tourist</item>
+    </string-array>
+
+    <string-array name="textInsertLandMark">
+        <item>Restaurant</item>
+        <item>Hotel</item>
+        <item>Spot</item>
+        <item>Recommended by Tourist</item>
+    </string-array>
+
+    <string name="facebook_app_id">1637855299849357</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="homeBtnNavigation">首頁</string>
+    <string name="homeStrokeBtnNavigation">行程</string>
+    <string name="homeTakePictureBtnNavigation">打卡</string>
+    <string name="homeFriendsBtnNavigation">好友</string>
+    <string name="homePersonalBtnNavigation">個人</string>
+    <string name="createNewAccount">創立新帳號</string>
+    <string name="forgotPassword">忘記密碼</string>
+    <string name="Account">帳號</string>
+    <string name="Constellation">星座</string>
+    <string name="Birthday">生日</string>
+    <string name="nickName">暱稱</string>
+    <string name="BirthdayDate">月/日</string>
+    <string name="textForgotPasswordMessage">請輸入您的電子郵件以搜索您的帳戶</string>
+    <string name="textConfirm">確認</string>
+    <string name="textCancel">取消</string>
+    <string name="textForgotPassword">搜索您的帳戶</string>
+    <string name="textSendForgotPasswordMessage">成功將新密碼發送到您的電子郵箱</string>
+    <string name="textLoginIn">登入</string>
+    <string name="textLoginInMessage">請輸入您的帳戶和密碼</string>
+    <string name="btnTerms">我同意服務條款和隱私政策</string>
+    <string name="textTripName">行程名稱</string>
+    <string name="textAll">全部</string>
+    <string name="textGroup">群組</string>
+    <string name="textPersonal">個人</string>
+    <string name="textDate">日期</string>
+    <string name="textDay">天數</string>
+    <string name="textUserID">使用者帳號</string>
+    <string name="textFriendList">好友列表</string>
+    <string name="textTakePictureLarge">拍照</string>
+    <string name="textPickPicture">挑照片</string>
+    <string name="col_Name">名稱</string>
+    <string name="col_Type">類型</string>
+    <string name="col_Address">地址</string>
+    <string name="CheckInSharePopUpOption">選項</string>
+    <string name="CheckInShareFormCamera">拍照</string>
+    <string name="CheckInShareFormAlbum">挑照片</string>
+    <string name="msg_NoCameraApp">沒可用的相機程式</string>
+    <string name="CheckInShareInsert">上傳</string>
+    <string name="etCheckInShareDescription">照片描述</string>
+    <string name="CheckInShareState">公開狀態</string>
+    <string name="CheckInShareLandMark">選擇地標</string>
+    <string name="checkInShareNoCameraApp">沒可用的相機程式</string>
+    <string name="textSave">儲存</string>
+    <string name="msg_accountExist">帳號已存在</string>
+    <string name="msg_accountNotValid">無效的信箱</string>
+    <string name="msg_accountNotEmpty">不可空白</string>
+    <string name="msg_birthdayNotVaild">無效的生日</string>
+    <string name="msg_InsertFail">上傳失敗</string>
+    <string name="msg_InsertSuccess">上傳成功</string>
+    <string name="msg_NoNetwork">沒有網路</string>
+    <string name="createAccountSuccess">創立新帳號成功</string>
+    <string name="textNotValid">無效</string>
+    <string name="textNotReadTerms">沒有閱讀條款</string>
+    <string name="textCheckInShareChooseLandMark">選擇地標</string>
+    <string name="textCheckInShareChooseLandMarkId">地標ID</string>
+    <string name="msg_NoFoundLandMark">附近無地標</string>
+    <string name="msg_NoImage">沒有照片</string>
+    <string name="msg_NoLandMark">附近無地標</string>
+    <string name="title_activity_land_mark_info">資訊</string>
+    <string name="mapInfoDetailTitle">標題</string>
+    <string name="openHours">開放時間</string>
+    <string name="landMarkDescription">描述</string>
+    <string name="landMarkAddress">地址</string>
+    <string name="title_activity_home_news__personal">HomeNewsActivity_Personal</string>
+    <string name="UserName">使用者名稱</string>
+    <string name="set">設置</string>
+    <string name="reminder">提醒</string>
+    <string name="logout">登出</string>
+    <string name="cancle">取消</string>
+    <string name="textTakePictureSmall">拍照</string>
+    <string name="install">需要上傳</string>
+    <string name="noAnything">您未選取任何選項</string>
+    <string name="msg_permission">您需要啟用顯示位置的權限！</string>
+    <string name="needAllowPermission">獲取您的位置必須具有這些權限。 你需要允許它們。</string>
+    <string name="msg_ok">好</string>
+    <string name="msg_cancel">取消</string>
+    <string name="msg_NoNewsFound">目前沒有網路</string>
+    <string name="msg_NoFoundPictures">沒有任何照片</string>
+    <string name="msg_NoFoundNewsPictures">沒有任何照片</string>
+    <string name="msg_NoMessage">沒有任何訊息</string>
+    <string name="noCommentMessage">沒有任何訊息</string>
+    <string name="msg_CollectionSuccess">收藏</string>
+    <string name="msg_Liked">讚</string>
+    <string name="msg_InsertFrindSuccess">好友邀請送出</string>
+    <string name="textShare">分享</string>
+    <string name="msg_LastDay">別點了,剩下最一天了</string>
+    <string name="Add">+</string>
+    <string name="minusDay">-</string>
+    <string name="moveMap">顯示地圖</string>
+    <string name="msg_UpdateFail">更新失敗</string>
+    <string name="msg_UpdateSuccess">更新成功</string>
+    <string name="delete">確定刪除行程?</string>
+    <string name="msg_DeleteFail">刪除失敗</string>
+    <string name="msg_DeleteSuccess">刪除成功</string>
+    <string name="msg_ShareFail">分享失敗</string>
+    <string name="msg_ShareSuccess">分享成功</string>
+    <string name="text_MessageEmpty">沒有訊息</string>
+    <string name="textAddtoGroup">新增行程</string>
+    <string name="msg_NoTripsFound">沒有行程</string>
+    <string name="msg_NameIsInvalid">名稱無效</string>
+    <string name="text_Exit">離開</string>
+    <string name="msg_WantToExit">您確定想離開嗎?</string>
+    <string name="text_No">取消</string>
+    <string name="CheckInShareLandMarkSelf">建立新地標</string>
+    <string name="textLandMarkName">名稱</string>
+    <string name="textLandMarkAddress">地址</string>
+    <string name="textLandMarkDescription">描述</string>
+    <string name="textLandMarkOpeningHours">開放時間</string>
+    <string name="textLandMarkEvaluation">評價 0 ~ 5</string>
+    <string name="ckLandMarkState">類型</string>
+    <string name="textAddFriendtoGroup">新增旅行朋友</string>
+</resources>

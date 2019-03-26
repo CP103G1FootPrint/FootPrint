@@ -7,6 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +18,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,6 +29,7 @@ import android.widget.Toast;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Home;
+import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -36,11 +42,23 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public class MainLoginIn extends AppCompatActivity {
 
@@ -51,6 +69,7 @@ public class MainLoginIn extends AppCompatActivity {
     private static final int REQ_PERMISSIONS = 0;
     private TextInputEditText tIETAccount, tIETPassword;
     private CommonTask userValidTask;
+    private byte[] image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,20 +105,42 @@ public class MainLoginIn extends AppCompatActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
 
                                 //讀出姓名 ID FB個人頁面連結
-
-                                Log.d("FB", "complete");
-                                Log.d("FB", object.optString("name"));
-                                Log.d("FB", object.optString("link"));
-                                Log.d("FB", object.optString("id"));
-                                Log.d("FB", object.optString("birthday"));
+//                                Log.d("FB1", "complete");
+//                                Log.d("FB2", object.optString("name"));
+//                                Log.d("FB3", object.optString("link"));
+//                                Log.d("FB4", object.optString("id"));
+//                                Log.d("FB5", object.optString("email"));
+//                                Log.d("FB6", object.optString("picture"));
+//                                Log.d("FB7", object.optString("birthday"));
 
                                 String emailInput = object.optString("id");
                                 String nickName = object.optString("name");
                                 String passwordInput = "footPrint"; //預設
                                 int integral = 0;
                                 int fb = 1;
-                                String birthday = "1/1"; //預設
+                                String birthday = object.optString("birthday");
                                 String category = "Capricorn 12/21 - 1/20"; //預設
+
+                                String p1 = object.optString("picture");
+                                JsonObject jsonObjectPicture = new Gson().fromJson(p1, JsonObject.class);
+
+                                String data = jsonObjectPicture.get("data").toString();
+                                JsonObject jsonObjectData = new Gson().fromJson(data, JsonObject.class);
+                                //url
+                                String uriString = jsonObjectData.get("url").getAsString();
+                                Bitmap picture = null;
+                                LoginTask loginTask = new LoginTask(uriString);
+                                try {
+                                    picture = loginTask.execute().get();
+                                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                                    picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                    image = out.toByteArray();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }
+
                                 SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
 
                                 if(isUserValidFb(object.optString("id"),1)){
@@ -118,6 +159,10 @@ public class MainLoginIn extends AppCompatActivity {
                                         JsonObject jsonObject = new JsonObject();
                                         jsonObject.addProperty("action", "accountInsert");
                                         jsonObject.addProperty("account", new Gson().toJson(account));
+                                        if(image != null){
+                                            String imageBase64 = Base64.encodeToString(image, Base64.DEFAULT);
+                                            jsonObject.addProperty("imageBase64", imageBase64);
+                                        }
                                         int count = 0;
                                         try {
                                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
@@ -149,7 +194,7 @@ public class MainLoginIn extends AppCompatActivity {
 
                 //包入你想要得到的資料 送出request
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,link");
+                parameters.putString("fields", "id,name,link,email,picture.width(600).height(600),birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
 
@@ -346,11 +391,101 @@ public class MainLoginIn extends AppCompatActivity {
         return isUser;
     }
 
-    //for debug test
-//    public void gologinClick(View view){
-//        Intent intent = new Intent(MainLoginIn.this, Home.class);
-//        startActivity(intent);
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            // Log exception
+            return null;
+        }
+    }
+
+    public static  Bitmap downloadImage(String url) {
+        Bitmap bitmap = null;
+        InputStream stream = null;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inSampleSize = 1;
+
+        try {
+            stream = getHttpConnection(url);
+            bitmap = BitmapFactory.decodeStream(stream, null, bmOptions);
+            stream.close();
+        }
+        catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("downloadImage"+ e1.toString());
+        }
+        return bitmap;
+    }
+
+    // Makes HttpURLConnection and returns InputStream
+
+    public static  InputStream getHttpConnection(String urlString)  throws IOException {
+
+        InputStream stream = null;
+        URL url = new URL(urlString);
+        URLConnection connection = url.openConnection();
+
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) connection;
+            httpConnection.setRequestMethod("GET");
+            httpConnection.connect();
+
+            if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                stream = httpConnection.getInputStream();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("downloadImage" + ex.toString());
+        }
+        return stream;
+    }
+
+    /**     AsyncTAsk for Image Bitmap  */
+    private class LoginTask extends AsyncTask<Void, Void, Bitmap> {
+        String url;
+
+        public LoginTask(String url) {
+            this.url = url;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            return downloadImage(url);
+        }
+
+    }
+//    private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
+//
+//
+//        @Override
+//        protected Bitmap doInBackground(String... params) {
+//
+//            System.out.println("doInBackground");
+//
+//            Bitmap bitmap = null;
+//
+//            bitmap = AppMethods.downloadImage(params[0]);
+//
+//            return bitmap;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//
+//            System.out.println("bitmap" + bitmap);
+//
+//        }
 //    }
+
+
 
     @Override
     public void onStop() {

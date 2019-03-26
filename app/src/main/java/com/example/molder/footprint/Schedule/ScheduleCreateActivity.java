@@ -165,7 +165,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(ScheduleCreateActivity.this);
-                myBuilder.setTitle(R.string.textAddtoGroup);
+                myBuilder.setTitle(R.string.textAddFriendtoGroup);
                 myBuilder.setMultiChoiceItems(list_items, checked_items, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -177,7 +177,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                     }
                 }) ;
                 myBuilder.setCancelable(false);
-                myBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                myBuilder.setPositiveButton(R.string.textConfirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -190,7 +190,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                         shTvGroupM.setText(itemFriends);
                     }
                 });
-                myBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                myBuilder.setNegativeButton(R.string.textCancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

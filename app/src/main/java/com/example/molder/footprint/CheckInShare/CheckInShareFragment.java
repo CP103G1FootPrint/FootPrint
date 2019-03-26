@@ -246,8 +246,15 @@ public class CheckInShareFragment extends Fragment implements GoogleApiClient.Co
                     try {
                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
                         count = Integer.valueOf(result);
-                        Intent intent = new Intent(getActivity(), Home.class);
-                        startActivity(intent);
+
+                        Fragment fragment = new HomeFragment();
+                        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.content, fragment);
+                        fragmentTransaction.commit();
+
+//                        Intent intent = new Intent(getActivity(), Home.class);
+//                        startActivity(intent);
                     } catch (Exception e) {
                         Log.e(TAG, e.toString());
                     }
@@ -596,7 +603,7 @@ public class CheckInShareFragment extends Fragment implements GoogleApiClient.Co
     public void onResume() {
         super.onResume();
         if (!checkPlayServices()) {
-            Toast.makeText(getActivity(), R.string.install, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), R.string.install, Toast.LENGTH_SHORT).show();
         }
     }
 

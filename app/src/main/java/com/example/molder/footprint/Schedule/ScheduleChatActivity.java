@@ -162,7 +162,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
                 Log.e(TAG, e.toString());
             }
             if (newsMessage == null || newsMessage.isEmpty()) {
-                Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
             } else {
                 messageAdapter = new ScheduleChatActivity_MessageAdapter(newsMessage);
                 recyclerView.setAdapter(messageAdapter);
