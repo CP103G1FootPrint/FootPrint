@@ -55,9 +55,8 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
     private List<HomeNewsActivity_Message_Messages> newsMessage;
     private HomeNewsActivity_Message_Messages messages;
     private HomeNews_MessageAdapter homeNews_messageAdapter;
-    private static final String SERVER_URI =
-            "ws://10.0.2.2:8080/WSChatBasic_Web/AllChatServer/";
-
+//    private static final String SERVER_URI = "ws://10.0.2.2:8080/WSChatBasic_Web/AllChatServer/";
+    private static final String SERVER_URI = "ws://sewd.no-ip.org:8080/WSChatBasic_Web/AllChatServer/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +118,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                 headImageTask.execute();
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -141,7 +140,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                 headImageTask.execute();
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -160,7 +159,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                 newsMessage = new Gson().fromJson(jsonIn, listType);
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (newsMessage == null || newsMessage.isEmpty()) {
                 Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
@@ -208,7 +207,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
 //              Intent intent = new Intent(this, HomeNewsActivity_Message.class);
 //              startActivity(intent);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (count == 0) {
                 Common.showToast(this, R.string.msg_InsertFail);
@@ -293,7 +292,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                     headImageTask.execute();
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }
 

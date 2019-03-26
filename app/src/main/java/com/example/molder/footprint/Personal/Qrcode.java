@@ -53,7 +53,7 @@ public class Qrcode extends AppCompatActivity {
 
 
         } catch (WriterException e) {
-            Log.e(TAG, e.toString());
+//            Log.e(TAG, e.toString());
         }
 
 

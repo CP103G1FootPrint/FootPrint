@@ -110,7 +110,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                 headImageTask.execute();
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             //用userId 找該使用者上傳的照片id
             if (Common.networkConnected(this)) {
@@ -126,7 +126,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                     personalPictures = new Gson().fromJson(jsonIn, listType);
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (personalPictures == null || personalPictures.isEmpty()) {
                     Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
@@ -162,7 +162,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                 }.getType();
                 friendship_Friends = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (friendship_Friends == null || friendship_Friends.isEmpty()) {
 
@@ -178,7 +178,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
                     }.getType();
                     friendship_Friends = new Gson().fromJson(jsonIn, listType);
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (friendship_Friends == null || friendship_Friends.isEmpty()) {
                     home_news_personal_addFriend.setChecked(false);

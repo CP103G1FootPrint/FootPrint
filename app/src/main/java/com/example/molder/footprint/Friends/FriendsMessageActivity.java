@@ -116,7 +116,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
                 String userNickName = String.valueOf(jsonIn);
                 friendNickName.setText(userNickName);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -162,7 +162,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
                 }.getType();
                 chatMessage = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (chatMessage == null || chatMessage.isEmpty()) {
                 Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
@@ -222,7 +222,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
 //                onGetMessagesSuccess(chatMessage);
                 String chatMessageJson = new Gson().toJson(chatMessages);
                 chatWebSocketClient.send(chatMessageJson);
-                Log.d(TAG, "output: " + chatMessageJson);
+//                Log.d(TAG, "output: " + chatMessageJson);
             }
 
         });
@@ -357,7 +357,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
                     headImageTask = new HeadImageTask(url, senderId, imageSize,otherChatViewHolder.circleImageView);
                     headImageTask.execute();
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }
 //            String alphabet = userNickName.substring(0, 1);
@@ -485,7 +485,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
                         break;
                 }
             }
-            Log.d(TAG, "received message: " + message);
+//            Log.d(TAG, "received message: " + message);
         }
     }
 

@@ -90,7 +90,7 @@ public class HomeNewsActivity_Personal_Friendship extends Activity {
                 headImageTask.execute();
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -115,7 +115,7 @@ public class HomeNewsActivity_Personal_Friendship extends Activity {
                             count = Integer.valueOf(result);
                             et_message.setText(null);
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                         if (count == 0) {
                             Common.showToast(HomeNewsActivity_Personal_Friendship.this, R.string.msg_InsertFail);
@@ -136,7 +136,7 @@ public class HomeNewsActivity_Personal_Friendship extends Activity {
                 HomeNewsActivity_Personal_Friendship_Friends friendsMessage = new HomeNewsActivity_Personal_Friendship_Friends("notify", userId, inviteeUserId, message, "text");
                 String chatMessageJson = new Gson().toJson(friendsMessage);
                 friendshipNotifyWebSocketClient.send(chatMessageJson);
-                Log.d(TAG, "output: " + chatMessageJson);
+//                Log.d(TAG, "output: " + chatMessageJson);
                 finish();
             }
         });

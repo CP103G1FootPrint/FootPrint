@@ -46,7 +46,7 @@ public class FriendshipNotifyWebSocketClient extends WebSocketClient {
                 "onOpen: Http status code = %d; status message = %s",
                 handshakeData.getHttpStatus(),
                 handshakeData.getHttpStatusMessage());
-        Log.d(TAG, "onOpen: " + text);
+//        Log.d(TAG, "onOpen: " + text);
     }
 
 //    // 訊息內容多(例如：圖片)，server端必須以byte型式傳送，此方法可以接收byte型式資料
@@ -90,7 +90,7 @@ public class FriendshipNotifyWebSocketClient extends WebSocketClient {
         String text = String.format(Locale.getDefault(),
                 "code = %d, reason = %s, remote = %b",
                 code, reason, remote);
-        Log.d(TAG, "onClose: " + text);
+//        Log.d(TAG, "onClose: " + text);
     }
 
     @Override

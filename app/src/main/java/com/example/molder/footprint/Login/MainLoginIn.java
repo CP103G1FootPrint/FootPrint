@@ -91,7 +91,7 @@ public class MainLoginIn extends AppCompatActivity {
 
                 accessToken = loginResult.getAccessToken();
 
-                Log.d("FB", "access token got.");
+//                Log.d("FB", "access token got.");
 
                 //send request and call graph api
 
@@ -169,7 +169,7 @@ public class MainLoginIn extends AppCompatActivity {
                                             count = Integer.valueOf(result);
 
                                         } catch (Exception e) {
-                                            Log.e(TAG, e.toString());
+//                                            Log.e(TAG, e.toString());
                                         }
                                         if (count == 0) {
                                             Common.showToast(MainLoginIn.this, R.string.msg_InsertFail);
@@ -206,7 +206,7 @@ public class MainLoginIn extends AppCompatActivity {
             public void onCancel() {
                 // App code
 
-                Log.d("FB", "CANCEL");
+//                Log.d("FB", "CANCEL");
             }
 
             //登入失敗
@@ -215,7 +215,7 @@ public class MainLoginIn extends AppCompatActivity {
             public void onError(FacebookException exception) {
                 // App code
 
-                Log.d("FB", exception.toString());
+//                Log.d("FB", exception.toString());
             }
 
         });
@@ -359,7 +359,7 @@ public class MainLoginIn extends AppCompatActivity {
                 String result = userValidTask.execute().get();
                 isUser = Boolean.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
                 isUser = false;
             }
         } else {
@@ -382,7 +382,7 @@ public class MainLoginIn extends AppCompatActivity {
                 String result = userValidTask.execute().get();
                 isUser = Boolean.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
                 isUser = false;
             }
         } else {

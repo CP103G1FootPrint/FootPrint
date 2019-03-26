@@ -40,7 +40,7 @@ public class PersonalSelfieCommon extends Fragment {
             int srcWidth = srcBitmap.getWidth();
             int srcHeight = srcBitmap.getHeight();
             String text = "source image size = " + srcWidth + "x" + srcHeight;
-            Log.d(TAG, text);
+//            Log.d(TAG, text);
             int longer = Math.max(srcWidth, srcHeight);
 
             if (longer > newSize) {
@@ -51,7 +51,7 @@ public class PersonalSelfieCommon extends Fragment {
                 System.gc();
                 text = "\nscale = " + scale + "\nscaled image size = " +
                         srcBitmap.getWidth() + "x" + srcBitmap.getHeight();
-                Log.d(TAG, text);
+//                Log.d(TAG, text);
             }
             return srcBitmap;
         }

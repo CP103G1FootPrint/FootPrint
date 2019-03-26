@@ -137,12 +137,12 @@ public class choosePic extends AppCompatActivity {
                         Intent intent = new Intent(choosePic.this, PersonalSetting.class);
                         startActivity(intent);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (count == 0) {
-                        Common.showToast(choosePic.this, R.string.msg_InsertFail);
+//                        Common.showToast(choosePic.this, R.string.msg_InsertFail);
                     } else {
-                        Common.showToast(choosePic.this, R.string.msg_InsertSuccess);
+//                        Common.showToast(choosePic.this, R.string.msg_InsertSuccess);
                     }
                 } else {
                     Common.showToast(choosePic.this, R.string.msg_NoNetwork);
@@ -205,7 +205,7 @@ public class choosePic extends AppCompatActivity {
                     crop(uri);
                     break;
                 case REQ_CROP_PICTURE:
-                    Log.d(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
+//                    Log.d(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
                     try {
                         Bitmap picture = BitmapFactory.decodeStream(
                                 choosePic.this.getContentResolver().openInputStream(croppedImageUri));
@@ -214,7 +214,7 @@ public class choosePic extends AppCompatActivity {
                         picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
                         image = out.toByteArray();
                     } catch (FileNotFoundException e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     break;
             }

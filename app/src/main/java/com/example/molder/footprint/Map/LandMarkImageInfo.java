@@ -91,10 +91,10 @@ public class LandMarkImageInfo extends Activity {
                 //解析 json to gson
                 locations = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (locations == null || locations.isEmpty()) {
-                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
             } else {
                 LandMark location = locations.get(0);
                 //找出地標裡所有照片id
@@ -111,10 +111,10 @@ public class LandMarkImageInfo extends Activity {
                         //解析 json to gson
                         pictures = new Gson().fromJson(jsonIn, listType);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (pictures == null || pictures.isEmpty()) {
-                        Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                     } else {
                         //recycleView
                         imageInfoRecyclerView.setLayoutManager(
@@ -125,7 +125,7 @@ public class LandMarkImageInfo extends Activity {
                         imageInfoRecyclerView.scrollToPosition(imagePosition);
                     }
                 } else {
-                    Toast.makeText(this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
                 }
 
             }

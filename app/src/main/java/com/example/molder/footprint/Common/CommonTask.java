@@ -40,7 +40,7 @@ public class CommonTask extends AsyncTask<String, Integer, String> {
             connection.setRequestProperty("charset", "UTF-8");
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
             bw.write(outStr);
-            Log.d(TAG, "output: " + outStr);
+//            Log.d(TAG, "output: " + outStr);
             bw.close();
 
             int responseCode = connection.getResponseCode();
@@ -51,16 +51,16 @@ public class CommonTask extends AsyncTask<String, Integer, String> {
                     inStr.append(line);
                 }
             } else {
-                Log.d(TAG, "response code: " + responseCode);
+//                Log.d(TAG, "response code: " + responseCode);
             }
         } catch (IOException e) {
-            Log.e(TAG, e.toString());
+//            Log.e(TAG, e.toString());
         } finally {
             if (connection != null) {
                 connection.disconnect();
             }
         }
-        Log.d(TAG, "input: " + inStr);
+//        Log.d(TAG, "input: " + inStr);
         return inStr.toString();
     }
 

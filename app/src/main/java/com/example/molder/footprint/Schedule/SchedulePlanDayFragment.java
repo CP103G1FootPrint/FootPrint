@@ -208,10 +208,10 @@ public class SchedulePlanDayFragment extends Fragment {
                 //解析 json to gson
                 locations = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (locations == null || locations.isEmpty()) {
-                Common.showToast(mContext, R.string.msg_NoFoundLandMark);
+//                Common.showToast(mContext, R.string.msg_NoFoundLandMark);
             } else {
                 showResult(locations);
             }
@@ -367,7 +367,7 @@ public class SchedulePlanDayFragment extends Fragment {
                 //解析 json to gson
                 mDatas = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
     }
@@ -447,12 +447,12 @@ public class SchedulePlanDayFragment extends Fragment {
                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                 count = Integer.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Common.showToast(getActivity(), R.string.msg_InsertFail);
+//                Common.showToast(getActivity(), R.string.msg_InsertFail);
             } else {
-                Common.showToast(getActivity(), R.string.msg_InsertSuccess);
+//                Common.showToast(getActivity(), R.string.msg_InsertSuccess);
             }
         } else {
             Common.showToast(getActivity(), R.string.msg_NoNetwork);
@@ -472,12 +472,12 @@ public class SchedulePlanDayFragment extends Fragment {
                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                 count = Integer.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Common.showToast(getActivity(), R.string.msg_InsertFail);
+//                Common.showToast(getActivity(), R.string.msg_InsertFail);
             } else {
-                Common.showToast(getActivity(), R.string.msg_InsertSuccess);
+//                Common.showToast(getActivity(), R.string.msg_InsertSuccess);
             }
         } else {
             Common.showToast(getActivity(), R.string.msg_NoNetwork);

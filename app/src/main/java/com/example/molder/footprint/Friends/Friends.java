@@ -80,7 +80,7 @@ public class Friends extends Fragment implements FragmentBackHandler {
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 

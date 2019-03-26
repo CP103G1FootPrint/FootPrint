@@ -118,7 +118,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                 }.getType();
                 newsFragment_news = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (newsFragment_news == null || newsFragment_news.isEmpty()) {
                 Common.showToast(activity, R.string.msg_NoNewsFound);
@@ -401,7 +401,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                                 count = Integer.valueOf(result);
                             } catch (Exception e) {
-                                Log.e(TAG, e.toString());
+//                                Log.e(TAG, e.toString());
                             }
                             if (count == 0) {
                                 Common.showToast(activity, R.string.msg_InsertFail);
@@ -427,7 +427,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                                 count = Integer.valueOf(result);
                             } catch (Exception e) {
-                                Log.e(TAG, e.toString());
+//                                Log.e(TAG, e.toString());
                             }
                             if (count == 0) {
                                 Common.showToast(activity, R.string.msg_InsertFail);
@@ -455,7 +455,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
                             count = Integer.valueOf(result);
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                         if (count == 0) {
 //                            Common.showToast(activity, R.string.msg_InsertFail);
@@ -487,12 +487,12 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                                 count = Integer.valueOf(result);
                             } catch (Exception e) {
-                                Log.e(TAG, e.toString());
+//                                Log.e(TAG, e.toString());
                             }
                             if (count == 0) {
-                                Common.showToast(activity, R.string.msg_InsertFail);
+//                                Common.showToast(activity, R.string.msg_InsertFail);
                             } else {
-                                Common.showToast(activity, R.string.msg_CollectionSuccess);
+//                                Common.showToast(activity, R.string.msg_CollectionSuccess);
                             }
                         } else {
                             Common.showToast(activity, R.string.msg_NoNetwork);
@@ -514,7 +514,7 @@ public class HomeNewsFragment extends Fragment implements FragmentBackHandler {
                                 Log.e(TAG, e.toString());
                             }
                             if (count == 0) {
-                                Common.showToast(activity, R.string.msg_InsertFail);
+//                                Common.showToast(activity, R.string.msg_InsertFail);
                             } else {
 //                                Common.showToast(activity, R.string.msg_InsertSuccess);
                             }

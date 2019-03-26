@@ -122,7 +122,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
 //                Toast.makeText(getActivity(), texts, Toast.LENGTH_SHORT).show();
                 textViewCounter.setText(texts);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (friendship_Friends == null || friendship_Friends.isEmpty()) {
                 Common.showToast(activity, R.string.msg_NoNewsFound);
@@ -203,7 +203,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
                     headImageTask.execute();
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }else{
 //                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
