@@ -47,7 +47,9 @@ public class ScheduleChatActivity extends AppCompatActivity {
     private CommonTask userIdTask, messageTask;
     private HeadImageTask headImageTask;
     private int imageSize, imageId;
-    private List<ScheduleChatActivity_Messages> newsMessage = null;
+    private List<ScheduleChatActivity_Messages> newsMessage;
+    private ScheduleChatActivity_Messages messages;
+    private ScheduleChatActivity_MessageAdapter messageAdapter;
     private int tripId ;
 
 
@@ -56,7 +58,8 @@ public class ScheduleChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_all_chat);
-
+        recyclerView = findViewById(R.id.sh_rv_home_news_message);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));//這邊輸入語法可以設定水平或垂直呈現
         imageSize = getResources().getDisplayMetrics().widthPixels;
 
         //刷新資料
@@ -70,10 +73,8 @@ public class ScheduleChatActivity extends AppCompatActivity {
             }
         });
 
-        handleViews();
+//        handleViews();
         showResults();
-
-
     }
 
     private void showResults() {
@@ -83,6 +84,10 @@ public class ScheduleChatActivity extends AppCompatActivity {
         sendButton = findViewById(R.id.sh_bt_Comment);
         commentMessage = findViewById(R.id.sh_ti_Go_To_Comment);
         personalUserHeadPicture = findViewById(R.id.sh_ci_Comment_user);
+
+        int location = commentMessage.length();
+        commentMessage.setSelection(location);
+
         //打開上一頁的打包的資料
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -159,7 +164,8 @@ public class ScheduleChatActivity extends AppCompatActivity {
             if (newsMessage == null || newsMessage.isEmpty()) {
                 Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
             } else {
-                recyclerView.setAdapter(new ScheduleChatActivity.ScheduleChatActivity_MessageAdapter(this, newsMessage));
+                messageAdapter = new ScheduleChatActivity_MessageAdapter(newsMessage);
+                recyclerView.setAdapter(messageAdapter);
             }
         }
 
@@ -174,6 +180,8 @@ public class ScheduleChatActivity extends AppCompatActivity {
                     // Toast.makeText(this, R.string.msg_NoMessage, Toast.LENGTH_SHORT).show();
                 } else {
                     insertMessage();
+                    onGetMessagesSuccess(messages);
+
                 }
             }
         });
@@ -189,7 +197,6 @@ public class ScheduleChatActivity extends AppCompatActivity {
 
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/ChatMessageServlet";
-            ScheduleChatActivity_Messages messages;
             messages = new ScheduleChatActivity_Messages(0, personalUserId, message, tripId);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "insert");
@@ -213,17 +220,31 @@ public class ScheduleChatActivity extends AppCompatActivity {
         }
     }
 
+
+    public void onGetMessagesSuccess(ScheduleChatActivity_Messages message) {
+        if (messageAdapter == null) {
+            messageAdapter = new ScheduleChatActivity_MessageAdapter(new ArrayList<ScheduleChatActivity_Messages>());
+            recyclerView.setAdapter(messageAdapter);
+        }
+        messageAdapter.add(message);
+        recyclerView.smoothScrollToPosition(messageAdapter.getItemCount() - 1);
+    }
+
     private class ScheduleChatActivity_MessageAdapter extends
             RecyclerView.Adapter<ScheduleChatActivity.ScheduleChatActivity_MessageAdapter.MyViewHolder> {
         Context context;
-        List<ScheduleChatActivity_Messages> newsMessage;
+//        List<ScheduleChatActivity_Messages> newsMessage;
 
-        public ScheduleChatActivity_MessageAdapter(Context context,
-                                                   List<ScheduleChatActivity_Messages> newsMessage) {
-            this.context = context;
-            this.newsMessage = newsMessage;
+        public ScheduleChatActivity_MessageAdapter(List<ScheduleChatActivity_Messages> newsMessages) {
+//            this.context = context;
+            newsMessage = newsMessages;
             imageSize = getResources().getDisplayMetrics().widthPixels / 3; //getDisplayMetrics()取得目前螢幕
 
+        }
+
+        public void add(ScheduleChatActivity_Messages message) {
+            newsMessage.add(message);
+            notifyItemInserted(newsMessage.size() - 1);
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -242,7 +263,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
         @NonNull
         @Override
         public ScheduleChatActivity.ScheduleChatActivity_MessageAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = layoutInflater.inflate(R.layout.activity_home_news__message_item, viewGroup, false);
             return new ScheduleChatActivity.ScheduleChatActivity_MessageAdapter.MyViewHolder(itemView);
         }
@@ -285,15 +306,15 @@ public class ScheduleChatActivity extends AppCompatActivity {
         }
     }
 
-    private void handleViews() {
-        recyclerView = findViewById(R.id.sh_rv_home_news_message);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));//這邊輸入語法可以設定水平或垂直呈現
-        List<ScheduleChatActivity_Messages> newsMessageList = getNewsMessage();
-        recyclerView.setAdapter(new ScheduleChatActivity.ScheduleChatActivity_MessageAdapter(this, newsMessageList));
-    }
+//    private void handleViews() {
+//        recyclerView = findViewById(R.id.sh_rv_home_news_message);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));//這邊輸入語法可以設定水平或垂直呈現
+//        List<ScheduleChatActivity_Messages> newsMessageList = getNewsMessage();
+//        recyclerView.setAdapter(new ScheduleChatActivity.ScheduleChatActivity_MessageAdapter(this, newsMessageList));
+//    }
 
-    protected List<ScheduleChatActivity_Messages> getNewsMessage() {
-        List<ScheduleChatActivity_Messages> newsMessage = new ArrayList<>();
-        return newsMessage;
-    }
+//    protected List<ScheduleChatActivity_Messages> getNewsMessage() {
+//        List<ScheduleChatActivity_Messages> newsMessage = new ArrayList<>();
+//        return newsMessage;
+//    }
 }

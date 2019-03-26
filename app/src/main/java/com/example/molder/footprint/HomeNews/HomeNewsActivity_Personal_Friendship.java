@@ -51,7 +51,7 @@ public class HomeNewsActivity_Personal_Friendship extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        // 設定目前聊天對象
+        // 設定好友邀請對象
         FriendshipNotifyWebSocketClient.friendInChat = inviteeUserId;
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

@@ -10,7 +10,7 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_margin="10dp"
-        android:src="@drawable/profile_picture_pinky"
+        android:src="@drawable/ic_launcher"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
-        android:text="Pinky"
         android:textColor="#000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/ci_profile＿picture"
@@ -32,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Taipei"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/tv_news_userName"
         app:layout_constraintStart_toEndOf="@id/tv_news_userName" />
@@ -42,8 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_marginTop="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/home_news_picture"
+        android:scaleType="fitXY"
+        android:src="@drawable/pictureloading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ci_profile＿picture" />
 
@@ -110,7 +108,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="12dp"
-        android:text="ddddddddd"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@id/ib_news_like"
         app:layout_constraintTop_toBottomOf="@id/ib_news_like" />

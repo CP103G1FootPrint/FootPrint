@@ -48,7 +48,7 @@ public class PersonalHome extends Fragment {
     private View personal_fragment;
     private PagerAdapter personalhomePagerAdapter;
     private HeadImageTask headImageTask;
-    private TextView tv_id, tv_point;
+    private TextView tv_id, tv_point,tv_userID;
     private ImageView piggy, selfePic;
     private int imageSize;
     private String url;
@@ -73,11 +73,12 @@ public class PersonalHome extends Fragment {
         piggy = personal_fragment.findViewById(R.id.piggy);
         selfePic = personal_fragment.findViewById(R.id.selfePic);
         imageSize = getResources().getDisplayMetrics().widthPixels;
+        tv_userID = personal_fragment.findViewById(R.id.tv_userID);
 
 
         SharedPreferences preferences = getActivity().getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         String userId = preferences.getString("userId", "");//抓使用者帳號
-
+        tv_userID.setText("userID:" +userId);
 
         url = Common.URL + "/PicturesServlet";
         headImageTask = new HeadImageTask(url, userId, imageSize, selfePic);

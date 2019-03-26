@@ -52,7 +52,8 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
     private CommonTask userIdTask, messageTask;
     private HeadImageTask headImageTask;
     private int imageSize, imageId;
-    private List<HomeNewsActivity_Message_Messages> newsMessage = null;
+    private List<HomeNewsActivity_Message_Messages> newsMessage;
+    private HomeNewsActivity_Message_Messages messages;
     private HomeNews_MessageAdapter homeNews_messageAdapter;
     private static final String SERVER_URI =
             "ws://10.0.2.2:8080/WSChatBasic_Web/AllChatServer/";
@@ -63,7 +64,8 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_news__message);
         imageSize = getResources().getDisplayMetrics().widthPixels/10;
-
+        recyclerView = findViewById(R.id.rv_home_news_message);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));//這邊輸入語法可以設定水平或垂直呈現
         //刷新資料
         swipeRefreshLayout = this.findViewById(R.id.message_SwipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -74,8 +76,6 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-        handleViews();
         showResults();
     }
 
@@ -165,7 +165,8 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
             if (newsMessage == null || newsMessage.isEmpty()) {
                 Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
             } else {
-                recyclerView.setAdapter(new HomeNews_MessageAdapter(this, newsMessage));
+                homeNews_messageAdapter = new HomeNews_MessageAdapter(newsMessage);
+                recyclerView.setAdapter(homeNews_messageAdapter);
             }
         }
 
@@ -177,6 +178,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
                     Toast.makeText(HomeNewsActivity_Message.this,"uhh",Toast.LENGTH_LONG).show();
                 } else {
                     insertMessage();
+                    onGetMessagesSuccess(messages);
 //                  HomeNews_MessageAdapter;
 //                  HomeNewsActivity_Message.this.notifyDataSetChanged();
 //                    homeNews_messageAdapter.notifyDataSetChanged();
@@ -193,7 +195,7 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         personalUserId = preferences.getString("userId", "");
         if (Common.networkConnected(this)) {
             String url = Common.URL + "/CommentServlet";
-            HomeNewsActivity_Message_Messages messages;
+//            HomeNewsActivity_Message_Messages messages;
             messages = new HomeNewsActivity_Message_Messages(0, personalUserId, message, imageId);
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("action", "insert");
@@ -218,17 +220,28 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         }
     }
 
-    private class HomeNews_MessageAdapter extends
-            RecyclerView.Adapter<HomeNews_MessageAdapter.MyViewHolder> {
-        Context context;
-        List<HomeNewsActivity_Message_Messages> newsMessage;
+    public void onGetMessagesSuccess(HomeNewsActivity_Message_Messages message) {
+        if (homeNews_messageAdapter == null) {
+            homeNews_messageAdapter = new HomeNews_MessageAdapter(new ArrayList<HomeNewsActivity_Message_Messages>());
+            recyclerView.setAdapter(homeNews_messageAdapter);
+        }
+        homeNews_messageAdapter.add(message);
+        recyclerView.smoothScrollToPosition(homeNews_messageAdapter.getItemCount() - 1);
+    }
 
-        public HomeNews_MessageAdapter(Context context,
-                                       List<HomeNewsActivity_Message_Messages> newsMessage) {
-            this.context = context;
-            this.newsMessage = newsMessage;
+    private class HomeNews_MessageAdapter extends RecyclerView.Adapter<HomeNews_MessageAdapter.MyViewHolder> {
+        private LayoutInflater layoutInflater;
+        Context context;
+//        List<HomeNewsActivity_Message_Messages> newsMessage;
+
+        public HomeNews_MessageAdapter(List<HomeNewsActivity_Message_Messages> newsMessages) {
+            newsMessage = newsMessages;
             imageSize = getResources().getDisplayMetrics().widthPixels / 20; //getDisplayMetrics()取得目前螢幕
 
+        }
+        public void add(HomeNewsActivity_Message_Messages message) {
+            newsMessage.add(message);
+            notifyItemInserted(newsMessage.size() - 1);
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -247,9 +260,11 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            MyViewHolder myViewHolder = null;
+            layoutInflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = layoutInflater.inflate(R.layout.activity_home_news__message_item, viewGroup, false);
-            return new MyViewHolder(itemView);
+            myViewHolder = new MyViewHolder(itemView);
+            return myViewHolder;
         }
 
         @Override
@@ -290,16 +305,16 @@ public class HomeNewsActivity_Message extends AppCompatActivity {
         }
     }
 
-    private void handleViews() {
-        recyclerView = findViewById(R.id.rv_home_news_message);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));//這邊輸入語法可以設定水平或垂直呈現
-        List<HomeNewsActivity_Message_Messages> newsMessageList = getNewsMessage();
-        recyclerView.setAdapter(new HomeNews_MessageAdapter(this, newsMessageList));
-    }
+//    private void handleViews() {
+//        recyclerView = findViewById(R.id.rv_home_news_message);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));//這邊輸入語法可以設定水平或垂直呈現
+//        List<HomeNewsActivity_Message_Messages> newsMessageList = getNewsMessage();
+//        recyclerView.setAdapter(new HomeNews_MessageAdapter(newsMessageList));
+//    }
 
-    protected List<HomeNewsActivity_Message_Messages> getNewsMessage() {
-        List<HomeNewsActivity_Message_Messages> newsMessage = new ArrayList<>();
-        return newsMessage;
-    }
+//    protected List<HomeNewsActivity_Message_Messages> getNewsMessage() {
+//        List<HomeNewsActivity_Message_Messages> newsMessage = new ArrayList<>();
+//        return newsMessage;
+//    }
 }
 

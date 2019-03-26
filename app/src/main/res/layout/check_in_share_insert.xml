@@ -48,24 +48,33 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/upload" />
 
-            <ImageButton
-                android:id="@+id/btCheckInSharePickPicture"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:src="@drawable/add_photo"
-                android:layout_alignTop="@+id/btCheckInShareTakePicture"
-                android:layout_toRightOf="@+id/btCheckInShareTakePicture"
-                android:onClick="onPickPictureClick"
-                android:text="@string/CheckInShareFormAlbum" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_below="@+id/ivCheckInShare"
+            android:layout_centerHorizontal="true">
 
             <ImageButton
+                android:id="@+id/btCheckInSharePickPicture"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add_photo"
+                android:layout_toRightOf="@+id/btCheckInShareTakePicture"
+                android:background="#FAFAFA"
+                android:onClick="onPickPictureClick"
+                android:text="@string/CheckInShareFormAlbum" />
+            <ImageButton
                 android:id="@+id/btCheckInShareTakePicture"
-                android:layout_width="60dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:src="@drawable/add_cam"
-                android:layout_below="@+id/ivCheckInShare"
-                android:layout_alignLeft="@id/ivCheckInShare"
+                android:background="#FAFAFA"
                 android:onClick="onTakePictureClick" />
+        </LinearLayout>
+
         </RelativeLayout>
 
         <TextView
@@ -94,8 +103,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/CheckInShareLandMark"
-                android:textColor="#0000FF"
+                android:text="@string/CheckInShareLandMark"
+                android:textColor="@color/colorBlack"
                 android:layout_marginTop="10dp"/>
 
             <Button
@@ -103,8 +112,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/CheckInShareLandMarkSelf"
-                android:textColor="#0000FF"
+                android:text="@string/CheckInShareLandMarkSelf"
+                android:textColor="@color/colorBlack"
                 android:layout_marginTop="10dp"/>
 
         </LinearLayout>

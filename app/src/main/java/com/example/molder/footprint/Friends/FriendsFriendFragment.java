@@ -119,7 +119,7 @@ public class FriendsFriendFragment extends Fragment implements FragmentBackHandl
                 friendship_Friends = new Gson().fromJson(jsonIn, listType);
                 count = friendship_Friends.size();
                 String texts = String.valueOf(count);
-                Toast.makeText(getActivity(), texts, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), texts, Toast.LENGTH_SHORT).show();
                 textViewCounter.setText(texts);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());

@@ -10,7 +10,7 @@
         android:layout_width="160dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/home_news_picture"
+        android:src="@drawable/pictureloading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 

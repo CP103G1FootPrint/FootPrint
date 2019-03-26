@@ -63,6 +63,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
     private static final int VIEW_TYPE_OTHER = 2;
     private static final String TAG = "FriendsMessageActivity";
     private LocalBroadcastManager broadcastManager;
+    private TextView friendNickName;
     private EditText etMessage;
     private ImageButton ivSend;
     private String friend, sender;
@@ -100,6 +101,22 @@ public class FriendsMessageActivity extends AppCompatActivity {
                         friend = chatMessage.getReceiver();
                     }
                 }
+            }
+        }
+        friendNickName = findViewById(R.id.friendNickName);
+        if (Common.networkConnected(FriendsMessageActivity.this)) {
+            String url = Common.URL + "/PicturesServlet";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("action", "findUserNickName");
+            jsonObject.addProperty("id", friend);
+            userIdTask = new CommonTask(url, jsonObject.toString());
+            try {
+                //顯示使用者暱稱
+                String jsonIn = userIdTask.execute().get();
+                String userNickName = String.valueOf(jsonIn);
+                friendNickName.setText(userNickName);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
             }
         }
 

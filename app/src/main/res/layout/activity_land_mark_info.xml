@@ -41,7 +41,7 @@
         android:layout_height="250dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
-        android:src="@drawable/home_news_picture"/>
+        android:src="@drawable/pictureloading" />
 
     <FrameLayout
     android:layout_width="match_parent"

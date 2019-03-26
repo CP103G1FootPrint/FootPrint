@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.molder.footprint.Common.Common;
 import com.example.molder.footprint.Common.CommonTask;
 import com.example.molder.footprint.Common.ImageTask;
+import com.example.molder.footprint.Login.Account;
 import com.example.molder.footprint.Map.LandMark;
 import com.example.molder.footprint.R;
 import com.google.gson.Gson;
@@ -44,6 +45,7 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
     private String userId, userNickName, userNowId;
     private ImageTask picturesTask;
     private int imageSize;
+    private Account account;
     private List<HomeNewsFragment_PersonalPictures> personalPictures = null;
     private List<HomeNewsActivity_Personal_Friendship_Friends> friendship_Friends;
 
@@ -87,18 +89,20 @@ public class HomeNewsActivity_Personal extends AppCompatActivity {
         }
         userName.setText(userId);
 
-        //先抓userId
+        //抓取userinfo
         if (Common.networkConnected(this)) {
-            String url = Common.URL + "/PicturesServlet";
+            String url = Common.URL + "/AccountServlet";
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("action", "findUserNickName");
+            jsonObject.addProperty("action", "findSelfInfo");
             jsonObject.addProperty("id", userId);
             userIdTask = new CommonTask(url, jsonObject.toString());
             try {
-                //顯示使用者暱稱
                 String jsonIn = userIdTask.execute().get();
-                userNickName = String.valueOf(jsonIn);
-                nickName.setText(userNickName);
+                Type listType = new TypeToken<Account>() {
+                }.getType();
+                account = new Gson().fromJson(jsonIn, listType);
+                nickName.setText(account.getNickname());
+                userBirthday.setText(account.getBirthday());
 
                 //使用者頭像
                 url = Common.URL + "/PicturesServlet";
