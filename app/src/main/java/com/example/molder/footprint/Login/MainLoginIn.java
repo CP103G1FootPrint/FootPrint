@@ -58,6 +58,7 @@ import java.net.URLConnection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public class MainLoginIn extends AppCompatActivity {
 
@@ -104,14 +105,13 @@ public class MainLoginIn extends AppCompatActivity {
                             public void onCompleted(JSONObject object, GraphResponse response) {
 
                                 //讀出姓名 ID FB個人頁面連結
-
-                                Log.d("FB1", "complete");
-                                Log.d("FB2", object.optString("name"));
-                                Log.d("FB3", object.optString("link"));
-                                Log.d("FB4", object.optString("id"));
-                                Log.d("FB5", object.optString("email"));
-                                Log.d("FB6", object.optString("picture"));
-                                Log.d("FB7", object.optString("birthday"));
+//                                Log.d("FB1", "complete");
+//                                Log.d("FB2", object.optString("name"));
+//                                Log.d("FB3", object.optString("link"));
+//                                Log.d("FB4", object.optString("id"));
+//                                Log.d("FB5", object.optString("email"));
+//                                Log.d("FB6", object.optString("picture"));
+//                                Log.d("FB7", object.optString("birthday"));
 
                                 String emailInput = object.optString("id");
                                 String nickName = object.optString("name");
@@ -128,18 +128,18 @@ public class MainLoginIn extends AppCompatActivity {
                                 JsonObject jsonObjectData = new Gson().fromJson(data, JsonObject.class);
                                 //url
                                 String uriString = jsonObjectData.get("url").getAsString();
-//                              String str = "http://google.com";
-//                              Uri uri1 = Uri.parse(str);
-
-                                Bitmap picture = downloadImage(uriString);
-
-
-//                                Bitmap picture = getBitmapFromURL(uriString);
-                                //picture = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri1));
-
-                                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                                picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                                image = out.toByteArray();
+                                Bitmap picture = null;
+                                LoginTask loginTask = new LoginTask(uriString);
+                                try {
+                                    picture = loginTask.execute().get();
+                                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                                    picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                                    image = out.toByteArray();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                } catch (ExecutionException e) {
+                                    e.printStackTrace();
+                                }
 
                                 SharedPreferences preferences = getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
 
@@ -449,6 +449,19 @@ public class MainLoginIn extends AppCompatActivity {
     }
 
     /**     AsyncTAsk for Image Bitmap  */
+    private class LoginTask extends AsyncTask<Void, Void, Bitmap> {
+        String url;
+
+        public LoginTask(String url) {
+            this.url = url;
+        }
+
+        @Override
+        protected Bitmap doInBackground(Void... voids) {
+            return downloadImage(url);
+        }
+
+    }
 //    private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
 //
 //
@@ -472,11 +485,7 @@ public class MainLoginIn extends AppCompatActivity {
 //        }
 //    }
 
-    //for debug test
-//    public void gologinClick(View view){
-//        Intent intent = new Intent(MainLoginIn.this, Home.class);
-//        startActivity(intent);
-//    }
+
 
     @Override
     public void onStop() {
