@@ -79,7 +79,7 @@ public class CreateLandMark extends AppCompatActivity {
                 //將使用者輸入的地址轉成物件
                 addressList = geocoder.getFromLocationName(landMarkAddress, maxResults);
             } catch (IOException e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (addressList == null || addressList.isEmpty()) {
                 //GPS 位置
@@ -103,7 +103,7 @@ public class CreateLandMark extends AppCompatActivity {
                     landMarkId = Integer.valueOf(result);
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (landMarkId == 0) {
                     Common.showToast(this, R.string.msg_InsertFail);
@@ -123,7 +123,7 @@ public class CreateLandMark extends AppCompatActivity {
                     count = Integer.valueOf(result);
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (count == 0) {
                     Common.showToast(this, R.string.msg_InsertFail);

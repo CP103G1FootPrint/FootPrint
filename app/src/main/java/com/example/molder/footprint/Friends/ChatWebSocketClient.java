@@ -44,7 +44,7 @@ public class ChatWebSocketClient extends WebSocketClient {
                 "onOpen: Http status code = %d; status message = %s",
                 handshakeData.getHttpStatus(),
                 handshakeData.getHttpStatusMessage());
-        Log.d(TAG, "onOpen: " + text);
+//        Log.d(TAG, "onOpen: " + text);
     }
 
     // 訊息內容多(例如：圖片)，server端必須以byte型式傳送，此方法可以接收byte型式資料
@@ -52,7 +52,7 @@ public class ChatWebSocketClient extends WebSocketClient {
     public void onMessage(ByteBuffer bytes) {
         int length = bytes.array().length;
         String message = new String(bytes.array());
-        Log.d(TAG, "onMessage(ByteBuffer): length = " + length);
+//        Log.d(TAG, "onMessage(ByteBuffer): length = " + length);
         onMessage(message);
     }
 
@@ -69,7 +69,7 @@ public class ChatWebSocketClient extends WebSocketClient {
             // 開啟聊天視窗後會將聊天對象儲存在friendInChat
             String text = "sender: " + chatMessage.getSender() +
                     "\nfriendInChat: " + friendInChat;
-            Log.d(TAG, text);
+//            Log.d(TAG, text);
             /* 接收到聊天訊息但尚未開啟聊天畫面(ChatActivity)或是即便開了聊天對象不是送訊者，
                就顯示Notification告知user，user點擊後即開啟聊天畫面 */
             if (friendInChat == null || !friendInChat.equals(chatMessage.getSender())) {
@@ -89,7 +89,7 @@ public class ChatWebSocketClient extends WebSocketClient {
         String text = String.format(Locale.getDefault(),
                 "code = %d, reason = %s, remote = %b",
                 code, reason, remote);
-        Log.d(TAG, "onClose: " + text);
+//        Log.d(TAG, "onClose: " + text);
     }
 
     @Override

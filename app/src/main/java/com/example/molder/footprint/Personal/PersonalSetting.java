@@ -89,7 +89,7 @@ public class PersonalSetting extends AppCompatActivity {
                 passwordEdit.setText(account.getPassword());
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -232,10 +232,10 @@ public class PersonalSetting extends AppCompatActivity {
                     count = Integer.valueOf(result);
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (count == 0) {
-                    Common.showToast(this, R.string.msg_InsertFail);
+//                    Common.showToast(this, R.string.msg_InsertFail);
                 } else {
 //                    Common.showToast(this, R.string.msg_InsertSuccess);
                     finish();

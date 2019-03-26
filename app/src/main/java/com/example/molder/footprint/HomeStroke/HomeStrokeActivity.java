@@ -275,7 +275,7 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
                 //解析 json to gson
                 mDatas = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }if (mDatas == null || mDatas.isEmpty()) {
 //                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                 mapFragment.getMapAsync(this);
@@ -302,7 +302,7 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
                 //解析 json to gson
                 mDatas = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }if (mDatas == null || mDatas.isEmpty()) {
 //                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                 mapFragment.getMapAsync(this);
@@ -423,7 +423,7 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
                     String result = imageIdTask.execute().get();
                     imageId = Integer.valueOf(result);
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             } else {
                 Common.showToast(HomeStrokeActivity.this, R.string.msg_NoNetwork);
@@ -440,7 +440,7 @@ public class HomeStrokeActivity extends AppCompatActivity implements OnMapReadyC
                 // passing null and calling get() means not to run FindImageByIdTask.onPostExecute()
                 bitmap = landMarkImageTask.execute().get();
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);

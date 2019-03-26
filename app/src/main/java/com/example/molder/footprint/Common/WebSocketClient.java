@@ -32,7 +32,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
                 "onOpen: Http status code = %d; status message = %s",
                 handshakeData.getHttpStatus(),
                 handshakeData.getHttpStatusMessage());
-        Log.d(TAG, "onOpen: " + text);
+//        Log.d(TAG, "onOpen: " + text);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         // type: 訊息種類，有open(有user連線), close(有user離線), chat(其他user傳送來的聊天訊息)
         String type = jsonObject.get("type").getAsString();
         sendMessageBroadcast(type, message);
-        Log.d(TAG, "onMessage: " + message);
+//        Log.d(TAG, "onMessage: " + message);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class WebSocketClient extends org.java_websocket.client.WebSocketClient {
         String text = String.format(Locale.getDefault(),
                 "code = %d, reason = %s, remote = %b",
                 code, reason, remote);
-        Log.d(TAG, "onClose: " + text);
+//        Log.d(TAG, "onClose: " + text);
     }
 
     @Override

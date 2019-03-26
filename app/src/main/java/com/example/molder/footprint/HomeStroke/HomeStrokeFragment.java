@@ -105,7 +105,7 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
                 }.getType();
                 trips = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (trips == null || trips.isEmpty()) {
                 Common.showToast(activity, R.string.msg_NoTripsFound);
@@ -179,7 +179,7 @@ public class HomeStrokeFragment extends Fragment implements FragmentBackHandler 
                     headImageTask.execute();
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }else{
 //                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();

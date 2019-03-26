@@ -19,16 +19,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class Common {
 	// Android官方模擬器連結本機web server可以直接使用 http://10.0.2.2
 //	public final static String URL = "http://10.0.2.2:8080/";
-//    public final static String URL = "http://sewd.no-ip.org:8080/FootPrint";
+    public final static String URL = "http://sewd.no-ip.org:8080/FootPrint";
 //    public final static String URL = "http://192.168.196.89:8080/FootPrint";
-    public final static String URL = "http://10.0.2.2:8080/FootPrint";
+//    public final static String URL = "http://10.0.2.2:8080/FootPrint";
 
 
     private final static String TAG = "Common";
-    public static final String SERVER_URI =
-            "ws://10.0.2.2:8080/FootPrint/ChatServer/";
-//    public static final String SERVER_URI =
-//            "ws://192.168.196.157/WSChatBasic_Web/TwoChatServer/";
+//    public static final String SERVER_URI = "ws://10.0.2.2:8080/FootPrint/ChatServer/";
+    public static final String SERVER_URI = "ws://sewd.no-ip.org:8080/WSChatBasic_Web/TwoChatServer/";
     public static WebSocketClient webSocketClient;
 
 
@@ -38,7 +36,7 @@ public class Common {
         try {
             uri = new URI(SERVER_URI + userName);
         } catch (URISyntaxException e) {
-            Log.e(TAG, e.toString());
+//            Log.e(TAG, e.toString());
         }
         if (webSocketClient == null) {
             webSocketClient = new WebSocketClient(uri, context);
@@ -58,7 +56,7 @@ public class Common {
         SharedPreferences preferences =
                 context.getSharedPreferences(Common.PREF_FILE, MODE_PRIVATE);
         String userId = preferences.getString("userId", "");
-        Log.d(TAG, "userId = " + userId);
+//        Log.d(TAG, "userId = " + userId);
         return userId;
     }
 

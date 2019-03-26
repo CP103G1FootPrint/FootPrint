@@ -13,10 +13,8 @@ import java.util.List;
 public class Common {
 
     private static final String TAG = "Common";
-    public final static String SERVER_URI =
-            "ws://10.0.2.2:8080/FootPrint/ChatServer/";
-//    public final static String SERVER_URI =
-//            "http://192.168.196.89:8080/FootPrint/ChatServer/";
+//    public final static String SERVER_URI = "ws://10.0.2.2:8080/FootPrint/ChatServer/";
+    public final static String SERVER_URI = "ws://sewd.no-ip.org:8080/FootPrint/ChatServer/";
     public static ChatWebSocketClient chatWebSocketClient;
     private static List<String> friendList = new ArrayList<>();
 
@@ -27,7 +25,7 @@ public class Common {
             try {
                 uri = new URI(SERVER_URI + userName);
             } catch (URISyntaxException e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             chatWebSocketClient = new ChatWebSocketClient(uri, context);
             chatWebSocketClient.connect();
@@ -59,7 +57,7 @@ public class Common {
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
         String text = "source image size = " + srcWidth + "x" + srcHeight;
-        Log.d(TAG, text);
+//        Log.d(TAG, text);
         int longer = Math.max(srcWidth, srcHeight);
 
         if (longer > newSize) {
@@ -70,7 +68,7 @@ public class Common {
             System.gc();
             text = "\nscale = " + scale + "\nscaled image size = " +
                     srcBitmap.getWidth() + "x" + srcBitmap.getHeight();
-            Log.d(TAG, text);
+//            Log.d(TAG, text);
         }
         return srcBitmap;
     }

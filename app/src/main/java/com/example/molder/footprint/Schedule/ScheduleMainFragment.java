@@ -219,10 +219,10 @@ public class ScheduleMainFragment extends Fragment {
                         }
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (friendship_Friends == null || friendship_Friends.isEmpty()) {
-                    Common.showToast(activity, R.string.msg_NoNewsFound);
+//                    Common.showToast(activity, R.string.msg_NoNewsFound);
                 } else {
 
                 }
@@ -272,14 +272,14 @@ public class ScheduleMainFragment extends Fragment {
                                             String result = tripDeleteTask.execute().get();
                                             count = Integer.valueOf(result);
                                         } catch (Exception e) {
-                                            Log.e(TAG, e.toString());
+//                                            Log.e(TAG, e.toString());
                                         }
                                         if (count == 0) {
-                                            Common.showToast(activity, R.string.msg_DeleteFail);
+//                                            Common.showToast(activity, R.string.msg_DeleteFail);
                                         } else {
                                             trips.remove(i);
                                             notifyDataSetChanged();
-                                            Common.showToast(activity, R.string.msg_DeleteSuccess);
+//                                            Common.showToast(activity, R.string.msg_DeleteSuccess);
                                         }
                                     } else {
                                         Common.showToast(activity, R.string.msg_NoNetwork);
@@ -317,13 +317,13 @@ public class ScheduleMainFragment extends Fragment {
                                             String result = tripShareTask.execute().get();
                                             count = Integer.valueOf(result);
                                         } catch (Exception e) {
-                                            Log.e(TAG, e.toString());
+//                                            Log.e(TAG, e.toString());
                                         }
                                         if (count == 0) {
-                                            Common.showToast(activity, R.string.msg_ShareFail);
+//                                            Common.showToast(activity, R.string.msg_ShareFail);
                                         } else {
 
-                                            Common.showToast(activity, R.string.msg_ShareSuccess);
+//                                            Common.showToast(activity, R.string.msg_ShareSuccess);
                                         }
                                     } else {
                                         Common.showToast(activity, R.string.msg_NoNetwork);
@@ -375,7 +375,7 @@ public class ScheduleMainFragment extends Fragment {
                                 }
                             }
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                     }
                     checked_items = new boolean[list_items.length];
@@ -412,12 +412,12 @@ public class ScheduleMainFragment extends Fragment {
                                     String result = new CommonTask(url, jsonObject.toString()).execute().get();
                                     count = Integer.valueOf(result);
                                 } catch (Exception e) {
-                                    Log.e(TAG, e.toString());
+//                                    Log.e(TAG, e.toString());
                                 }
                                 if (count == 0) {
-                                    Common.showToast(activity, R.string.msg_InsertFail);
+//                                    Common.showToast(activity, R.string.msg_InsertFail);
                                 } else {
-                                    Common.showToast(activity, R.string.msg_InsertSuccess);
+//                                    Common.showToast(activity, R.string.msg_InsertSuccess);
                                 }
                             } else {
                                 Common.showToast(activity, R.string.msg_NoNetwork);
@@ -537,10 +537,10 @@ public class ScheduleMainFragment extends Fragment {
                         //解析 json to gson
                         trips = new Gson().fromJson(jsonIn, listType);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (trips == null || trips.isEmpty()) {
-                        Toast.makeText(activity, R.string.msg_NoTripsFound, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(activity, R.string.msg_NoTripsFound, Toast.LENGTH_SHORT).show();
                     } else {
 //                        showAllTrips();
                         recyclerView.setAdapter(new TripAdapter(activity, trips));

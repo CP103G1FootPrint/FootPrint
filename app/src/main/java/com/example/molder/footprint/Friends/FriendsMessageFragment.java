@@ -109,7 +109,7 @@ public class FriendsMessageFragment extends Fragment implements FragmentBackHand
                 }.getType();
                 friendship_Friends = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (friendship_Friends == null || friendship_Friends.isEmpty()) {
                 com.example.molder.footprint.Common.Common.showToast(activity, R.string.msg_NoNewsFound);
@@ -140,7 +140,7 @@ public class FriendsMessageFragment extends Fragment implements FragmentBackHand
                     }.getType();
                     chatMessages = new Gson().fromJson(jsonIn, listType);
                 }catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }if (chatMessages == null || chatMessages.isEmpty()) {
                     com.example.molder.footprint.Common.Common.showToast(activity, R.string.msg_NoNewsFound);
                 }else{
@@ -209,7 +209,7 @@ public class FriendsMessageFragment extends Fragment implements FragmentBackHand
                     headImageTask.execute();
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }else{
 //                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();

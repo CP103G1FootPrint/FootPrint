@@ -177,7 +177,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
             bitMapHeadImage = headImageTask.execute().get();
             bitHeadImage = getRoundedCornerBitmap(bitMapHeadImage);
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+//            Log.e(TAG, e.toString());
         }
         return view;
     }
@@ -288,7 +288,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                         //解析 json to gson
                         locations = new Gson().fromJson(jsonIn, listType);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (locations == null || locations.isEmpty()) {
 //                        Toast.makeText(mContext, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
@@ -459,7 +459,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                         //解析 json to gson
                         locations = new Gson().fromJson(jsonIn, listType);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (locations == null || locations.isEmpty()) {
 //                        Toast.makeText(mContext, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
@@ -555,7 +555,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                     String result = imageIdTask.execute().get();
                     imageId = Integer.valueOf(result);
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             } else {
                 Common.showToast(getActivity(), R.string.msg_NoNetwork);
@@ -572,7 +572,7 @@ public class HomeMapFragment extends Fragment implements OnMapReadyCallback,
                 // passing null and calling get() means not to run FindImageByIdTask.onPostExecute()
                 bitmap = landMarkImageTask.execute().get();
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);

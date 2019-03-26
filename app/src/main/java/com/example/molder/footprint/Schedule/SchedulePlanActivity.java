@@ -166,7 +166,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
                             count = Integer.valueOf(result);
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                     }
 
@@ -182,12 +182,12 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
                             count = Integer.valueOf(result);
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                         if (count == 0) {
-                            Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateFail);
+//                            Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateFail);
                         } else {
-                            Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateSuccess);
+//                            Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateSuccess);
                             //廣播
                             ScheduleDay scheduleDay = new ScheduleDay("ScheduleDay","dayChangeLess",userId,new Gson().toJson(friends),1, mTabLayout.getTabCount());
                             String scheduleMessageJson = new Gson().toJson(scheduleDay);
@@ -225,12 +225,12 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                         String result = new CommonTask(url, jsonObject.toString()).execute().get();
                         count = Integer.valueOf(result);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (count == 0) {
-                        Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateFail);
+//                        Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateFail);
                     } else {
-                        Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateSuccess);
+//                        Common.showToast(SchedulePlanActivity.this, R.string.msg_UpdateSuccess);
                         //廣播
                         ScheduleDay scheduleDay = new ScheduleDay("ScheduleDay","dayChangeAdd",userId,new Gson().toJson(friends),1, mTabLayout.getTabCount());
                         String scheduleMessageJson = new Gson().toJson(scheduleDay);
@@ -407,7 +407,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                 }.getType();
                 friends = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(this, R.string.msg_NoNetwork);
@@ -443,7 +443,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                 //解析 json to gson
                 mDatas = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }if (mDatas == null || mDatas.isEmpty()) {
 //                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                 mapFragment.getMapAsync(this);
@@ -470,7 +470,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                 //解析 json to gson
                 mDatas = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }if (mDatas == null || mDatas.isEmpty()) {
 //                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                 mapFragment.getMapAsync(this);
@@ -684,7 +684,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                     String result = imageIdTask.execute().get();
                     imageId = Integer.valueOf(result);
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             } else {
                 Common.showToast(SchedulePlanActivity.this, R.string.msg_NoNetwork);
@@ -701,7 +701,7 @@ public class SchedulePlanActivity extends AppCompatActivity implements OnMapRead
                 // passing null and calling get() means not to run FindImageByIdTask.onPostExecute()
                 bitmap = landMarkImageTask.execute().get();
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (bitmap != null) {
                 imageView.setImageBitmap(bitmap);

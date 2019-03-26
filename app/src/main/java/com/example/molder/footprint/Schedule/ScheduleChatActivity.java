@@ -118,7 +118,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
                 headImageTask.execute();
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -140,7 +140,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
                 headImageTask.execute();
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
 
@@ -159,7 +159,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
                 newsMessage = new Gson().fromJson(jsonIn, listType);
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (newsMessage == null || newsMessage.isEmpty()) {
 //                Toast.makeText(this, R.string.msg_NoNewsFound, Toast.LENGTH_SHORT).show();
@@ -208,12 +208,12 @@ public class ScheduleChatActivity extends AppCompatActivity {
                 commentMessage.setText(null);
 
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Common.showToast(this, R.string.msg_InsertFail);
+//                Common.showToast(this, R.string.msg_InsertFail);
             } else {
-                Common.showToast(this, R.string.msg_InsertSuccess);
+//                Common.showToast(this, R.string.msg_InsertSuccess);
             }
         } else {
             Common.showToast(this, R.string.msg_NoNetwork);
@@ -294,7 +294,7 @@ public class ScheduleChatActivity extends AppCompatActivity {
                     headImageTask.execute();
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }
 

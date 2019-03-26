@@ -381,7 +381,7 @@ public class CheckInShareFragment extends Fragment implements GoogleApiClient.Co
                     crop(uri);
                     break;
                 case REQ_CROP_PICTURE:
-                    Log.d(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
+//                    Log.d(TAG, "REQ_CROP_PICTURE: " + croppedImageUri.toString());
                     try {
                         Bitmap picture = BitmapFactory.decodeStream(
                                 activity.getContentResolver().openInputStream(croppedImageUri));
@@ -390,7 +390,7 @@ public class CheckInShareFragment extends Fragment implements GoogleApiClient.Co
                         picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
                         image = out.toByteArray();
                     } catch (FileNotFoundException e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     break;
                 case REQ_Location:

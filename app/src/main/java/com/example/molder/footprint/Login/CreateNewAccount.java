@@ -103,7 +103,7 @@ public class CreateNewAccount extends AppCompatActivity {
                 String result = accountExistTask.execute().get();
                 accountExist = Boolean.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             // show an error message if the id exists;
             // otherwise, the error message should be clear
@@ -197,7 +197,7 @@ public class CreateNewAccount extends AppCompatActivity {
                     count = Integer.valueOf(result);
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
                 if (count == 0) {
                     Common.showToast(this, R.string.msg_InsertFail);

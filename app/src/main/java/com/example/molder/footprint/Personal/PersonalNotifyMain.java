@@ -103,7 +103,7 @@ public class PersonalNotifyMain extends Fragment {
                 }.getType();
                 friendship_Friends = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (friendship_Friends == null || friendship_Friends.isEmpty()) {
                 Common.showToast(activity, R.string.msg_NoNewsFound);
@@ -182,7 +182,7 @@ public class PersonalNotifyMain extends Fragment {
                     headImageTask.execute();
 
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }else{
 //                Toast.makeText(HomeNewsFragment.this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
@@ -203,10 +203,10 @@ public class PersonalNotifyMain extends Fragment {
                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
                             count = Integer.valueOf(result);
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                         if (count == 0) {
-                            Common.showToast(activity, R.string.msg_InsertFail);
+//                            Common.showToast(activity, R.string.msg_InsertFail);
                         } else {
 //                                Common.showToast(activity, R.string.msg_InsertSuccess);
                         }
@@ -233,10 +233,10 @@ public class PersonalNotifyMain extends Fragment {
                             String result = new CommonTask(url, jsonObject.toString()).execute().get();
                             count = Integer.valueOf(result);
                         } catch (Exception e) {
-                            Log.e(TAG, e.toString());
+//                            Log.e(TAG, e.toString());
                         }
                         if (count == 0) {
-                            Common.showToast(activity, R.string.msg_InsertFail);
+//                            Common.showToast(activity, R.string.msg_InsertFail);
                         } else {
 //                                Common.showToast(activity, R.string.msg_InsertSuccess);
                         }

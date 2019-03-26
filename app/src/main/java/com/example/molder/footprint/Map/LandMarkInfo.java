@@ -92,7 +92,7 @@ public class LandMarkInfo extends AppCompatActivity {
                     landMarkName = String.valueOf(jsonIn);
                     mapInfoDetailTitle.setText(landMarkName);
                 } catch (Exception e) {
-                    Log.e(TAG, e.toString());
+//                    Log.e(TAG, e.toString());
                 }
             }
         }
@@ -127,7 +127,7 @@ public class LandMarkInfo extends AppCompatActivity {
                 imageId = Integer.valueOf(result);
                 imageIdCheck = true;
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(this, R.string.msg_NoNetwork);
@@ -144,7 +144,7 @@ public class LandMarkInfo extends AppCompatActivity {
                 bitmap = landMarkImageTask.execute().get();
                 imageIdCheck = false;
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (bitmap != null) {
                 mapInfoDetailPicture.setImageBitmap(bitmap);
@@ -169,10 +169,10 @@ public class LandMarkInfo extends AppCompatActivity {
                 //解析 json to gson
                 locations = new Gson().fromJson(jsonIn, listType);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (locations == null || locations.isEmpty()) {
-                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
             } else {
                 LandMark location = locations.get(0);
                 String textAddress = getResources().getString(R.string.textLandMarkAddress);
@@ -203,10 +203,10 @@ public class LandMarkInfo extends AppCompatActivity {
                         //解析 json to gson
                         pictures = new Gson().fromJson(jsonIn, listType);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (pictures == null || pictures.isEmpty()) {
-                        Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, R.string.msg_NoFoundLandMark, Toast.LENGTH_SHORT).show();
                     } else {
                         //recycleView
                         mapInfoDetailRecyclerView.setLayoutManager(
@@ -215,7 +215,7 @@ public class LandMarkInfo extends AppCompatActivity {
                         mapInfoDetailRecyclerView.setAdapter(new PictureAdapter(this, pictures));
                     }
                 } else {
-                    Toast.makeText(this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, R.string.msg_NoNetwork, Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -41,14 +41,14 @@ public class LoginTerms extends AppCompatActivity {
             }
             tvAsset.setText(sb);
         } catch (IOException e) {
-            Log.e(TAG, e.toString());
+//            Log.e(TAG, e.toString());
         } finally {
             try {
                 if (br != null) {
                     br.close();
                 }
             } catch (IOException e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         }
     }

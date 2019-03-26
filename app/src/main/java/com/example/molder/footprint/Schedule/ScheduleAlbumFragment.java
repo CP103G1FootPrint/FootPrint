@@ -134,7 +134,7 @@ public class ScheduleAlbumFragment extends Fragment {
                         }.getType();
                         groupAlbums = new Gson().fromJson(jsonIn, listType);
                     } catch (Exception e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
                     if (groupAlbums == null || groupAlbums.isEmpty()) {
                         Common.showToast(activity, R.string.msg_NoImage);

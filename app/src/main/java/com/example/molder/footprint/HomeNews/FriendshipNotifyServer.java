@@ -15,10 +15,8 @@ import java.util.List;
 public class FriendshipNotifyServer {
 
     private static final String TAG = "FriendshipNotifyCommon";
-    public final static String SERVER_URI =
-            "ws://10.0.2.2:8080/FootPrint/FriendShipServer/";
-//    public final static String SERVER_URI =
-//            "http://192.168.196.89:8080/FootPrint/ChatServer/";
+//    public final static String SERVER_URI = "ws://10.0.2.2:8080/FootPrint/FriendShipServer/";
+    public final static String SERVER_URI = "http://sewd.no-ip.org:8080/FootPrint/ChatServer/";
     public static FriendshipNotifyWebSocketClient friendshipNotifyWebSocketClient;
     private static List<String> friendList = new ArrayList<>();
 
@@ -29,7 +27,7 @@ public class FriendshipNotifyServer {
             try {
                 uri = new URI(SERVER_URI + userName);
             } catch (URISyntaxException e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             friendshipNotifyWebSocketClient = new FriendshipNotifyWebSocketClient(uri, context);
             friendshipNotifyWebSocketClient.connect();
@@ -61,7 +59,7 @@ public class FriendshipNotifyServer {
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
         String text = "source image size = " + srcWidth + "x" + srcHeight;
-        Log.d(TAG, text);
+//        Log.d(TAG, text);
         int longer = Math.max(srcWidth, srcHeight);
 
         if (longer > newSize) {
@@ -72,7 +70,7 @@ public class FriendshipNotifyServer {
             System.gc();
             text = "\nscale = " + scale + "\nscaled image size = " +
                     srcBitmap.getWidth() + "x" + srcBitmap.getHeight();
-            Log.d(TAG, text);
+//            Log.d(TAG, text);
         }
         return srcBitmap;
     }

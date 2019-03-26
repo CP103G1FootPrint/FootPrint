@@ -318,12 +318,12 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                 count = Integer.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
+//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
             } else {
-                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
+//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
             }
         } else {
             Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
@@ -344,12 +344,12 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                 String result = new CommonTask(url, jsonObject.toString()).execute().get();
                 count = Integer.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (count == 0) {
-                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
+//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertFail);
             } else {
-                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
+//                Common.showToast(ScheduleCreateActivity.this, R.string.msg_InsertSuccess);
             }
         } else {
             Common.showToast(ScheduleCreateActivity.this, R.string.msg_NoNetwork);
@@ -387,7 +387,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                         picture.compress(Bitmap.CompressFormat.JPEG, 100, out);
                         image = out.toByteArray();
                     } catch (FileNotFoundException e) {
-                        Log.e(TAG, e.toString());
+//                        Log.e(TAG, e.toString());
                     }
 
 
@@ -452,10 +452,10 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                 int count = friendship_Friends.size();
                 list_items = new String[count];
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
             if (friendship_Friends == null || friendship_Friends.isEmpty()) {
-                Common.showToast(activity, R.string.msg_NoNewsFound);
+//                Common.showToast(activity, R.string.msg_NoNewsFound);
             } else {
                 for (int position = 0;position < friendship_Friends.size();position++){
                     HomeNewsActivity_Personal_Friendship_Friends friendship = friendship_Friends.get(position);
@@ -484,7 +484,7 @@ public class ScheduleCreateActivity extends AppCompatActivity implements
                 String result = tripIDCommonTask.execute().get();
                 tripID = Integer.valueOf(result);
             } catch (Exception e) {
-                Log.e(TAG, e.toString());
+//                Log.e(TAG, e.toString());
             }
         } else {
             Common.showToast(activity, R.string.msg_NoNetwork);

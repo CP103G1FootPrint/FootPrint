@@ -16,9 +16,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class ScheduleDayServer {
 
     private final static String TAG = "ScheduleDayCommon";
-    public static final String SERVER_URI = "ws://10.0.2.2:8080/FootPrint/ScheduleDayServer/";
-//    public static final String SERVER_URI =
-//            "http://192.168.196.89:8080/FootPrint/ScheduleDayServer/";
+//    public static final String SERVER_URI = "ws://10.0.2.2:8080/FootPrint/ScheduleDayServer/";
+    public static final String SERVER_URI = "ws://sewd.no-ip.org:8080/FootPrint/ScheduleDayServer/";
     public static ScheduleDayWebSocketClient scheduleDayWebSocketClient;
 
     // 建立WebSocket連線
@@ -27,7 +26,7 @@ public class ScheduleDayServer {
         try {
             uri = new URI(SERVER_URI + userName);
         } catch (URISyntaxException e) {
-            Log.e(TAG, e.toString());
+//            Log.e(TAG, e.toString());
         }
         if (scheduleDayWebSocketClient == null) {
             scheduleDayWebSocketClient = new ScheduleDayWebSocketClient(uri, context);
