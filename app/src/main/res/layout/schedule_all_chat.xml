@@ -47,7 +47,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/message_button"
-        android:hint="   Comment"
+        android:hint="Comment"
+        android:paddingLeft="13dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sh_bt_Comment"
         app:layout_constraintStart_toEndOf="@id/sh_ci_Comment_user" />

@@ -61,8 +61,8 @@
 
     <CheckBox
         android:id="@+id/ib_news_message"
-        android:layout_width="31dp"
-        android:layout_height="27dp"
+        android:layout_width="28sp"
+        android:layout_height="27sp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/message_icon"

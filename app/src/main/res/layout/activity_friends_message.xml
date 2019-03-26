@@ -15,11 +15,11 @@
         android:layout_marginBottom="10dp"
         android:layout_weight="1"
         android:background="@drawable/message_button"
-        android:hint=" Message"
+        android:hint="Message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/bt_SendMessage"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingLeft="5dp"
+        android:paddingLeft="13dp"
         android:singleLine="false" />
 
     <ImageButton
